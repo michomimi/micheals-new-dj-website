@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DJ Mishoo Reviews</title>
+<meta name="description" content="What guests, couples and event organisers say after the night, plus a place to leave your own review.">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body data-page="reviews">
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<main id="page">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow reveal">Reviews</p>
+      <h1 class="reveal d1">In their <span class="accent">words</span></h1>
+      <p class="crumbs reveal d2"><a href="index.html">Home</a> / Reviews</p>
+    </div>
+  </section>
+
+  <!-- ================= PUBLISHED REVIEWS ================= -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <!--
+        These cards are generated from CONFIG.reviews in js/app.js.
+        To publish a review, add an entry to that array — nothing a guest
+        submits appears here on its own.
+      -->
+      <div class="grid grid-3 reveal" data-reviews></div>
+    </div>
+  </section>
+
+  <!-- ================= LEAVE A REVIEW ================= -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="grid grid-2" style="gap:clamp(2rem,5vw,4rem); align-items:start">
+
+        <div class="reveal">
+          <p class="eyebrow">Leave a review</p>
+          <h2>Played your <span class="accent">event?</span></h2>
+          <p class="lead" style="margin-top:1rem">
+            Thirty seconds of your time genuinely helps the next couple decide.
+            Write whatever is honest, the good and the awkward.
+          </p>
+          <p class="form-note" style="margin-top:1.4rem">
+            Reviews are sent straight to me and are published on this page by hand,
+            so nothing goes live without both of us knowing. Your email is never shown.
+          </p>
+
+          <div data-social-block>
+            <p class="eyebrow" style="margin-top:2rem">Follow</p>
+            <div class="socials" data-socials></div>
+          </div>
+        </div>
+
+        <form class="form card reveal d1" data-form="review">
+          <div class="field-row">
+            <div class="field">
+              <label for="r-name">Your name</label>
+              <input id="r-name" name="name" type="text" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="r-email">Email</label>
+              <input id="r-email" name="email" type="email" autocomplete="email" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="r-event">Which event?</label>
+            <input id="r-event" name="event" type="text" placeholder="e.g. Wedding, June 2026, Calgary">
+          </div>
+
+          <div class="field">
+            <label id="r-rating-label">Rating</label>
+            <!-- stars run 5→1 in the DOM; CSS flips them so they read 1→5 -->
+            <div class="rating" role="radiogroup" aria-labelledby="r-rating-label">
+              <input type="radio" id="r5" name="rating" value="5" checked><label for="r5" title="5 stars" aria-label="5 stars">★</label>
+              <input type="radio" id="r4" name="rating" value="4"><label for="r4" title="4 stars" aria-label="4 stars">★</label>
+              <input type="radio" id="r3" name="rating" value="3"><label for="r3" title="3 stars" aria-label="3 stars">★</label>
+              <input type="radio" id="r2" name="rating" value="2"><label for="r2" title="2 stars" aria-label="2 stars">★</label>
+              <input type="radio" id="r1" name="rating" value="1"><label for="r1" title="1 star"  aria-label="1 star">★</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="r-review">Your review</label>
+            <textarea id="r-review" name="review" placeholder="How was the music, the setup, the planning beforehand?" required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="r-consent" style="text-transform:none; letter-spacing:0; font-size:.86rem; color:var(--ink-2); display:flex; gap:.6rem; align-items:flex-start">
+              <input id="r-consent" name="consent" type="checkbox" value="yes" required style="width:auto; margin-top:.25rem">
+              <span>I'm happy for this review and my first name to appear on this site.</span>
+            </label>
+          </div>
+
+          <button class="btn btn-primary btn-block" type="submit">Send review</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CTA ================= -->
+  <section style="padding-top:0">
+    <div class="wrap center reveal">
+      <h2>Planning something?</h2>
+      <p class="lead" style="margin:1rem auto 2rem">Let's talk about your date.</p>
+      <a class="btn btn-primary" href="booking.html">Check availability</a>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/gl.js" defer></script>
+<script src="js/app.js" defer></script>
+<script src="js/motion.js" defer></script>
+</body>
+</html>

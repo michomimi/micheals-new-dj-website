@@ -1,8 +1,8 @@
 /* =====================================================================
-   MICHEAL — DJ SITE · design system
-   Palette and type follow princetires.ca: pure black, red accent,
-   condensed uppercase display over a geometric body face, and short
-   (.15-.3s) transitions rather than long showy ones.
+   DJ MISHOO — design system
+   Pure black, red accent, and short (.15-.3s) transitions rather than
+   long showy ones. Display type is a geometric grotesque over a rounded
+   geometric body face.
    ===================================================================== */
 
 :root{
@@ -19,8 +19,12 @@
   --line:      rgba(255,255,255,.10);
   --line-2:    rgba(255,255,255,.055);
 
-  /* type */
-  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  /* type
+     Space Grotesk for display — geometric with just enough irregularity
+     to feel designed rather than default. Kept at 500–700 on purpose:
+     its heavier weights go blobby fast, and the wide letterforms already
+     carry enough presence without extra thickness. */
+  --display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
   --sans:    "Outfit", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 
   /* system */
@@ -62,11 +66,11 @@ ul{ list-style:none; }
 .eyebrow.center::after{ content:""; width:24px; height:2px; background:var(--red); }
 
 h1{ font-family:var(--display); font-weight:700; text-transform:uppercase;
-    font-size:clamp(2.8rem,8vw,6.2rem); line-height:.92; letter-spacing:-.005em; }
-h2{ font-family:var(--display); font-weight:700; text-transform:uppercase;
-    font-size:clamp(2rem,5vw,3.5rem); line-height:.98; }
+    font-size:clamp(2.2rem,5.8vw,4.6rem); line-height:1.02; letter-spacing:-.035em; }
+h2{ font-family:var(--display); font-weight:600; text-transform:uppercase;
+    font-size:clamp(1.65rem,3.6vw,2.7rem); line-height:1.08; letter-spacing:-.028em; }
 h3{ font-family:var(--display); font-weight:600; text-transform:uppercase;
-    font-size:1.45rem; line-height:1.05; }
+    font-size:1.14rem; line-height:1.2; letter-spacing:-.015em; }
 .accent{ color:var(--red); }
 .lead{ font-size:clamp(1rem,1.6vw,1.14rem); color:var(--ink-2); max-width:62ch; }
 p{ color:var(--ink-2); }
@@ -110,8 +114,22 @@ body::after{
 .site-header.scrolled{ background:rgba(0,0,0,.93); border-color:var(--line-2); }
 .header-inner{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
 .brand{ display:inline-flex; align-items:center; gap:.6rem; }
-.brand-mark{ font-family:var(--display); font-weight:700; text-transform:uppercase; font-size:1.5rem; letter-spacing:.04em; line-height:1; }
+.brand-mark{
+  display:inline-flex; align-items:center; gap:.34em;
+  font-family:var(--display); font-weight:700; text-transform:uppercase;
+  font-size:1.26rem; letter-spacing:-.03em; line-height:1;
+}
 .brand-mark em{ font-style:normal; color:var(--red); }
+
+/* music note after the name. Sized in em so it scales with the logo. */
+.brand-note{ width:1.05em; height:1.05em; flex:0 0 auto; color:var(--red);
+             transform-origin:60% 80%; transition:transform .2s var(--ease); }
+.brand-note .head{ fill:currentColor; stroke:none; }
+.brand-note .stem{ fill:none; stroke:currentColor; stroke-width:1.9;
+                   stroke-linecap:round; stroke-linejoin:round; }
+/* it lifts and tilts when the logo is hovered, rather than bobbing
+   forever in a fixed header where the motion would nag */
+.brand:hover .brand-note{ transform:translateY(-2px) rotate(-10deg); }
 .brand-logo{ height:36px; width:auto; }
 
 .nav{ display:flex; gap:1.9rem; }
@@ -127,15 +145,58 @@ body::after{
 .hamburger[aria-expanded="true"] span:nth-child(2){ opacity:0; }
 .hamburger[aria-expanded="true"] span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
 
+/* Panel drops from under the header. It is measured against svh so an
+   iOS address bar appearing cannot push the last link off screen, and it
+   scrolls internally if the list ever outgrows the viewport. */
 .mobile-nav{
   position:fixed; inset:var(--header-h) 0 auto 0; z-index:59;
-  background:rgba(0,0,0,.97); backdrop-filter:blur(18px);
+  background:rgba(6,6,8,.96); backdrop-filter:blur(20px) saturate(1.2);
   border-bottom:1px solid var(--line-2);
-  transform:translateY(-115%); transition:transform .3s var(--ease);
-  padding:1rem clamp(18px,4vw,44px) 1.6rem;
+  box-shadow:0 26px 50px -30px rgba(0,0,0,.9);
+  padding:.6rem clamp(18px,4vw,44px) calc(1.4rem + env(safe-area-inset-bottom));
+  max-height:calc(100svh - var(--header-h));
+  overflow-y:auto; overscroll-behavior:contain;
+
+  /* animate opacity and visibility too, so the panel cannot be tabbed
+     into or flash over content while it is closed */
+  transform:translateY(-102%);
+  opacity:0; visibility:hidden;
+  transition:transform .34s var(--ease), opacity .22s var(--ease), visibility 0s .34s;
 }
-.mobile-nav.open{ transform:translateY(0); }
-.mobile-nav a{ display:block; padding:.8rem 0; font-family:var(--display); font-size:1.55rem; text-transform:uppercase; border-bottom:1px solid var(--line-2); }
+.mobile-nav.open{
+  transform:translateY(0); opacity:1; visibility:visible;
+  transition:transform .34s var(--ease), opacity .2s var(--ease), visibility 0s;
+}
+
+.mobile-nav a{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:.95rem .25rem; font-family:var(--display); font-weight:600;
+  font-size:1.2rem; letter-spacing:-.03em; text-transform:uppercase;
+  color:var(--ink-2); border-bottom:1px solid var(--line-2);
+  border-radius:8px;
+  transition:color .16s, background .16s, padding-left .2s var(--ease);
+}
+.mobile-nav a:last-child{ border-bottom:none; }
+.mobile-nav a:active{ background:rgba(220,38,38,.10); padding-left:.7rem; }
+.mobile-nav a.is-active{ color:var(--ink); }
+/* red bar marks the current page, matching the desktop underline */
+.mobile-nav a.is-active::after{
+  content:""; width:20px; height:2px; background:var(--red); border-radius:2px;
+}
+
+/* Links fade in one after another as the panel drops. Delays only apply
+   while opening, so closing stays a single clean movement. */
+.mobile-nav a{ opacity:0; transform:translateY(-6px); }
+.mobile-nav.open a{ opacity:1; transform:none; transition:opacity .26s var(--ease), transform .26s var(--ease), color .16s, background .16s, padding-left .2s var(--ease); }
+.mobile-nav.open a:nth-child(1){ transition-delay:.05s }
+.mobile-nav.open a:nth-child(2){ transition-delay:.09s }
+.mobile-nav.open a:nth-child(3){ transition-delay:.13s }
+.mobile-nav.open a:nth-child(4){ transition-delay:.17s }
+.mobile-nav.open a:nth-child(5){ transition-delay:.21s }
+.mobile-nav.open a:nth-child(6){ transition-delay:.25s }
+
+/* stop the page behind the open panel from scrolling */
+body.nav-open{ overflow:hidden; }
 
 /* =====================================================================
    HERO
@@ -165,7 +226,7 @@ body::after{
 
 /* stats */
 .stats{ display:flex; flex-wrap:wrap; gap:clamp(1.4rem,5vw,4rem); margin-top:3rem; }
-.stat b{ font-family:var(--display); font-size:2.6rem; line-height:1; display:block; }
+.stat b{ font-family:var(--display); font-weight:600; font-size:2.2rem; line-height:1; display:block; letter-spacing:-.04em; }
 .stat span{ font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-3); }
 
 /* =====================================================================
@@ -173,7 +234,7 @@ body::after{
    ===================================================================== */
 .marquee{ border-block:1px solid var(--line-2); background:rgba(220,38,38,.06); overflow:hidden; padding:.85rem 0; }
 .marquee-track{ display:flex; gap:2.6rem; width:max-content; animation:marquee 36s linear infinite; }
-.marquee-track span{ font-family:var(--display); text-transform:uppercase; font-size:1.15rem; letter-spacing:.06em; color:var(--ink-2); display:inline-flex; align-items:center; gap:2.6rem; }
+.marquee-track span{ font-family:var(--display); font-weight:500; text-transform:uppercase; font-size:.96rem; letter-spacing:.02em; color:var(--ink-2); display:inline-flex; align-items:center; gap:2.6rem; }
 .marquee-track span::after{ content:"◆"; color:var(--red); font-size:.66rem; }
 @keyframes marquee{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
 
@@ -181,8 +242,10 @@ body::after{
    CARDS
    ===================================================================== */
 .grid{ display:grid; gap:1.2rem; }
-.grid-2{ grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); }
-.grid-3{ grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); }
+/* min() guards the track floor: without it a 320px minimum is wider than
+   the content area on a 320px phone and the grid overflows sideways */
+.grid-2{ grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); }
+.grid-3{ grid-template-columns:repeat(auto-fit,minmax(min(270px,100%),1fr)); }
 
 .card{
   background:var(--bg-2); border:1px solid var(--line-2); border-radius:var(--radius);
@@ -203,9 +266,9 @@ body::after{
 }
 .mix + .mix{ margin-top:.7rem; }
 .mix:hover{ border-color:rgba(220,38,38,.55); background:var(--bg-3); transform:translateX(4px); }
-.mix-num{ font-family:var(--display); font-size:1.5rem; color:var(--red); min-width:2.2rem; }
-.mix-name{ font-family:var(--display); text-transform:uppercase; font-size:1.28rem; line-height:1.05; }
-.mix-meta{ font-size:.78rem; color:var(--ink-3); letter-spacing:.06em; text-transform:uppercase; }
+.mix-num{ font-family:var(--display); font-weight:600; font-size:1.3rem; color:var(--red); min-width:2.4rem; letter-spacing:-.03em; }
+.mix-name{ display:block; font-family:var(--display); font-weight:600; text-transform:uppercase; font-size:1.05rem; line-height:1.2; letter-spacing:-.02em; }
+.mix-meta{ display:block; font-size:.78rem; color:var(--ink-3); letter-spacing:.06em; text-transform:uppercase; }
 .mix-play{
   width:46px; height:46px; border-radius:50%; display:grid; place-items:center;
   background:rgba(220,38,38,.14); color:var(--red);
@@ -226,7 +289,7 @@ body::after{
   transition:background .18s, padding-inline .2s var(--ease);
 }
 .date-row:hover{ background:rgba(220,38,38,.06); padding-inline:1rem .4rem; }
-.date-when{ font-family:var(--display); font-size:1.45rem; min-width:6.2rem; line-height:1; }
+.date-when{ font-family:var(--display); font-weight:600; font-size:1.2rem; min-width:6.2rem; line-height:1; letter-spacing:-.03em; }
 .date-when small{ display:block; font-family:var(--sans); font-size:.68rem; letter-spacing:.2em; color:var(--ink-3); }
 .date-venue{ font-weight:600; color:var(--ink); }
 .date-city{ color:var(--ink-3); font-size:.88rem; }
@@ -248,7 +311,7 @@ body::after{
   font-size:.64rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
   padding:.3rem .8rem; border-radius:999px;
 }
-.pkg-price{ font-family:var(--display); font-size:2.9rem; line-height:1; }
+.pkg-price{ font-family:var(--display); font-weight:600; font-size:2.4rem; line-height:1; letter-spacing:-.045em; }
 .pkg-price small{ font-family:var(--sans); font-size:.78rem; color:var(--ink-3); letter-spacing:.08em; }
 .pkg ul{ display:flex; flex-direction:column; gap:.55rem; margin:.3rem 0 1rem; }
 .pkg li{ display:flex; gap:.6rem; align-items:flex-start; font-size:.92rem; color:var(--ink-2); }
@@ -258,9 +321,81 @@ body::after{
 .pkg .btn{ margin-top:auto; }
 
 /* =====================================================================
+   REVIEWS
+   ===================================================================== */
+.review{
+  background:var(--bg-2); border:1px solid var(--line-2); border-radius:var(--radius);
+  padding:1.7rem; display:flex; flex-direction:column; gap:1rem;
+  transition:border-color .18s, transform .2s var(--ease), box-shadow .2s;
+}
+.review:hover{ border-color:rgba(220,38,38,.45); transform:translateY(-4px); box-shadow:0 24px 50px -30px rgba(220,38,38,.6); }
+.review blockquote{ color:var(--ink-2); font-size:.98rem; }
+.review blockquote::before{ content:"\201C"; }
+.review blockquote::after{ content:"\201D"; }
+.review figcaption strong{ display:block; font-family:var(--display); text-transform:uppercase; font-size:1rem; font-weight:600; letter-spacing:-.02em; }
+.review figcaption span{ font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); }
+/* Empty state for the review grid. The generic .embed-empty grey sits at
+   40% white and vanished against black, so this gets its own dark panel
+   and full-strength copy. Spans the whole grid row. */
+.reviews-empty{
+  grid-column:1 / -1;
+  background:linear-gradient(180deg, rgba(220,38,38,.10), var(--bg-2) 70%);
+  border:1px dashed rgba(220,38,38,.55);
+  border-radius:var(--radius);
+  padding:2.6rem 1.6rem; text-align:center;
+}
+.reviews-empty b{
+  display:block; font-family:var(--display); font-weight:600;
+  text-transform:uppercase; font-size:1.2rem; letter-spacing:-.02em;
+  color:var(--ink); margin-bottom:.4rem;
+}
+.reviews-empty span{ color:var(--red-hot); font-size:.95rem; font-weight:500; }
+
+.stars{ color:var(--red); letter-spacing:.18em; font-size:1rem; line-height:1; }
+.stars i{ color:var(--line); font-style:normal; }
+
+/* Star picker in the review form. The stars sit in DOM order 5→1 and are
+   flipped with row-reverse, so "~ label" reaches every star below the one
+   hovered or checked. Selectors are prefixed with .field so they outrank
+   the generic .field label / .field input rules further down this file. */
+.field .rating{ display:flex; flex-direction:row-reverse; justify-content:flex-end; gap:.3rem; }
+.field .rating input{ position:absolute; opacity:0; width:0; height:0; padding:0; border:0; }
+.field .rating label{
+  font-size:1.8rem; line-height:1; color:var(--line); cursor:pointer;
+  letter-spacing:0; text-transform:none; transition:color .15s, transform .15s var(--ease);
+}
+.field .rating label:hover, .field .rating label:hover ~ label,
+.field .rating input:checked ~ label{ color:var(--red); }
+.field .rating label:hover{ transform:scale(1.12); }
+.field .rating input:focus-visible + label{ outline:2px solid var(--red-hot); outline-offset:3px; border-radius:4px; }
+
+/* =====================================================================
+   DEPOSIT PICKER
+   ===================================================================== */
+.deposit-row{
+  display:flex; flex-wrap:wrap; align-items:flex-end; gap:1.2rem;
+  margin:1.6rem 0 1.2rem;
+}
+.deposit-row .field{ flex:1 1 240px; }
+.deposit-amount{ flex:0 0 auto; }
+.deposit-amount span{
+  display:block; font-size:.66rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ink-3); margin-bottom:.45rem;
+}
+.deposit-amount b{
+  display:block; font-family:var(--display); font-weight:600; font-size:2.1rem;
+  line-height:1; color:var(--red); letter-spacing:-.04em;
+}
+.deposit-row .btn{ flex:0 0 auto; }
+@media (max-width:560px){
+  .deposit-row{ align-items:stretch; }
+  .deposit-row .btn{ width:100%; }
+}
+
+/* =====================================================================
    GALLERY
    ===================================================================== */
-.gallery{ display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:.8rem; }
+.gallery{ display:grid; grid-template-columns:repeat(auto-fill,minmax(min(230px,100%),1fr)); gap:.8rem; }
 .shot{
   position:relative; aspect-ratio:1/1; border-radius:var(--radius-s); overflow:hidden;
   background:var(--bg-2); border:1px solid var(--line-2); cursor:pointer;
@@ -298,12 +433,25 @@ body::after{
 .form{ display:flex; flex-direction:column; gap:1rem; }
 .field{ display:flex; flex-direction:column; gap:.4rem; }
 .field label{ font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); }
+/* background-COLOR, not the background shorthand — the shorthand would
+   wipe the custom chevron image on .field select below */
 .field input, .field textarea, .field select{
-  background:var(--bg-1); border:1px solid var(--line); border-radius:var(--radius-s);
-  padding:.85rem 1rem; transition:border-color .15s, background .15s, box-shadow .15s;
+  background-color:var(--bg-1); border:1px solid var(--line); border-radius:var(--radius-s);
+  padding:.85rem 1rem; transition:border-color .15s, background-color .15s, box-shadow .15s;
 }
 .field input:focus, .field textarea:focus, .field select:focus{
-  outline:none; border-color:var(--red); background:var(--bg-3); box-shadow:0 0 0 3px rgba(220,38,38,.18);
+  outline:none; border-color:var(--red); background-color:var(--bg-3); box-shadow:0 0 0 3px rgba(220,38,38,.18);
+}
+
+/* The native select arrow sits hard against the border and ignores
+   padding, so draw our own and inset it to match the text. */
+.field select{
+  appearance:none; -webkit-appearance:none;
+  padding-right:2.9rem;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' opacity='.5'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat:no-repeat;
+  background-position:right 1rem center;
+  background-size:15px 15px;
 }
 .field textarea{ resize:vertical; min-height:120px; }
 .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
@@ -321,8 +469,20 @@ body::after{
 .contact-list span{ display:block; font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-3); }
 .contact-list a:hover{ color:var(--red); }
 .socials{ display:flex; gap:.7rem; flex-wrap:wrap; }
-.social{ width:46px; height:46px; border-radius:50%; display:grid; place-items:center; border:1px solid var(--line); transition:background .18s, border-color .18s, transform .18s, box-shadow .18s; }
-.social:hover{ background:var(--red); border-color:var(--red); transform:translateY(-3px); box-shadow:var(--glow); }
+.social{
+  width:46px; height:46px; border-radius:50%; display:grid; place-items:center;
+  border:1px solid var(--line); color:var(--ink-2);
+  transition:background .18s, border-color .18s, color .18s, transform .18s, box-shadow .18s;
+}
+/* tint and lift rather than flood with red — matches .mix-play and the
+   cards, and keeps the icon legible instead of white-on-solid-red */
+.social:hover{
+  background:rgba(220,38,38,.12);
+  border-color:rgba(220,38,38,.55);
+  color:var(--red-hot);
+  transform:translateY(-3px);
+  box-shadow:0 12px 28px -16px rgba(220,38,38,.85);
+}
 
 /* =====================================================================
    FOOTER
@@ -330,12 +490,54 @@ body::after{
 .site-footer{ border-top:1px solid var(--line-2); background:rgba(0,0,0,.72); padding:clamp(40px,6vw,70px) 0 26px; }
 .footer-grid{ display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:2.4rem; }
 .footer-grid h4{ font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-3); margin-bottom:1rem; }
-.footer-grid a{ display:block; padding:.3rem 0; color:var(--ink-2); font-size:.92rem; transition:color .15s; }
-.footer-grid a:hover{ color:var(--red); }
+/* Scoped to the Explore column on purpose. A blanket ".footer-grid a"
+   also catches the social buttons and the CTA, overriding their display
+   and colour — which knocks the icon out of its circle and turns it red
+   on a red background. Keep this selector narrow. */
+.footer-nav a{ display:block; padding:.3rem 0; color:var(--ink-2); font-size:.92rem; transition:color .15s; }
+.footer-nav a:hover{ color:var(--red); }
+
+/* "Get in touch" column: labelled rows, then one real button */
+.footer-contact{ display:flex; flex-direction:column; gap:1rem; margin-bottom:1.6rem; }
+.footer-contact span{
+  display:block; font-size:.66rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.footer-contact a{
+  display:inline-block; padding:.15rem 0; color:var(--ink); font-weight:500;
+  overflow-wrap:anywhere;                    /* long emails must not overflow */
+  transition:color .15s;
+}
+.footer-contact a:hover{ color:var(--red); }
 .footer-bottom{
   margin-top:2.4rem; padding-top:1.3rem; border-top:1px solid var(--line-2);
-  display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+  display:flex; justify-content:space-between; align-items:center;
+  gap:.8rem 1.6rem; flex-wrap:wrap;
   font-size:.83rem; color:var(--ink-3);
+}
+.footer-legal{ display:flex; gap:1.4rem; flex-wrap:wrap; }
+.footer-legal a{ color:var(--ink-3); transition:color .15s; }
+.footer-legal a:hover{ color:var(--red); }
+
+/* =====================================================================
+   LEGAL PAGES — long-form prose, so lists get their bullets back and
+   the measure is capped for readability
+   ===================================================================== */
+.legal{ max-width:78ch; }
+.legal h2{ font-size:clamp(1.25rem,2.3vw,1.6rem); margin:2.8rem 0 .9rem; }
+.legal h2:first-of-type{ margin-top:0; }
+.legal h3{ font-size:.98rem; margin:1.7rem 0 .5rem; color:var(--ink); }
+.legal p{ margin-bottom:1rem; }
+.legal ul{ list-style:disc; padding-left:1.35rem; margin:0 0 1.3rem; }
+.legal li{ color:var(--ink-2); margin-bottom:.55rem; }
+.legal li::marker{ color:var(--red); }
+.legal strong{ color:var(--ink); font-weight:600; }
+.legal a{ color:var(--red); }
+.legal a:hover{ color:var(--red-hot); text-decoration:underline; }
+.legal-updated{
+  font-size:.72rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--ink-3); margin-bottom:2.4rem;
+  padding-bottom:1.2rem; border-bottom:1px solid var(--line-2);
 }
 
 /* =====================================================================
@@ -361,12 +563,30 @@ body::after{
   .footer-grid{ grid-template-columns:1fr; }
   .mix{ grid-template-columns:auto 1fr; }
   .mix-play{ grid-column:2; }
-  .stats{ gap:1.6rem; }
+  .stats{ gap:1.6rem 2.2rem; }
   .stat b{ font-size:2rem; }
+  /* two clean columns beats four cramped ones */
+  .stat{ flex:1 1 40%; }
+  .lightbox-close{ top:12px; right:14px; }
+}
+
+/* Small phones: the logo, the Book Me button and the hamburger stop
+   fitting on one line around here, so the button loses its padding. */
+@media (max-width:400px){
+  .header-actions .btn{ padding:.72rem 1rem; font-size:.84rem; }
+  .brand-mark{ font-size:1.12rem; }
+  .header-actions{ gap:.45rem; }
+  .pkg{ padding:1.6rem 1.25rem; }
+  .card{ padding:1.3rem; }
+  .deposit-amount b{ font-size:1.8rem; }
 }
 
 @media (prefers-reduced-motion:reduce){
-  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important;
+     transition-duration:.001ms !important; transition-delay:0s !important;
+     animation-delay:0s !important; scroll-behavior:auto !important; }
+  /* the menu's staggered links must land instantly, not just quickly */
+  .mobile-nav a{ opacity:1; transform:none; }
   .reveal{ opacity:1; transform:none; }
   #gl{ display:none; }
 }

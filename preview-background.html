@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Background options — DJ Mishoo</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  /* This page is a scratch pad for choosing a background. Delete it, and
+     this block, once the choice is made. */
+  .picker{
+    position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:40;
+    display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem;
+    background:rgba(6,6,8,.86); backdrop-filter:blur(16px);
+    border:1px solid var(--line); border-radius:999px;
+    padding:.5rem; max-width:calc(100vw - 32px);
+  }
+  .picker button{
+    font-size:.84rem; font-weight:600; padding:.6rem 1.1rem; border-radius:999px;
+    color:var(--ink-2); transition:background .16s, color .16s;
+  }
+  .picker button:hover{ color:var(--ink); background:rgba(255,255,255,.06); }
+  .picker button.on{ background:var(--red); color:#fff; }
+  .stage{ min-height:100svh; display:grid; place-items:center; text-align:center; padding:6vh 5vw 22vh; }
+  .stage h1{ margin-bottom:1rem; }
+  .note{
+    position:fixed; top:18px; left:50%; transform:translateX(-50%); z-index:40;
+    font-size:.74rem; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--ink-3); text-align:center; width:max-content; max-width:90vw;
+  }
+</style>
+</head>
+
+<body data-page="preview">
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<p class="note">Background preview <span id="current" style="color:var(--red)"></span></p>
+
+<main id="page">
+  <section class="stage">
+    <div>
+      <p class="eyebrow center">Calgary, Alberta</p>
+      <h1>Music that<br>moves the <span class="accent">room</span></h1>
+      <p class="lead" style="margin:0 auto">
+        Sample copy so you can judge how readable text stays on top of each
+        background. Try it on your phone as well as this screen.
+      </p>
+      <div class="hero-cta" style="justify-content:center; margin-top:2rem">
+        <a class="btn btn-primary" href="index.html">Back to the site</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<nav class="picker" id="picker" aria-label="Background options"></nav>
+
+<script src="js/gl.js"></script>
+<script>
+  /* Buttons swap the shader live. gl.js exposes setBackground() and the
+     list of available looks. */
+  (function () {
+    const LABELS = {
+      waves:     "Speaker waves · Home",
+      vinyl:     "Spinning vinyl · About",
+      lasers:    "Lasers · Gallery",
+      waveform:  "Track waveform · Reviews",
+      discoball: "Disco ball · Booking",
+      equalizer: "Equalizer · Contact",
+      strobe:    "Club lighting (dim)",
+      sparks:    "Sparks (dim)",
+      ribbons:   "Ribbons (old)",
+    };
+    const picker  = document.getElementById("picker");
+    const current = document.getElementById("current");
+    const names   = window.BACKGROUNDS || [];
+
+    if (!names.length) {
+      picker.innerHTML = '<span style="padding:.6rem 1.1rem;font-size:.84rem">' +
+        'WebGL is off or reduced motion is on, so there is nothing to preview.</span>';
+      return;
+    }
+
+    const start = new URLSearchParams(location.search).get("bg") || names[0];
+
+    names.forEach((name) => {
+      const b = document.createElement("button");
+      b.textContent = LABELS[name] || name;
+      b.dataset.bg = name;
+      b.addEventListener("click", () => {
+        window.setBackground(name);
+        [...picker.children].forEach((c) => c.classList.toggle("on", c.dataset.bg === name));
+        current.textContent = LABELS[name] || name;
+        history.replaceState(null, "", "?bg=" + name);
+      });
+      picker.appendChild(b);
+    });
+
+    const first = picker.querySelector('[data-bg="' + start + '"]') || picker.firstChild;
+    first.click();
+  })();
+</script>
+</body>
+</html>

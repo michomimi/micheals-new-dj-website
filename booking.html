@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book DJ Mishoo</title>
+<meta name="description" content="DJ packages and booking enquiries for weddings, clubs, corporate and private events in Calgary.">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body data-page="booking">
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<main id="page">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow reveal">Booking</p>
+      <h1 class="reveal d1">Lock in your <span class="accent">date</span></h1>
+      <p class="crumbs reveal d2"><a href="index.html">Home</a> / Booking</p>
+    </div>
+  </section>
+
+  <!-- ================= PACKAGES ================= -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">Packages</p>
+        <h2>Straightforward <span class="accent">pricing</span></h2>
+        <p class="lead">
+          Starting points, not fine print. Every quote is confirmed in writing once I know
+          the venue and the hours. <!-- EDIT: set your real prices below -->
+        </p>
+      </div>
+
+      <div class="grid grid-3">
+
+        <article class="pkg reveal">
+          <h3>Essential</h3>
+          <p class="pkg-price"><span data-price="essential"></span> <small>starting</small></p>
+          <p style="font-size:.92rem">Small parties and events where the venue already has sound.</p>
+          <ul>
+            <li>Up to 4 hours of DJ time</li>
+            <li>Open-format set, planned with you</li>
+            <li>Controller, laptop and headphones</li>
+            <li>One wireless microphone</li>
+            <li class="no">PA system</li>
+            <li class="no">Dance-floor lighting</li>
+          </ul>
+          <a class="btn btn-ghost btn-block" href="#enquiry" data-package="Essential">Choose Essential</a>
+        </article>
+
+        <article class="pkg featured reveal d1">
+          <span class="pkg-badge">Most booked</span>
+          <h3>Signature</h3>
+          <p class="pkg-price"><span data-price="signature"></span> <small>starting</small></p>
+          <p style="font-size:.92rem">The full wedding and event package, with sound, mics and lighting included.</p>
+          <ul>
+            <li>Up to 6 hours of DJ time</li>
+            <li>Ceremony and cocktail coverage</li>
+            <li>MC announcements and timeline cues</li>
+            <li>Full PA scaled to your room</li>
+            <li>Two wireless microphones</li>
+            <li>Dance-floor lighting</li>
+          </ul>
+          <a class="btn btn-primary btn-block" href="#enquiry" data-package="Signature">Choose Signature</a>
+        </article>
+
+        <article class="pkg reveal d2">
+          <h3>Headline</h3>
+          <p class="pkg-price"><span data-price="headline"></span> <small>starting</small></p>
+          <p style="font-size:.92rem">Large venues, galas and anything that needs a production step up.</p>
+          <ul>
+            <li>Up to 8 hours of DJ time</li>
+            <li>Everything in Signature</li>
+            <li>Subwoofers and expanded PA</li>
+            <li>Uplighting throughout the venue</li>
+            <li>Full planning call and site visit</li>
+            <li>Dry ice for the first dance</li>
+            <li>Cold spark fountains</li>
+          </ul>
+          <a class="btn btn-ghost btn-block" href="#enquiry" data-package="Headline">Choose Headline</a>
+        </article>
+
+      </div>
+
+      <p class="form-note reveal d3" style="margin-top:1.4rem">
+        Travel outside Calgary, extra hours and late-night extensions are quoted separately.
+        A deposit holds your date; the balance is due on the day.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= DEPOSIT ================= -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <!--
+        The package list, prices and deposit links all come from
+        CONFIG.packages in js/app.js — nothing here is hard-coded.
+      -->
+      <div class="card reveal">
+        <h3>Already agreed a date?</h3>
+        <p style="margin-top:.4rem">
+          Pick your package and pay the deposit, which is half the package price. The balance is
+          due on the day, and I'll send written confirmation as soon as it clears.
+        </p>
+
+        <div class="deposit-row">
+          <div class="field">
+            <label for="depositPackage">Your package</label>
+            <select id="depositPackage"></select>
+          </div>
+
+          <div class="deposit-amount">
+            <span>Deposit due</span>
+            <b id="depositAmount">&hellip;</b>
+          </div>
+
+          <a class="btn btn-primary" id="depositBtn" href="#">Pay deposit</a>
+        </div>
+
+        <p class="form-note">
+          Not agreed a date yet? Send an <a href="#enquiry" style="color:var(--red)">enquiry</a>
+          first. Deposits are only for confirmed bookings.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ENQUIRY FORM ================= -->
+  <section style="padding-top:0" id="enquiry">
+    <div class="wrap">
+      <div class="grid grid-2" style="gap:clamp(2rem,5vw,4rem); align-items:start">
+
+        <div class="reveal">
+          <p class="eyebrow">Enquiry</p>
+          <h2>Tell me about <span class="accent">your night</span></h2>
+          <p class="lead" style="margin-top:1rem">
+            The more you can give me here, the faster the quote. If your date is inside two
+            weeks, <a href="contact.html" style="color:var(--red)">call or WhatsApp me</a>
+            instead, it is quicker.
+          </p>
+          <div data-social-block>
+            <div class="socials" style="margin-top:1.6rem" data-socials></div>
+          </div>
+        </div>
+
+        <form class="form card reveal d1" data-form="booking">
+          <div class="field-row">
+            <div class="field">
+              <label for="b-name">Your name</label>
+              <input id="b-name" name="name" type="text" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="b-email">Email</label>
+              <input id="b-email" name="email" type="email" autocomplete="email" required>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="b-date">Event date</label>
+              <input id="b-date" name="date" type="date">
+            </div>
+            <div class="field">
+              <label for="b-type">Event type</label>
+              <select id="b-type" name="type">
+                <option>Wedding</option>
+                <option>Corporate</option>
+                <option>Club / bar</option>
+                <option>Birthday</option>
+                <option>Private party</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="b-venue">Venue / area</label>
+              <input id="b-venue" name="venue" type="text" placeholder="e.g. Downtown Calgary">
+            </div>
+            <div class="field">
+              <label for="b-guests">Guests</label>
+              <input id="b-guests" name="guests" type="number" min="1" placeholder="120">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="b-package">Package</label>
+            <select id="b-package" name="package">
+              <option>Not sure yet</option>
+              <option>Essential</option>
+              <option>Signature</option>
+              <option>Headline</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="b-message">Anything else</label>
+            <textarea id="b-message" name="message" placeholder="Timing, must-play tracks, whether the venue has sound…"></textarea>
+          </div>
+
+          <button class="btn btn-primary btn-block" type="submit">Send enquiry</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
+          <p class="form-note">No spam, no list. Your details are only used to answer this enquiry.</p>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/gl.js" defer></script>
+<script src="js/app.js" defer></script>
+<script src="js/motion.js" defer></script>
+</body>
+</html>

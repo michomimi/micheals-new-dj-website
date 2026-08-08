@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DJ Mishoo Gallery</title>
+<meta name="description" content="Photos from weddings, clubs and private events across Calgary.">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body data-page="gallery">
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<main id="page">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow reveal">Gallery</p>
+      <h1 class="reveal d1">Nights that <span class="accent">worked</span></h1>
+      <p class="crumbs reveal d2"><a href="index.html">Home</a> / Gallery</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <!--
+        EDIT: drop photos into images/gallery/ and swap each placeholder for:
+          <figure class="shot">
+            <img src="images/gallery/01.jpg" alt="Wedding reception, Calgary" loading="lazy">
+            <figcaption class="shot-cap">Wedding · Calgary</figcaption>
+          </figure>
+        Clicking a real .shot opens the lightbox (js/motion.js).
+      -->
+      <div class="gallery reveal">
+        <div class="shot empty">Add <code>images/gallery/01.jpg</code></div>
+        <div class="shot empty">Add <code>images/gallery/02.jpg</code></div>
+        <div class="shot empty">Add <code>images/gallery/03.jpg</code></div>
+        <div class="shot empty">Add <code>images/gallery/04.jpg</code></div>
+        <div class="shot empty">Add <code>images/gallery/05.jpg</code></div>
+        <div class="shot empty">Add <code>images/gallery/06.jpg</code></div>
+        <div class="shot empty">Add <code>images/gallery/07.jpg</code></div>
+        <div class="shot empty">Add <code>images/gallery/08.jpg</code></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap center reveal">
+      <h2>Want yours in <span class="accent">here?</span></h2>
+      <p class="lead" style="margin:1rem auto 2rem">Tell me about the event.</p>
+      <a class="btn btn-primary" href="booking.html">Check availability</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- lightbox — wired up by js/motion.js -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo">
+  <button class="lightbox-close" aria-label="Close">
+    <svg viewBox="0 0 24 24" class="ic"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <!-- src is filled in by js/motion.js when a photo is opened -->
+  <img alt="">
+</div>
+
+<script src="js/gl.js" defer></script>
+<script src="js/app.js" defer></script>
+<script src="js/motion.js" defer></script>
+</body>
+</html>

@@ -7,34 +7,48 @@
 
 const CONFIG = {
   /* ---- YOUR DETAILS — edit these ---------------------------------- */
-  name:       "MICHEAL",            // stage name, shown big
-  nameAccent: "",                   // optional 2nd word in red, e.g. "DJ"
-  tagline:    "DJ · Producer · Calgary",
-  email:      "",                   // ← your booking email
-  phone:      "",                   // ← e.g. "+1 403 000 0000" (blank hides it)
+  name:       "DJ MISHOO",          // full name — titles, footer, email subjects
+  brandLead:  "DJ",                 // logo: the white part
+  brandAccent:"MISHOO",             // logo: the red part (leave "" for all white)
+  tagline:    "Open-format DJ · Calgary, AB",
+  email:      "michel.jabour52@gmail.com",
+  phone:      "+1 403 437 6153",    // blank hides it
+  whatsapp:   "https://wa.me/14034376153",   // built from the phone number above
   city:       "Calgary, AB",
 
-  /* ---- SOCIALS — paste your real profile URLs --------------------- */
+  /* ---- SOCIALS — profiles people follow, not ways to reach you.
+     WhatsApp deliberately lives above with the phone and email instead:
+     it belongs with the contact methods, not under "Follow".
+     ------------------------------------------------------------------ */
   social: {
-    instagram:  "",   // ← your Instagram URL
-    tiktok:     "",   // ← your TikTok URL
-    whatsapp:   "",   // ← https://wa.me/1403XXXXXXX  (digits only, no spaces)
+    instagram:  "https://www.instagram.com/dj_mishoo",
+    tiktok:     "https://www.tiktok.com/@dj.micheal21",
     soundcloud: "",   // optional
     youtube:    "",   // optional
   },
 
-  /* ---- PAYMENTS ---------------------------------------------------
-     Paste one hosted checkout URL per item (Stripe Payment Link, PayPal
-     or Square). Leave "" and the button shows "coming soon" rather than
-     linking nowhere. Never put an API secret key in this file — a hosted
-     checkout link is a plain public URL and is safe to commit.
+  /* ---- PACKAGES & DEPOSITS ----------------------------------------
+     `price` here is the single source of truth — the booking page reads
+     it, so you never edit a price in two places.
+
+     The deposit is worked out as price × depositRate and shown to the
+     guest. IMPORTANT: that figure is only a label. The amount actually
+     charged is whatever the Stripe link is set to, so each link must be
+     created for exactly the deposit shown beside it, and re-made if you
+     ever change a price. A mismatch means the guest is quoted one number
+     and billed another.
+
+     Leave `deposit` empty and the button says "not set up yet" rather
+     than linking nowhere. A hosted checkout URL is public and safe to
+     commit — never put a secret API key here.
      ------------------------------------------------------------------ */
-  pay: {
-    deposit:   "",   // booking deposit
-    essential: "",   // package 1
-    signature: "",   // package 2
-    headline:  "",   // package 3
-  },
+  depositRate: 0.5,                 // half the package price
+
+  packages: [
+    { id: "essential", name: "Essential", price: 800,  deposit: "" },  // ← $400 Stripe link
+    { id: "signature", name: "Signature", price: 1500, deposit: "" },  // ← $750 Stripe link
+    { id: "headline",  name: "Headline",  price: 2000, deposit: "" },  // ← $1,000 Stripe link
+  ],
 
   /* ---- FORMS ------------------------------------------------------
      A static site cannot email you on its own. Create a free form
@@ -43,6 +57,17 @@ const CONFIG = {
      an enquiry is never silently lost.
      ------------------------------------------------------------------ */
   formEndpoint: "",
+
+  /* ---- REVIEWS ----------------------------------------------------
+     Guests submit reviews through the form on reviews.html, which sends
+     them to you (form endpoint, or your email as a fallback). Nothing
+     appears on the site until you paste it in here — so nobody can post
+     to your site directly. Add newest first.
+     ------------------------------------------------------------------ */
+  reviews: [
+    // { name: "Sarah & Tom", event: "Wedding · Calgary", stars: 5,
+    //   text: "The floor did not empty once all night." },
+  ],
 };
 
 /* ---------- helpers ---------- */
@@ -54,16 +79,22 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (m) =>
 const PAGES = [
   { id: "home",    label: "Home",    href: "index.html"   },
   { id: "about",   label: "About",   href: "about.html"   },
-  { id: "music",   label: "Music",   href: "music.html"   },
   { id: "gallery", label: "Gallery", href: "gallery.html" },
+  { id: "reviews", label: "Reviews", href: "reviews.html" },
   { id: "booking", label: "Booking", href: "booking.html" },
   { id: "contact", label: "Contact", href: "contact.html" },
+];
+
+/* Legal pages live in the footer only, deliberately kept out of PAGES so
+   they never appear in the main navigation. */
+const LEGAL = [
+  { id: "terms",   label: "Terms and Conditions", href: "terms.html"   },
+  { id: "privacy", label: "Privacy Policy",       href: "privacy.html" },
 ];
 
 const ICONS = {
   instagram:  '<svg viewBox="0 0 24 24" class="ic"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>',
   tiktok:     '<svg viewBox="0 0 24 24" class="ic"><path d="M15 4v8.5a3.5 3.5 0 11-3.5-3.5"/><path d="M15 4c.6 2.2 2 3.4 4 3.6"/></svg>',
-  whatsapp:   '<svg viewBox="0 0 24 24" class="ic"><path d="M12 3a9 9 0 00-7.7 13.6L3 21l4.5-1.2A9 9 0 1012 3z"/><path d="M8.6 8.5c.2-.4.4-.4.6-.4h.4c.2 0 .4 0 .5.4l.6 1.4c.1.2 0 .3 0 .4l-.4.5c-.1.2-.2.3 0 .5a5.5 5.5 0 002.5 2.2c.3.1.4.1.5-.1l.5-.6c.2-.2.3-.1.5 0l1.3.7c.2.1.3.2.3.4"/></svg>',
   soundcloud: '<svg viewBox="0 0 24 24" class="ic"><path d="M3 15v-3M6 16v-5M9 16V9M12 16V7a5 5 0 019 3v6z"/></svg>',
   youtube:    '<svg viewBox="0 0 24 24" class="ic"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg>',
 };
@@ -77,9 +108,18 @@ function socialLinks() {
     .join("");
 }
 
+/* beamed pair of eighth notes, sitting after the name in the logo */
+const NOTE_MARK = `
+  <svg class="brand-note" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path class="stem" d="M9 17.4V5.1l10-2.2v12.3"/>
+    <circle class="head" cx="6.5" cy="18" r="2.7"/>
+    <circle class="head" cx="16.5" cy="15.7" r="2.7"/>
+  </svg>`;
+
 function brandMark() {
-  const accent = CONFIG.nameAccent ? `<em>${esc(CONFIG.nameAccent)}</em>` : "";
-  return `<span class="brand-mark">${esc(CONFIG.name)}${accent}</span>`;
+  const lead   = CONFIG.brandLead || CONFIG.name;
+  const accent = CONFIG.brandAccent ? ` <em>${esc(CONFIG.brandAccent)}</em>` : "";
+  return `<span class="brand-mark">${esc(lead)}${accent}${NOTE_MARK}</span>`;
 }
 
 /* =====================================================================
@@ -95,7 +135,7 @@ function injectShell() {
   document.body.insertAdjacentHTML("afterbegin", `
     <header class="site-header" id="siteHeader">
       <div class="wrap header-inner">
-        <a class="brand" href="index.html" aria-label="${esc(CONFIG.name)} — home">${brandMark()}</a>
+        <a class="brand" href="index.html" aria-label="${esc(CONFIG.name)} home">${brandMark()}</a>
         <nav class="nav" aria-label="Main">${navLinks}</nav>
         <div class="header-actions">
           <a class="btn btn-primary" href="booking.html">Book Me</a>
@@ -106,14 +146,33 @@ function injectShell() {
       </div>
     </header>
     <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
-      ${PAGES.map((p) => `<a href="${p.href}">${p.label}</a>`).join("")}
+      ${PAGES.map((p) =>
+        `<a class="${p.id === current ? "is-active" : ""}"${
+          p.id === current ? ' aria-current="page"' : ""
+        } href="${p.href}">${p.label}</a>`).join("")}
     </nav>
   `);
 
-  const mailLink = CONFIG.email
-    ? `<a href="mailto:${esc(CONFIG.email)}">${esc(CONFIG.email)}</a>` : "";
-  const telLink = CONFIG.phone
-    ? `<a href="tel:${CONFIG.phone.replace(/[^\d+]/g, "")}">${esc(CONFIG.phone)}</a>` : "";
+  /* Each contact row is a labelled pair rather than a bare link, so the
+     column reads as information instead of a second navigation list.
+     Anything not filled in on CONFIG is simply left out. */
+  const contactRow = (label, href, value, attrs = "") =>
+    `<li><span>${label}</span><a href="${href}"${attrs}>${esc(value)}</a></li>`;
+
+  const contactRows = [
+    CONFIG.email && contactRow("Email", `mailto:${esc(CONFIG.email)}`, CONFIG.email),
+    CONFIG.phone && contactRow("Phone", `tel:${CONFIG.phone.replace(/[^\d+]/g, "")}`, CONFIG.phone),
+    CONFIG.whatsapp && contactRow("WhatsApp", esc(CONFIG.whatsapp),
+      "Message me", ' target="_blank" rel="noopener"'),
+  ].filter(Boolean).join("");
+
+  /* Pages that already show social icons in their own content (contact,
+     reviews, booking) leave them out of the footer, so the same two
+     icons are not printed twice on one page. */
+  const socialsInPage = !!$("#page [data-socials]");
+  const footerSocials = socialsInPage
+    ? ""
+    : `<div class="socials" style="margin-top:1.4rem">${socialLinks()}</div>`;
 
   document.body.insertAdjacentHTML("beforeend", `
     <footer class="site-footer">
@@ -122,20 +181,23 @@ function injectShell() {
           <div>
             ${brandMark()}
             <p style="margin-top:.8rem;max-width:34ch">${esc(CONFIG.tagline)}</p>
-            <div class="socials" style="margin-top:1.4rem">${socialLinks()}</div>
+            ${footerSocials}
           </div>
-          <div>
+          <nav class="footer-nav" aria-label="Footer">
             <h4>Explore</h4>
             ${PAGES.map((p) => `<a href="${p.href}">${p.label}</a>`).join("")}
-          </div>
+          </nav>
           <div>
             <h4>Get in touch</h4>
-            ${mailLink}${telLink}
-            <a href="booking.html">Book a date</a>
+            <ul class="footer-contact">${contactRows}</ul>
+            <a class="btn btn-primary" href="booking.html">Book a date</a>
           </div>
         </div>
         <div class="footer-bottom">
-          <span>© <span id="year"></span> ${esc(CONFIG.name)}. All rights reserved.</span>
+          <span>&copy; <span id="year"></span> ${esc(CONFIG.name)}. All rights reserved.</span>
+          <nav class="footer-legal" aria-label="Legal">
+            ${LEGAL.map((l) => `<a href="${l.href}">${l.label}</a>`).join("")}
+          </nav>
           <span>${esc(CONFIG.city)}</span>
         </div>
       </div>
@@ -155,43 +217,115 @@ function initHeader() {
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
-  burger.addEventListener("click", () => {
-    const open = mnav.classList.toggle("open");
+  /* One place that opens and closes the panel, so the button state, the
+     page scroll lock and the panel itself can never drift apart. */
+  const setMenu = (open) => {
+    mnav.classList.toggle("open", open);
     burger.setAttribute("aria-expanded", String(open));
+    document.body.classList.toggle("nav-open", open);
+  };
+  const isOpen = () => mnav.classList.contains("open");
+
+  burger.addEventListener("click", (e) => {
+    e.stopPropagation();          // don't immediately re-close via document
+    setMenu(!isOpen());
   });
-  $$("a", mnav).forEach((a) => a.addEventListener("click", () => {
-    mnav.classList.remove("open");
-    burger.setAttribute("aria-expanded", "false");
-  }));
+
+  $$("a", mnav).forEach((a) => a.addEventListener("click", () => setMenu(false)));
+
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && mnav.classList.contains("open")) {
-      mnav.classList.remove("open");
-      burger.setAttribute("aria-expanded", "false");
-    }
+    if (e.key === "Escape" && isOpen()) setMenu(false);
   });
+
+  /* tapping anywhere off the panel closes it */
+  document.addEventListener("click", (e) => {
+    if (isOpen() && !mnav.contains(e.target)) setMenu(false);
+  });
+
+  /* rotating to landscape or resizing past the desktop breakpoint would
+     otherwise leave the panel open with the scroll lock still applied */
+  window.addEventListener("resize", () => {
+    if (isOpen() && window.innerWidth > 900) setMenu(false);
+  }, { passive: true });
 }
 
 /* =====================================================================
-   PAYMENT BUTTONS
-   Any [data-pay="key"] element is wired to CONFIG.pay[key]. With no URL
-   set it stays visible but is clearly disabled, so a half-configured
-   site never sends a paying customer to a dead link.
+   PRICES + DEPOSIT
+   Package prices come from CONFIG.packages so they live in one place.
+   The deposit widget lets a guest pick their package, shows half the
+   price, and points the button at that package's own checkout link —
+   a payment link has its amount baked in, so there is one per package.
    ===================================================================== */
-function initPayButtons() {
-  $$("[data-pay]").forEach((el) => {
-    const url = CONFIG.pay[el.dataset.pay];
-    if (url && url.trim()) {
-      el.href = url;
-      el.target = "_blank";
-      el.rel = "noopener";
+const money = (n) => "$" + Math.round(n).toLocaleString("en-CA");
+
+const depositFor = (pkg) => Math.round(pkg.price * CONFIG.depositRate);
+
+/* fill the price on each package card from CONFIG */
+function renderPrices() {
+  $$("[data-price]").forEach((el) => {
+    const pkg = CONFIG.packages.find((p) => p.id === el.dataset.price);
+    if (pkg) el.textContent = money(pkg.price);
+  });
+}
+
+function initDeposit() {
+  const select = $("#depositPackage");
+  const amount = $("#depositAmount");
+  const btn    = $("#depositBtn");
+  if (!select || !amount || !btn) return;
+
+  select.innerHTML = CONFIG.packages
+    .map((p) => `<option value="${p.id}">${esc(p.name)} (${money(p.price)})</option>`)
+    .join("");
+
+  const update = () => {
+    const pkg = CONFIG.packages.find((p) => p.id === select.value);
+    if (!pkg) return;
+    const due = depositFor(pkg);
+    amount.textContent = money(due);
+
+    if (pkg.deposit && pkg.deposit.trim()) {
+      btn.href = pkg.deposit;
+      btn.target = "_blank";
+      btn.rel = "noopener";
+      btn.removeAttribute("aria-disabled");
+      btn.style.opacity = "";
+      btn.style.cursor = "";
+      btn.title = "";
+      btn.textContent = `Pay ${money(due)} deposit`;
     } else {
-      el.setAttribute("aria-disabled", "true");
-      el.removeAttribute("href");
-      el.style.opacity = ".55";
-      el.style.cursor = "not-allowed";
-      el.title = "Payment link not set up yet";
-      el.textContent = "Payment coming soon";
+      /* no link for this package yet — stay visible but clearly dead,
+         so a half-configured site never takes a real payment wrongly */
+      btn.removeAttribute("href");
+      btn.setAttribute("aria-disabled", "true");
+      btn.style.opacity = ".55";
+      btn.style.cursor = "not-allowed";
+      btn.title = `Add the ${pkg.name} deposit link in js/app.js`;
+      btn.textContent = "Payment link coming soon";
     }
+  };
+
+  select.addEventListener("change", update);
+  update();
+}
+
+/* =====================================================================
+   PACKAGE BUTTONS
+   The package cards quote "starting" prices, so they open the enquiry
+   form rather than a checkout — the real number depends on venue and
+   hours. Clicking one preselects that package in the form so the visitor
+   doesn't have to pick it twice.
+   ===================================================================== */
+function initPackagePicker() {
+  const select = $("#b-package");
+  if (!select) return;
+
+  $$("[data-package]").forEach((el) => {
+    el.addEventListener("click", () => {
+      const wanted = el.dataset.package;
+      const match = [...select.options].find((o) => o.value === wanted);
+      if (match) select.value = wanted;
+    });
   });
 }
 
@@ -214,11 +348,11 @@ function initForms() {
 
       if (!CONFIG.formEndpoint) {
         if (!CONFIG.email) {
-          status.textContent = "Contact details aren't set up yet — check back soon.";
+          status.textContent = "Contact details are not set up yet, please check back soon.";
           status.className = "form-status err";
           return;
         }
-        const subject = encodeURIComponent(`${form.dataset.form} enquiry — ${data.name}`);
+        const subject = encodeURIComponent(`${form.dataset.form} enquiry from ${data.name}`);
         const body = encodeURIComponent(
           Object.entries(data).map(([k, v]) => `${k}: ${v}`).join("\n"));
         window.location.href = `mailto:${CONFIG.email}?subject=${subject}&body=${body}`;
@@ -237,7 +371,7 @@ function initForms() {
         });
         if (!res.ok) throw new Error(res.status);
         form.reset();
-        status.textContent = "Thanks — I'll get back to you shortly.";
+        status.textContent = "Thanks, I will get back to you shortly.";
         status.className = "form-status ok";
       } catch {
         status.textContent = "Couldn't send just now. Please try again or message me on Instagram.";
@@ -247,14 +381,78 @@ function initForms() {
   });
 }
 
+/* =====================================================================
+   REVIEWS
+   Any [data-reviews] element is filled from CONFIG.reviews. Add
+   data-limit="3" to show only the newest few (used on the home page).
+   ===================================================================== */
+function stars(n) {
+  const filled = Math.max(0, Math.min(5, Math.round(Number(n) || 0)));
+  return `<span class="stars" aria-label="${filled} out of 5 stars">` +
+    "★".repeat(filled) + `<i>${"★".repeat(5 - filled)}</i></span>`;
+}
+
+function renderReviews() {
+  $$("[data-reviews]").forEach((el) => {
+    const limit = parseInt(el.dataset.limit, 10);
+    const list = Number.isFinite(limit) ? CONFIG.reviews.slice(0, limit) : CONFIG.reviews;
+
+    if (!list.length) {
+      el.innerHTML = `<p class="reviews-empty">
+        <b>No reviews published yet</b>
+        <span>Yours could be the first.</span>
+      </p>`;
+      return;
+    }
+
+    /* no .reveal here on purpose: motion.js has already collected the
+       reveal elements by the time this runs, so anything injected now
+       would never be un-hidden. Put .reveal on the container instead. */
+    el.innerHTML = list.map((r) => `
+      <figure class="review">
+        ${stars(r.stars)}
+        <blockquote>${esc(r.text)}</blockquote>
+        <figcaption>
+          <strong>${esc(r.name)}</strong>
+          ${r.event ? `<span>${esc(r.event)}</span>` : ""}
+        </figcaption>
+      </figure>`).join("");
+  });
+}
+
 /* ---------- fill [data-*] placeholders from CONFIG ---------- */
 function fillBrandText() {
   $$("[data-brand]").forEach((el) => { el.textContent = CONFIG.name; });
   $$("[data-tagline]").forEach((el) => { el.textContent = CONFIG.tagline; });
-  $$("[data-socials]").forEach((el) => { el.innerHTML = socialLinks(); });
+  const links = socialLinks();
+  $$("[data-socials]").forEach((el) => {
+    el.innerHTML = links;
+    /* With no profile URLs set yet, hide the whole "Follow" block rather
+       than leaving a heading above an empty row. */
+    if (!links) {
+      const block = el.closest("[data-social-block]");
+      if (block) block.classList.add("hide");
+    }
+  });
+  $$("[data-whatsapp]").forEach((el) => {
+    if (CONFIG.whatsapp) {
+      el.href = CONFIG.whatsapp;
+      el.target = "_blank";
+      el.rel = "noopener";
+    } else {
+      el.removeAttribute("href");
+      el.textContent = "WhatsApp coming soon";
+    }
+  });
   $$("[data-email]").forEach((el) => {
     el.textContent = CONFIG.email || "Email coming soon";
     if (el.tagName === "A" && CONFIG.email) el.href = `mailto:${CONFIG.email}`;
+  });
+  $$("[data-phone]").forEach((el) => {
+    el.textContent = CONFIG.phone || "Phone coming soon";
+    if (el.tagName === "A" && CONFIG.phone) {
+      el.href = `tel:${CONFIG.phone.replace(/[^\d+]/g, "")}`;
+    }
   });
 }
 
@@ -262,6 +460,9 @@ document.addEventListener("DOMContentLoaded", () => {
   injectShell();
   initHeader();
   fillBrandText();
-  initPayButtons();
+  renderReviews();
+  renderPrices();
+  initDeposit();
+  initPackagePicker();
   initForms();
 });

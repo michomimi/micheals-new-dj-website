@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://localhost:8080/js/app.js)",
+      "Bash(perl -0pi -e 's{<p class=\"pkg-price\">\\\\$800 <small>starting</small></p>}{<p class=\"pkg-price\"><span data-price=\"essential\"></span> <small>starting</small></p>}; *)",
+      "Bash(curl -s -o /dev/null -w 'booking %{http_code}\\\\n' http://localhost:8080/booking.html)",
+      "Bash(curl -s -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 Chrome/120 Safari/537.36\" \"https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,600..800&family=Outfit:wght@400;500;600;700&display=swap\")",
+      "Bash(sed -i '' 's|family=Barlow+Condensed:wght@600;700|family=Archivo:wdth,wght@100..125,600..800|' *.html && grep -c 'Archivo' *.html)",
+      "Bash(perl -0pi -e ' *)",
+      "Bash(curl -s -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 Chrome/120 Safari/537.36\" \"https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap\")",
+      "Bash(curl -s -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 Chrome/120 Safari/537.36\" \"https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap\")",
+      "Bash(sed -i '' 's|family=Archivo:wdth,wght@100\\\\.\\\\.125,600\\\\.\\\\.800|family=Space+Grotesk:wght@500;600;700|' *.html && grep -ho 'family=Space[^&]*' *.html | sort -u)",
+      "Bash(perl -0pi -e 's!My style is open format, hip hop into house!My style is open format, hip-hop into house!' about.html)",
+      "Bash(perl -0pi -e 's!DJ Mishoo, Open Format DJ in Calgary!DJ Mishoo, Open-Format DJ in Calgary!g; s!Calgary open format DJ\\\\.!Calgary open-format DJ.!' *.html)",
+      "Bash(grep -n 'width:[0-9]\\\\{3,\\\\}px\\\\|min-width:[0-9]\\\\{3,\\\\}px\\\\|minmax\\([0-9]*px' css/styles.css)",
+      "Bash(osascript -l JavaScript -e ' *)",
+      "Bash(curl -s -o /dev/null -w 'preview page: %{http_code}\\\\n' http://localhost:8080/preview-background.html)",
+      "Bash(curl -s -o /dev/null -w 'gl.js: %{http_code}\\\\n' http://localhost:8080/js/gl.js)"
+    ],
+    "additionalDirectories": [
+      "/Users/michealjabour/Desktop/micheals-new-dj-website"
+    ]
+  }
+}
