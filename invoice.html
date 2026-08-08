@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invoice generator, DJ Mishoo</title>
+<meta name="description" content="Generate an invoice or receipt for a booking.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body data-page="invoice">
+
+<main id="page">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow reveal">Admin</p>
+      <h1 class="reveal d1">Invoice &amp; <span class="accent">receipt</span></h1>
+      <p class="crumbs reveal d2"><a href="index.html">Home</a> / Invoice</p>
+    </div>
+  </section>
+
+  <!--
+    This page is a tool for you, not for clients. It is marked noindex and
+    is not linked from anywhere on the site, so only someone with the URL
+    can reach it. It is not private though: anyone with the link can open
+    it. It holds no client data, it only formats what you type.
+  -->
+  <section style="padding-top:0" class="doc-form">
+    <div class="wrap">
+      <div class="grid grid-2" style="gap:clamp(2rem,5vw,4rem); align-items:start">
+
+        <div class="reveal">
+          <h2>Build the document</h2>
+          <p class="lead" style="margin-top:1rem">
+            Fill this in, generate, then save as PDF and email it. Switch the mode
+            to Receipt once the balance has been paid.
+          </p>
+          <p class="form-note" style="margin-top:1.4rem">
+            <strong>GST defaults to 0.</strong> Only add a rate if you are registered
+            for GST. Charging it without being registered is not allowed.
+          </p>
+        </div>
+
+        <form class="form card reveal d1" id="invoiceForm">
+
+          <div class="form-group" role="group" aria-labelledby="lg-doc">
+            <p class="form-legend" id="lg-doc">Document</p>
+            <div class="field">
+              <label for="docMode">Type</label>
+              <select id="docMode">
+                <option value="invoice">Invoice, balance owing</option>
+                <option value="receipt">Receipt, already paid</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="invNo">Number</label>
+              <input id="invNo" type="text">
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="invDate">Issued</label>
+                <input id="invDate" type="date">
+              </div>
+              <div class="field">
+                <label for="dueDate">Due</label>
+                <input id="dueDate" type="date">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" role="group" aria-labelledby="lg-client">
+            <p class="form-legend" id="lg-client">Client and event</p>
+            <div class="field">
+              <label for="invClient">Client name</label>
+              <input id="invClient" type="text" required>
+            </div>
+            <div class="field">
+              <label for="invEmail">Client email</label>
+              <input id="invEmail" type="email">
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="invEventDate">Event date</label>
+                <input id="invEventDate" type="date">
+              </div>
+              <div class="field">
+                <label for="invVenue">Venue</label>
+                <input id="invVenue" type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" role="group" aria-labelledby="lg-items">
+            <p class="form-legend" id="lg-items">Line items</p>
+            <div class="field">
+              <label for="invPkg">Fill the first line from a package</label>
+              <select id="invPkg"></select>
+            </div>
+
+            <div class="line-row">
+              <div class="field">
+                <label for="desc1">Description</label>
+                <input id="desc1" type="text" placeholder="Signature package, DJ services">
+              </div>
+              <div class="field">
+                <label for="amt1">Amount</label>
+                <input id="amt1" type="number" min="0" step="0.01" placeholder="0.00">
+              </div>
+            </div>
+            <div class="line-row">
+              <div class="field">
+                <label for="desc2" class="hide">Description 2</label>
+                <input id="desc2" type="text" placeholder="Extra hour">
+              </div>
+              <div class="field">
+                <label for="amt2" class="hide">Amount 2</label>
+                <input id="amt2" type="number" min="0" step="0.01" placeholder="0.00">
+              </div>
+            </div>
+            <div class="line-row">
+              <div class="field">
+                <label for="desc3" class="hide">Description 3</label>
+                <input id="desc3" type="text" placeholder="Travel outside Calgary">
+              </div>
+              <div class="field">
+                <label for="amt3" class="hide">Amount 3</label>
+                <input id="amt3" type="number" min="0" step="0.01" placeholder="0.00">
+              </div>
+            </div>
+            <div class="line-row">
+              <div class="field">
+                <label for="desc4" class="hide">Description 4</label>
+                <input id="desc4" type="text" placeholder="Anything else">
+              </div>
+              <div class="field">
+                <label for="amt4" class="hide">Amount 4</label>
+                <input id="amt4" type="number" min="0" step="0.01" placeholder="0.00">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" role="group" aria-labelledby="lg-totals">
+            <p class="form-legend" id="lg-totals">Totals</p>
+            <div class="field-row">
+              <div class="field">
+                <label for="paid">Deposit received</label>
+                <input id="paid" type="number" min="0" step="0.01" placeholder="0.00">
+              </div>
+              <div class="field">
+                <label for="taxRate">GST (%)</label>
+                <input id="taxRate" type="number" min="0" max="100" step="0.1" value="0">
+              </div>
+            </div>
+            <div class="field">
+              <label for="payNote">Payment instructions</label>
+              <textarea id="payNote" placeholder="Interac e-transfer to michel.jabour52@gmail.com, or card link on request."></textarea>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-block" type="submit">Generate document</button>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0" id="invoiceStage" hidden>
+    <div class="wrap">
+      <article class="doc" id="invoiceDoc"></article>
+      <div class="doc-actions no-print">
+        <button class="btn btn-primary" id="printInvoice">Save as PDF or print</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/app.js" defer></script>
+<script src="js/docs.js" defer></script>
+<script src="js/motion.js" defer></script>
+</body>
+</html>

@@ -95,7 +95,7 @@ const CONFIG = {
     path:    "videos/",
     posters: "videos/posters/",
     ext:     ".mp4",
-    count:   9,
+    count:   5,
     captions: {
       // 1: "Wedding · first dance",
     },

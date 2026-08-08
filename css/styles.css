@@ -599,6 +599,8 @@ body.nav-open{ overflow:hidden; }
 .form{ display:flex; flex-direction:column; gap:1rem; }
 .field{ display:flex; flex-direction:column; gap:.4rem; }
 .field label{ font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); }
+/* an aside inside a label, for "(optional)" style hints */
+.field label .doc-opt{ text-transform:none; letter-spacing:0; opacity:.7; }
 /* background-COLOR, not the background shorthand — the shorthand would
    wipe the custom chevron image on .field select below */
 .field input, .field textarea, .field select{
@@ -620,7 +622,48 @@ body.nav-open{ overflow:hidden; }
   background-size:15px 15px;
 }
 .field textarea{ resize:vertical; min-height:120px; }
-.field-row{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+
+/* Grid and flex children default to min-width:auto, so an input with a
+   wide intrinsic size (date, time and number are the worst offenders)
+   refuses to shrink and pushes straight out of the card. Forcing the
+   track and the control to be shrinkable is what keeps them inside. */
+.field{ min-width:0; }
+.field input, .field select, .field textarea{ width:100%; min-width:0; max-width:100%; }
+.field-row{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; min-width:0; }
+.field-row > *{ min-width:0; }
+
+/* long forms read better in labelled groups than as one tall column */
+.form-group{ display:flex; flex-direction:column; gap:1rem; min-width:0; }
+.form-group + .form-group{
+  margin-top:.5rem; padding-top:1.5rem; border-top:1px solid var(--line-2);
+}
+.form-legend{
+  font-size:.68rem; font-weight:600; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--red); margin-bottom:-.2rem;
+}
+
+/* tick lists for services, effects and consents. The label wraps the box
+   so the whole line is a hit target, which matters most on a phone. */
+.check-list{
+  display:grid; gap:.7rem 1.2rem;
+  grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));
+}
+.check{
+  display:flex; gap:.6rem; align-items:flex-start;
+  font-size:.88rem; color:var(--ink-2); cursor:pointer;
+}
+.check input{
+  width:auto; min-width:0; flex:0 0 auto;
+  margin-top:.15rem; accent-color:var(--red);
+  /* without this the native unchecked box is drawn white, which on a black
+     card reads as eight bright squares before anything is even ticked */
+  color-scheme:dark;
+}
+
+/* invoice line items: wide description, narrow amount */
+.line-row{ display:grid; grid-template-columns:1fr 132px; gap:.9rem; min-width:0; }
+.line-row > *{ min-width:0; }
+@media (max-width:560px){ .line-row{ grid-template-columns:1fr; } }
 .form-status{ font-size:.88rem; min-height:1.4em; }
 .form-status.ok{ color:#37D67A; }
 .form-status.err{ color:var(--red-hot); }
@@ -704,6 +747,128 @@ body.nav-open{ overflow:hidden; }
   font-size:.72rem; letter-spacing:.2em; text-transform:uppercase;
   color:var(--ink-3); margin-bottom:2.4rem;
   padding-bottom:1.2rem; border-bottom:1px solid var(--line-2);
+}
+
+/* =====================================================================
+   DOCUMENTS — generated contract, invoice and receipt
+   On screen these sit on a light card so they read as paper rather than
+   as part of the site. The print rules further down strip everything
+   else away so the PDF is just the document.
+   ===================================================================== */
+.doc{
+  background:#fff; color:#14161a;
+  border-radius:var(--radius); padding:clamp(1.6rem,4vw,3rem);
+  max-width:900px; margin-inline:auto;
+  box-shadow:0 40px 80px -50px rgba(0,0,0,.9);
+  font-size:.95rem; line-height:1.6;
+}
+.doc h2{ color:#14161a; font-size:1.9rem; letter-spacing:-.03em; }
+.doc h3{
+  color:#14161a; font-size:.82rem; letter-spacing:.16em; text-transform:uppercase;
+  margin:1.8rem 0 .6rem; padding-bottom:.4rem; border-bottom:1px solid #e3e6ea;
+}
+.doc p{ color:#3c414a; }
+/* the page-level section rule pads by 124px, which is right for the site
+   and absurd inside a document, so the document keeps its own rhythm */
+.doc section{ padding:0; }
+.doc-head{ display:flex; flex-wrap:wrap; gap:1.4rem; justify-content:space-between; align-items:flex-start; }
+.doc-head + .doc-recital{ margin-top:1.5rem; }
+.doc-head h2{ margin-bottom:.3rem; }
+.doc-meta{ font-size:.82rem; color:#6a7079; }
+.doc-brand{ text-align:right; font-size:.84rem; color:#3c414a; display:flex; flex-direction:column; gap:.1rem; }
+.doc-brand strong{ font-family:var(--display); font-size:1.05rem; letter-spacing:-.02em; text-transform:uppercase; color:#14161a; }
+
+.doc-parties{ display:grid; grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr)); gap:1.4rem; margin-top:1.4rem; }
+
+.doc-table{ width:100%; border-collapse:collapse; margin-bottom:.6rem; }
+.doc-table th, .doc-table td{
+  text-align:left; padding:.5rem .2rem; border-bottom:1px solid #e9ecef;
+  vertical-align:top; font-size:.9rem;
+}
+.doc-table th{ color:#6a7079; font-weight:500; width:38%; }
+.doc-table td{ color:#14161a; }
+.doc-num{ text-align:right; width:auto; }
+.doc-items th{ width:auto; }
+.doc-items tfoot th{ text-align:right; color:#3c414a; }
+.doc-due th, .doc-due td{ border-top:2px solid #14161a; border-bottom:none; padding-top:.7rem; font-size:1rem; }
+
+.doc-blank{ display:inline-block; min-width:150px; border-bottom:1px solid #b9bfc7; }
+.doc-terms{ list-style:decimal; padding-left:1.3rem; }
+.doc-terms li{ color:#3c414a; margin-bottom:.5rem; font-size:.89rem; }
+
+/* Article and clause numbering.
+   Two counters do the work a legal document expects: `art` ticks once per
+   <h3 class="doc-art">, `cl` restarts inside each clause list, and the
+   marker prints them together as 4.2 rather than a bare 2. Because both
+   counters live on .doc, the clause list can still read the article
+   number set by the heading above it. */
+.doc{ counter-reset:art; }
+.doc-art{ counter-increment:art; }
+.doc-art::before{ content:counter(art) ". "; }
+
+.doc-clauses{ list-style:none; padding-left:0; counter-reset:cl; margin-bottom:.4rem; }
+.doc-clauses > li{
+  counter-increment:cl; position:relative; padding-left:3.1rem;
+  color:#3c414a; font-size:.89rem; margin-bottom:.55rem;
+}
+.doc-clauses > li::before{
+  content:counter(art) "." counter(cl);
+  position:absolute; left:0; top:0;
+  color:#6a7079; font-variant-numeric:tabular-nums;
+}
+.doc-clauses strong{ color:#14161a; }
+
+.doc-lead{ color:#3c414a; font-size:.92rem; }
+.doc-quiet{ color:#6a7079; font-size:.8rem; }
+.doc-recital{ font-size:.89rem; color:#3c414a; margin-bottom:.5rem; }
+
+/* the initials strip that closes each appendix and the terms */
+.doc-initials{
+  display:flex; gap:.6rem; align-items:flex-end; justify-content:flex-end;
+  margin-top:1.2rem; font-size:.78rem; color:#6a7079;
+}
+.doc-initials .doc-blank{ min-width:90px; }
+
+.doc-stamp{
+  display:inline-block; margin-top:1rem; padding:.4rem 1rem; border-radius:6px;
+  border:2px solid #157f3d; color:#157f3d !important;
+  font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:.78rem;
+}
+
+.doc-sign{ display:grid; grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr)); gap:2rem; margin-top:1.6rem; }
+.doc-sig-line{
+  display:block; min-height:2.1rem; border-bottom:1px solid #14161a;
+  font-family:var(--display); font-size:1.2rem; color:#14161a;
+}
+.doc-sig-label{ display:block; font-size:.74rem; color:#6a7079; margin-top:.35rem; }
+
+.doc-actions{ max-width:900px; margin:2rem auto 0; display:flex; flex-direction:column; gap:1rem; }
+.doc-agree{
+  display:flex; gap:.7rem; align-items:flex-start;
+  font-size:.9rem; color:var(--ink-2); max-width:60ch;
+}
+.doc-agree input{ width:auto; margin-top:.3rem; }
+
+/* =====================================================================
+   PRINT — only the document survives
+   ===================================================================== */
+@media print{
+  @page{ margin:16mm; }
+  html, body{ background:#fff !important; color:#000 !important; }
+  body::after{ display:none !important; }
+  #gl, .site-header, .site-footer, .mobile-nav,
+  .page-head, .doc-form, .doc-actions, .no-print{ display:none !important; }
+  #page{ padding:0 !important; }
+  section{ padding:0 !important; }
+  .wrap{ max-width:none !important; padding:0 !important; }
+  .doc{
+    box-shadow:none !important; border-radius:0 !important;
+    padding:0 !important; max-width:none !important;
+  }
+  .doc h3{ break-after:avoid; }
+  .doc-terms li, .doc-clauses > li, .doc-table tr{ break-inside:avoid; }
+  .doc-sign, .doc-initials, .doc-parties{ break-inside:avoid; }
+  .reveal{ opacity:1 !important; transform:none !important; }
 }
 
 /* =====================================================================

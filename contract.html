@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Booking Agreement, DJ Mishoo</title>
+<meta name="description" content="Generate and sign the booking agreement for your event.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body data-page="contract">
+
+<main id="page">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow reveal">Agreement</p>
+      <h1 class="reveal d1">Booking <span class="accent">agreement</span></h1>
+      <p class="crumbs reveal d2"><a href="index.html">Home</a> / Booking agreement</p>
+    </div>
+  </section>
+
+  <!-- ================= DETAILS FORM ================= -->
+  <section style="padding-top:0" class="doc-form">
+    <div class="wrap">
+      <div class="grid grid-2" style="gap:clamp(2rem,5vw,4rem); align-items:start">
+
+        <div class="reveal">
+          <h2>Fill in the details</h2>
+          <p class="lead" style="margin-top:1rem">
+            Enter the booking details and press generate. The full agreement is
+            built here in your browser, ready to read, sign and save as a PDF.
+          </p>
+          <p style="margin-top:1.2rem">
+            Only the name, email, date and fee are required. Anything you leave
+            blank prints as a fill-in line, so a detail still being settled can
+            be written in by hand and initialled by both sides.
+          </p>
+          <p class="form-note" style="margin-top:1.4rem">
+            Nothing is uploaded while you type. The agreement only reaches
+            DJ Mishoo when you press send, or when you email the PDF yourself.
+          </p>
+        </div>
+
+        <form class="form card reveal d1" id="contractForm">
+
+          <div class="form-group" role="group" aria-labelledby="lg-you">
+            <p class="form-legend" id="lg-you">Your details</p>
+            <div class="field-row">
+              <div class="field">
+                <label for="client">Full name</label>
+                <input id="client" name="client" type="text" autocomplete="name" required>
+              </div>
+              <div class="field">
+                <label for="phone">Phone</label>
+                <input id="phone" name="phone" type="tel" autocomplete="tel">
+              </div>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label for="org">Company or organisation <span class="doc-opt">(if booking for one)</span></label>
+              <input id="org" name="org" type="text" autocomplete="organization">
+            </div>
+            <div class="field">
+              <label for="clientAddress">Mailing address</label>
+              <input id="clientAddress" name="clientAddress" type="text" autocomplete="street-address"
+                     placeholder="Street, city, province, postal code">
+            </div>
+          </div>
+
+          <div class="form-group" role="group" aria-labelledby="lg-event">
+            <p class="form-legend" id="lg-event">The event</p>
+            <div class="field-row">
+              <div class="field">
+                <label for="eventDate">Date</label>
+                <input id="eventDate" name="eventDate" type="date" required>
+              </div>
+              <div class="field">
+                <label for="eventType">Type</label>
+                <select id="eventType" name="eventType">
+                  <option>Wedding</option>
+                  <option>Corporate</option>
+                  <option>Club / bar</option>
+                  <option>Birthday</option>
+                  <option>Private party</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="venue">Venue name</label>
+              <input id="venue" name="venue" type="text">
+            </div>
+            <div class="field">
+              <label for="address">Venue address</label>
+              <input id="address" name="address" type="text">
+            </div>
+            <div class="field">
+              <label for="guests">Approximate guests</label>
+              <input id="guests" name="guests" type="number" min="1" placeholder="120">
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="coordName">Day-of contact</label>
+                <input id="coordName" name="coordName" type="text" placeholder="Planner, or best person on site">
+              </div>
+              <div class="field">
+                <label for="coordPhone">Their phone</label>
+                <input id="coordPhone" name="coordPhone" type="tel">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" role="group" aria-labelledby="lg-times">
+            <p class="form-legend" id="lg-times">Running times</p>
+            <div class="field-row">
+              <div class="field">
+                <label for="setupTime">Setup access from</label>
+                <input id="setupTime" name="setupTime" type="time">
+              </div>
+              <div class="field">
+                <label for="clearBy">Venue cleared by</label>
+                <input id="clearBy" name="clearBy" type="time">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="startTime">Performance starts</label>
+                <input id="startTime" name="startTime" type="time">
+              </div>
+              <div class="field">
+                <label for="endTime">Performance ends</label>
+                <input id="endTime" name="endTime" type="time">
+              </div>
+            </div>
+            <p class="form-note">
+              Setup normally needs 60 to 90 minutes before the performance, and
+              packing down takes about an hour after it.
+            </p>
+          </div>
+
+          <div class="form-group" role="group" aria-labelledby="lg-svc">
+            <p class="form-legend" id="lg-svc">Services included</p>
+            <div class="check-list">
+              <label class="check" for="svcDj"><input id="svcDj" type="checkbox" checked><span>DJ performance and sound</span></label>
+              <label class="check" for="svcMc"><input id="svcMc" type="checkbox"><span>MC and announcements</span></label>
+              <label class="check" for="svcCeremony"><input id="svcCeremony" type="checkbox"><span>Ceremony sound and mic</span></label>
+              <label class="check" for="svcCocktail"><input id="svcCocktail" type="checkbox"><span>Cocktail hour music</span></label>
+              <label class="check" for="svcLight"><input id="svcLight" type="checkbox"><span>Dance floor lighting</span></label>
+              <label class="check" for="svcUplight"><input id="svcUplight" type="checkbox"><span>Uplighting</span></label>
+              <label class="check" for="svcDryIce"><input id="svcDryIce" type="checkbox"><span>Dry ice, low fog</span></label>
+              <label class="check" for="svcSpark"><input id="svcSpark" type="checkbox"><span>Cold spark fountains</span></label>
+            </div>
+            <p class="form-note">
+              Dry ice and cold sparks need the venue's written approval in
+              advance. Clause 12 covers what happens if a venue refuses.
+            </p>
+          </div>
+
+          <div class="form-group" role="group" aria-labelledby="lg-fee">
+            <p class="form-legend" id="lg-fee">Package and fee</p>
+            <div class="field">
+              <label for="pkg">Package</label>
+              <select id="pkg" name="pkg"></select>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="fee">Total fee (CAD)</label>
+                <input id="fee" name="fee" type="number" min="0" step="1" required>
+              </div>
+              <div class="field">
+                <label for="deposit">Deposit (CAD)</label>
+                <input id="deposit" name="deposit" type="number" min="0" step="1">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="depositDue">Deposit due by</label>
+                <input id="depositDue" name="depositDue" type="date">
+              </div>
+              <div class="field">
+                <label for="travel">Travel fee (CAD)</label>
+                <input id="travel" name="travel" type="number" min="0" step="1" placeholder="0">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="overtime">Overtime, per hour</label>
+                <input id="overtime" name="overtime" type="number" min="0" step="5" placeholder="150">
+              </div>
+              <div class="field">
+                <label for="payMethod">Payment by</label>
+                <select id="payMethod" name="payMethod">
+                  <option>Interac e-transfer</option>
+                  <option>Interac e-transfer or cash</option>
+                  <option>Cash</option>
+                  <option>Bank transfer</option>
+                  <option>Other, as agreed in writing</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" role="group" aria-labelledby="lg-music">
+            <p class="form-legend" id="lg-music">Music and extras</p>
+            <div class="field">
+              <label for="mustPlay">Must-play list</label>
+              <textarea id="mustPlay" name="mustPlay" placeholder="First dance, entrance song, family favourites…"></textarea>
+            </div>
+            <div class="field">
+              <label for="noPlay">Do-not-play list</label>
+              <textarea id="noPlay" name="noPlay" placeholder="Anything you never want to hear…"></textarea>
+            </div>
+            <div class="field">
+              <label for="notes">Anything else agreed</label>
+              <textarea id="notes" name="notes" placeholder="Second location, extra hour, specific setup…"></textarea>
+            </div>
+            <div class="check-list" style="margin-top:.2rem">
+              <label class="check" for="promoOptOut">
+                <input id="promoOptOut" type="checkbox">
+                <span>Do not use photos or video of my event for promotion</span>
+              </label>
+            </div>
+          </div>
+
+          <input type="hidden" id="agreementDate">
+
+          <button class="btn btn-primary btn-block" type="submit">Generate agreement</button>
+          <p class="form-note">Check every detail before signing. This becomes the record of what was agreed.</p>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GENERATED DOCUMENT ================= -->
+  <section style="padding-top:0" id="contractStage" hidden>
+    <div class="wrap">
+      <article class="doc" id="contractDoc"></article>
+
+      <div class="doc-actions no-print">
+        <div class="field" style="max-width:420px">
+          <label for="sigName">Type your full name to sign</label>
+          <input id="sigName" type="text" autocomplete="name" placeholder="Your full legal name">
+        </div>
+
+        <label class="doc-agree" for="sigAgree">
+          <input id="sigAgree" type="checkbox">
+          <span>
+            I have read the whole agreement above, including appendices A and B,
+            and I accept it on the date shown.
+          </span>
+        </label>
+
+        <div class="hero-cta">
+          <button class="btn btn-primary" id="printDoc" disabled>Save as PDF or print</button>
+          <button class="btn btn-ghost" id="sendDoc" disabled>Send a copy to DJ Mishoo</button>
+        </div>
+        <p class="form-status" id="docStatus" role="status" aria-live="polite"></p>
+        <p class="form-note">
+          Keep your own copy. Printing to PDF is the record for both sides, and
+          the reference at the top of the document identifies this booking in
+          any later message about it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/app.js" defer></script>
+<script src="js/docs.js" defer></script>
+<script src="js/motion.js" defer></script>
+</body>
+</html>

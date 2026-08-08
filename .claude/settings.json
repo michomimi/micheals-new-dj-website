@@ -25,7 +25,24 @@
       "Bash(curl -s -o /dev/null -w 'portrait.jpg: %{http_code}\\\\n' http://localhost:8080/images/press/portrait.jpg)",
       "Bash(curl -s -o /dev/null -w 'about.html:   %{http_code}\\\\n' http://localhost:8080/about.html)",
       "Bash(sips -Z 300 -s formatOptions 60 images/gallery/thumb/06.jpg --out __TRACKED_VAR__/check06.jpg)",
-      "Bash(grep -v '^removed$')"
+      "Bash(grep -v '^removed$')",
+      "Bash(awk '{print $9, $5\"b\"}')",
+      "Bash(curl -s -o /dev/null -w 'localhost:8080 -> %{http_code}\\\\n' http://localhost:8080/contract.html)",
+      "Bash(node --check js/docs.js)",
+      "Bash(node --check js/app.js)",
+      "Read(//System/Volumes/Preboot/Cryptexes/OS/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/**)",
+      "Bash(/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc -e ' *)",
+      "Bash(/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc /private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/harness.js)",
+      "Bash(grep -v '^$')",
+      "Bash(ls -d \"/Applications/Google Chrome.app\" \"/Applications/Safari.app\" \"/Applications/Microsoft Edge.app\" 2>/dev/null; which chromium 2>/dev/null)",
+      "Read(//Applications/Google Chrome.app/**)",
+      "Bash(python3 -)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --no-sandbox --hide-scrollbars --window-size=1000,3000 --screenshot=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/shot.png file:///private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/preview.html)",
+      "Bash(grep -n \"^section\\\\|^section{\\\\|^section, \\\\|^p{\\\\|^h2{\" css/styles.css)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --no-sandbox --hide-scrollbars --window-size=1000,2400 --screenshot=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/shot2.png file:///private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/preview.html)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --no-sandbox --hide-scrollbars --window-size=1000,1500 --screenshot=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/shot-tail.png file:///private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/preview-tail.html)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --no-sandbox --hide-scrollbars --virtual-time-budget=3000 --window-size=1200,2600 --screenshot=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/form.png file:///Users/michealjabour/Desktop/micheals-new-dj-website/contract.html)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --no-sandbox --no-pdf-header-footer --print-to-pdf=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/agreement.pdf file:///private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/preview.html)"
     ],
     "additionalDirectories": [
       "/Users/michealjabour/Desktop/micheals-new-dj-website"
