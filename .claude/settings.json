@@ -15,7 +15,17 @@
       "Bash(grep -n 'width:[0-9]\\\\{3,\\\\}px\\\\|min-width:[0-9]\\\\{3,\\\\}px\\\\|minmax\\([0-9]*px' css/styles.css)",
       "Bash(osascript -l JavaScript -e ' *)",
       "Bash(curl -s -o /dev/null -w 'preview page: %{http_code}\\\\n' http://localhost:8080/preview-background.html)",
-      "Bash(curl -s -o /dev/null -w 'gl.js: %{http_code}\\\\n' http://localhost:8080/js/gl.js)"
+      "Bash(curl -s -o /dev/null -w 'gl.js: %{http_code}\\\\n' http://localhost:8080/js/gl.js)",
+      "Bash(command -v sips magick convert)",
+      "Bash(sips -g pixelWidth -g pixelHeight images/gallery/IMG_0390.DNG)",
+      "Bash(grep -v '^excluded$')",
+      "Read(//private/tmp/**)",
+      "Bash(cd /Users/michealjabour/Desktop/micheals-new-dj-website/images/gallery *)",
+      "Bash(sips -g pixelWidth -g pixelHeight images/press/portrait.jpg)",
+      "Bash(curl -s -o /dev/null -w 'portrait.jpg: %{http_code}\\\\n' http://localhost:8080/images/press/portrait.jpg)",
+      "Bash(curl -s -o /dev/null -w 'about.html:   %{http_code}\\\\n' http://localhost:8080/about.html)",
+      "Bash(sips -Z 300 -s formatOptions 60 images/gallery/thumb/06.jpg --out __TRACKED_VAR__/check06.jpg)",
+      "Bash(grep -v '^removed$')"
     ],
     "additionalDirectories": [
       "/Users/michealjabour/Desktop/micheals-new-dj-website"

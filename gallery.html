@@ -22,29 +22,44 @@
       <p class="eyebrow reveal">Gallery</p>
       <h1 class="reveal d1">Nights that <span class="accent">worked</span></h1>
       <p class="crumbs reveal d2"><a href="index.html">Home</a> / Gallery</p>
+
+      <nav class="section-jump reveal d3" aria-label="Gallery sections">
+        <a href="#photos">Photos</a>
+        <a href="#videos">Videos</a>
+      </nav>
     </div>
   </section>
 
-  <section style="padding-top:0">
+  <!-- ================= PHOTOS ================= -->
+  <section style="padding-top:0" id="photos">
     <div class="wrap">
-      <!--
-        EDIT: drop photos into images/gallery/ and swap each placeholder for:
-          <figure class="shot">
-            <img src="images/gallery/01.jpg" alt="Wedding reception, Calgary" loading="lazy">
-            <figcaption class="shot-cap">Wedding · Calgary</figcaption>
-          </figure>
-        Clicking a real .shot opens the lightbox (js/motion.js).
-      -->
-      <div class="gallery reveal">
-        <div class="shot empty">Add <code>images/gallery/01.jpg</code></div>
-        <div class="shot empty">Add <code>images/gallery/02.jpg</code></div>
-        <div class="shot empty">Add <code>images/gallery/03.jpg</code></div>
-        <div class="shot empty">Add <code>images/gallery/04.jpg</code></div>
-        <div class="shot empty">Add <code>images/gallery/05.jpg</code></div>
-        <div class="shot empty">Add <code>images/gallery/06.jpg</code></div>
-        <div class="shot empty">Add <code>images/gallery/07.jpg</code></div>
-        <div class="shot empty">Add <code>images/gallery/08.jpg</code></div>
+      <div class="sec-head reveal">
+        <p class="eyebrow">Photos</p>
+        <h2>From the <span class="accent">floor</span></h2>
       </div>
+      <!--
+        Tiles are generated from CONFIG.gallery in js/app.js. Name photos
+        01.jpg, 02.jpg and so on, drop them in images/gallery/, and change
+        `count` there to add or remove slots. Clicking a tile opens the
+        lightbox below.
+      -->
+      <div class="gallery" data-gallery></div>
+    </div>
+  </section>
+
+  <!-- ================= VIDEOS ================= -->
+  <section style="padding-top:0" id="videos">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">Videos</p>
+        <h2>Sets in <span class="accent">motion</span></h2>
+      </div>
+      <!--
+        Generated from CONFIG.videos in js/app.js. Name clips 01.mp4,
+        02.mp4 and so on, put them in videos/, add matching poster images
+        in videos/posters/, then set `count`.
+      -->
+      <div class="video-grid" data-videos></div>
     </div>
   </section>
 
@@ -58,13 +73,15 @@
 
 </main>
 
-<!-- lightbox — wired up by js/motion.js -->
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo">
+<!-- lightbox, wired up by js/motion.js. Holds either the photo or the
+     clip; whichever is not in use is hidden. Video is muted with no
+     audio track in the file either. -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Media viewer">
   <button class="lightbox-close" aria-label="Close">
     <svg viewBox="0 0 24 24" class="ic"><path d="M6 6l12 12M18 6L6 18"/></svg>
   </button>
-  <!-- src is filled in by js/motion.js when a photo is opened -->
-  <img alt="">
+  <img alt="" hidden>
+  <video controls muted playsinline preload="none" hidden></video>
 </div>
 
 <script src="js/gl.js" defer></script>

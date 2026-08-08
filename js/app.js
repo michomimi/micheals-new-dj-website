@@ -58,6 +58,49 @@ const CONFIG = {
      ------------------------------------------------------------------ */
   formEndpoint: "",
 
+  /* ---- GALLERY ----------------------------------------------------
+     Name your photos 01.jpg, 02.jpg ... up to `count`, and drop them in
+     the folder below. A slot with no file yet shows a labelled
+     placeholder rather than a broken image, so you can upload in
+     batches. Change `count` to add or remove slots.
+
+     Captions are optional. Add them by slot number, for example
+     3: "Wedding · The Fairmont". Slots with no caption show none.
+     ------------------------------------------------------------------ */
+  gallery: {
+    thumbs: "images/gallery/thumb/",   // 700px, shown in the grid
+    full:   "images/gallery/full/",    // 1600px, loaded only in the lightbox
+    ext:    ".jpg",
+    count:  11,
+    captions: {
+      // 1: "Wedding · Calgary",
+      // 2: "Corporate · Downtown",
+    },
+  },
+
+  /* ---- VIDEOS -----------------------------------------------------
+     Same idea as the gallery. Name clips 01.mp4, 02.mp4 and so on, put
+     them in videos/, then set `count` to how many there are.
+
+     A poster is the still frame shown before play. Drop a matching
+     01.jpg in videos/posters/ for each clip. Without one the player
+     shows a black frame until it is played, which still works but
+     looks worse.
+
+     Keep clips short and compressed. A phone video can be 100MB per
+     minute, which is far too heavy for a web page. 1080p and under
+     about 10MB per clip is a sensible ceiling.
+     ------------------------------------------------------------------ */
+  videos: {
+    path:    "videos/",
+    posters: "videos/posters/",
+    ext:     ".mp4",
+    count:   9,
+    captions: {
+      // 1: "Wedding · first dance",
+    },
+  },
+
   /* ---- REVIEWS ----------------------------------------------------
      Guests submit reviews through the form on reviews.html, which sends
      them to you (form endpoint, or your email as a fallback). Nothing
@@ -310,6 +353,39 @@ function initDeposit() {
 }
 
 /* =====================================================================
+   BUTTON FEEDBACK
+   The ripple has to start where the button was actually pressed, and CSS
+   alone cannot know that, so the coordinates are handed to the animation
+   as custom properties. Everything else is done in the stylesheet.
+
+   Delegated from the document because buttons are injected into the
+   header and footer after this file's other work runs.
+   ===================================================================== */
+function initButtonFX() {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) return;
+
+  document.addEventListener("pointerdown", (e) => {
+    if (!e.target.closest) return;
+    const btn = e.target.closest(".btn");
+    if (!btn || btn.getAttribute("aria-disabled") === "true") return;
+
+    const r = btn.getBoundingClientRect();
+    btn.style.setProperty("--bx", `${e.clientX - r.left}px`);
+    btn.style.setProperty("--by", `${e.clientY - r.top}px`);
+
+    /* restart cleanly if the same button is pressed again mid-animation */
+    btn.classList.remove("is-hit");
+    void btn.offsetWidth;                       // force reflow
+    btn.classList.add("is-hit");
+  });
+
+  document.addEventListener("animationend", (e) => {
+    if (e.animationName === "coneRing") e.target.classList.remove("is-hit");
+  });
+}
+
+/* =====================================================================
    PACKAGE BUTTONS
    The package cards quote "starting" prices, so they open the enquiry
    form rather than a checkout — the real number depends on venue and
@@ -379,6 +455,107 @@ function initForms() {
       }
     });
   });
+}
+
+/* =====================================================================
+   GALLERY
+   Tiles are generated from CONFIG.gallery so 30 photos do not mean 30
+   blocks of copy-pasted markup. Every image is lazy loaded, which is
+   what keeps a long gallery usable on mobile data.
+   ===================================================================== */
+function renderGallery() {
+  const host = $("[data-gallery]");
+  if (!host) return;
+
+  const g = CONFIG.gallery;
+  const slots = [];
+
+  for (let i = 1; i <= g.count; i++) {
+    const n   = String(i).padStart(2, "0");
+    const cap = g.captions[i] || "";
+    const alt = cap || `DJ Mishoo event photo ${n}`;
+    slots.push(`
+      <figure class="shot tile-in" style="--i:${i % 6}" data-slot="${n}"
+              tabindex="0" role="button" aria-label="Open photo ${n}">
+        <img src="${g.thumbs}${n}${g.ext}" data-full="${g.full}${n}${g.ext}"
+             alt="${esc(alt)}" loading="lazy" decoding="async">
+        ${cap ? `<figcaption class="shot-cap">${esc(cap)}</figcaption>` : ""}
+      </figure>`);
+  }
+  host.innerHTML = slots.join("");
+
+  /* An empty slot would otherwise render as a broken image icon. Catch
+     the load failure and turn that tile back into a labelled placeholder
+     so photos can be uploaded a few at a time. */
+  $$("img", host).forEach((img) => {
+    img.addEventListener("error", () => {
+      const fig = img.closest(".shot");
+      if (!fig) return;
+      fig.classList.add("empty");
+      fig.removeAttribute("tabindex");
+      fig.removeAttribute("role");
+      fig.innerHTML = `<span>${fig.dataset.slot}${esc(CONFIG.gallery.ext)}</span>`;
+    });
+  });
+
+  if (window.revealItems) window.revealItems($$(".shot", host));
+}
+
+/* =====================================================================
+   VIDEOS
+   preload="none" matters here: without it a browser starts fetching
+   every clip on the page at once, which is far heavier than images.
+   Nothing downloads until a visitor presses play.
+   ===================================================================== */
+function renderVideos() {
+  const host = $("[data-videos]");
+  if (!host) return;
+
+  const v = CONFIG.videos;
+
+  if (!v.count) {
+    host.innerHTML = `<p class="reviews-empty">
+      <b>Videos coming soon</b>
+      <span>Clips from recent nights are on the way.</span>
+    </p>`;
+    return;
+  }
+
+  /* The grid shows poster frames, not players. Clicking one opens the
+     clip centred in the lightbox, which is why no <video> is created
+     here: nine players on a page is a lot of idle machinery. */
+  const cards = [];
+  for (let i = 1; i <= v.count; i++) {
+    const n   = String(i).padStart(2, "0");
+    const cap = v.captions[i] || "";
+    const label = cap || `DJ Mishoo clip ${n}`;
+    cards.push(`
+      <figure class="video-card tile-in" style="--i:${i % 6}" data-slot="${n}"
+              data-src="${v.path}${n}${v.ext}" data-poster="${v.posters}${n}.jpg"
+              tabindex="0" role="button" aria-label="Play ${esc(label)}">
+        <img src="${v.posters}${n}.jpg" alt="${esc(label)}" loading="lazy" decoding="async">
+        <span class="video-play" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg>
+        </span>
+        ${cap ? `<figcaption>${esc(cap)}</figcaption>` : ""}
+      </figure>`);
+  }
+  host.innerHTML = cards.join("");
+
+  /* a slot with no poster yet becomes a labelled placeholder, so clips
+     can be uploaded a few at a time without the page looking broken */
+  $$("img", host).forEach((img) => {
+    img.addEventListener("error", () => {
+      const fig = img.closest(".video-card");
+      if (!fig) return;
+      fig.classList.add("empty");
+      fig.removeAttribute("tabindex");
+      fig.removeAttribute("role");
+      fig.innerHTML = `<span>${fig.dataset.slot}${esc(CONFIG.videos.ext)}</span>`;
+    });
+  });
+
+  if (window.revealItems) window.revealItems($$(".video-card", host));
 }
 
 /* =====================================================================
@@ -460,9 +637,12 @@ document.addEventListener("DOMContentLoaded", () => {
   injectShell();
   initHeader();
   fillBrandText();
+  renderGallery();
+  renderVideos();
   renderReviews();
   renderPrices();
   initDeposit();
   initPackagePicker();
+  initButtonFX();
   initForms();
 });

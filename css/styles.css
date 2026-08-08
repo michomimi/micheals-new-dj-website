@@ -80,13 +80,69 @@ section{ padding:clamp(60px,9vw,124px) 0; position:relative; }
 .sec-head p{ margin-top:.8rem; max-width:60ch; }
 
 /* ---------- buttons ---------- */
+/* =====================================================================
+   BUTTONS — they behave like speaker cones.
+
+   HOVER  a signal sweeps across the face, left to right, and the button
+          lifts. The sweep is a background layer rather than a pseudo
+          element, so it can never sit on top of the label.
+   PRESS  the cone punches: it compresses, springs past its size, then
+          settles, while a ripple leaves the exact point pressed and a
+          ring of pressure expands outward past the edge.
+
+   The ripple lives on ::before at z-index -1. Painting order puts that
+   above the button's own background but below its text, so the label
+   stays legible without wrapping it in an extra element. isolate keeps
+   the negative layer from escaping behind the section.
+   ===================================================================== */
 .btn{
+  position:relative; isolation:isolate; overflow:hidden;
   display:inline-flex; align-items:center; justify-content:center; gap:.55rem;
   font-weight:600; font-size:.92rem; padding:.9rem 1.7rem; border-radius:999px;
-  transition:background .18s, color .18s, box-shadow .18s, transform .18s;
+  --bx:50%; --by:50%;                       /* press point, set by app.js */
+  background-image:linear-gradient(105deg,
+    transparent 38%, rgba(255,255,255,.28) 50%, transparent 62%);
+  background-size:250% 100%;
+  background-position:170% 0;
+  background-repeat:no-repeat;
+  transition:background-color .18s, color .18s, box-shadow .18s,
+             transform .22s var(--ease), background-position .6s var(--ease);
 }
-.btn-primary{ background:var(--red); color:#fff; }
-.btn-primary:hover{ background:var(--red-hot); box-shadow:var(--glow); transform:translateY(-2px); }
+.btn:hover{ background-position:-60% 0; }
+
+.btn::before{
+  content:""; position:absolute; z-index:-1;
+  left:var(--bx); top:var(--by); width:0; height:0;
+  transform:translate(-50%,-50%); border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,.6), rgba(255,255,255,0) 68%);
+  opacity:0;
+}
+.btn.is-hit::before{ animation:conePush .6s var(--ease) forwards; }
+@keyframes conePush{
+  0%   { width:0;    height:0;    opacity:.9; }
+  100% { width:320%; height:320%; opacity:0;  }
+}
+
+/* compress, overshoot, settle. box-shadow is not clipped by overflow,
+   so the pressure ring can travel outside the button. */
+.btn.is-hit{ animation:coneKick .44s var(--ease), coneRing .62s ease-out; }
+@keyframes coneKick{
+  0%   { transform:scale(.93); }
+  42%  { transform:scale(1.05) translateY(-3px); }
+  70%  { transform:scale(.99); }
+  100% { transform:none; }
+}
+@keyframes coneRing{
+  0%   { box-shadow:0 0 0 0    rgba(220,38,38,.55); }
+  100% { box-shadow:0 0 0 24px rgba(220,38,38,0);   }
+}
+
+.btn:active{ transform:scale(.95); transition-duration:.08s; }
+.btn[aria-disabled="true"]{ background-image:none; }
+.btn[aria-disabled="true"]:hover{ transform:none; }
+
+.btn-primary{ background-color:var(--red); color:#fff; }
+.btn-primary:hover{ background-color:var(--red-hot); box-shadow:var(--glow); transform:translateY(-2px); }
 .btn-ghost{ color:var(--ink); box-shadow:inset 0 0 0 1.4px var(--line); }
 .btn-ghost:hover{ box-shadow:inset 0 0 0 1.4px var(--red); color:var(--red); transform:translateY(-2px); }
 .btn-block{ width:100%; }
@@ -410,8 +466,99 @@ body.nav-open{ overflow:hidden; }
   opacity:0; transform:translateY(6px); transition:opacity .25s, transform .25s var(--ease);
 }
 .shot:hover .shot-cap{ opacity:1; transform:translateY(0); }
-.shot.empty{ display:grid; place-items:center; color:var(--ink-3); font-size:.78rem; text-align:center; padding:1rem; cursor:default; }
+/* a slot with no photo uploaded yet */
+.shot.empty{
+  display:grid; place-items:center; cursor:default;
+  background:var(--bg-2); border:1px dashed rgba(255,255,255,.14);
+  color:var(--ink-3); font-size:.74rem; letter-spacing:.1em;
+  text-align:center; padding:1rem;
+}
 .shot.empty::after{ display:none; }
+.shot.empty:hover{ border-color:rgba(255,255,255,.14); }
+
+/* jump links between the Photos and Videos sections */
+.section-jump{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1.6rem; }
+.section-jump a{
+  font-size:.84rem; font-weight:600; padding:.55rem 1.2rem; border-radius:999px;
+  color:var(--ink-2); box-shadow:inset 0 0 0 1.4px var(--line);
+  transition:color .16s, box-shadow .16s, background .16s;
+}
+.section-jump a:hover{
+  color:var(--red); box-shadow:inset 0 0 0 1.4px var(--red);
+  background:rgba(220,38,38,.08);
+}
+
+/* =====================================================================
+   VIDEOS
+   ===================================================================== */
+.video-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr)); gap:.9rem; }
+.video-card{
+  position:relative; border-radius:var(--radius); overflow:hidden; cursor:pointer;
+  border:1px solid var(--line-2); background:var(--bg-2); aspect-ratio:4/5;
+  transition:border-color .2s, transform .28s var(--ease), box-shadow .28s;
+}
+.video-card img{
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .6s var(--ease), filter .3s;
+}
+/* darken toward the bottom so the caption and play badge stay readable */
+.video-card::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to top, rgba(0,0,0,.72), transparent 55%);
+  opacity:.65; transition:opacity .25s;
+}
+.video-card:hover{
+  border-color:rgba(220,38,38,.55); transform:translateY(-5px);
+  box-shadow:0 28px 55px -28px rgba(220,38,38,.7);
+}
+.video-card:hover img{ transform:scale(1.07); filter:saturate(1.12); }
+.video-card:hover::after{ opacity:.85; }
+
+/* play badge, pulsing like the speaker rings in the background */
+.video-play{
+  position:absolute; inset:0; margin:auto; z-index:2;
+  width:60px; height:60px; border-radius:50%;
+  display:grid; place-items:center;
+  background:rgba(220,38,38,.90); color:#fff;
+  box-shadow:0 0 0 0 rgba(220,38,38,.55);
+  transition:transform .28s var(--ease), background .2s;
+}
+.video-play svg{ width:24px; height:24px; fill:currentColor; margin-left:3px; }
+.video-card:hover .video-play{ transform:scale(1.12); background:var(--red-hot); animation:playPulse 1.4s ease-out infinite; }
+@keyframes playPulse{
+  0%   { box-shadow:0 0 0 0    rgba(220,38,38,.55); }
+  100% { box-shadow:0 0 0 26px rgba(220,38,38,0);   }
+}
+
+.video-card figcaption{
+  position:absolute; left:1rem; right:1rem; bottom:.9rem; z-index:2;
+  font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink);
+  opacity:0; transform:translateY(6px);
+  transition:opacity .25s, transform .25s var(--ease);
+}
+.video-card:hover figcaption{ opacity:1; transform:none; }
+
+/* a clip that has not been uploaded yet */
+.video-card.empty{
+  display:grid; place-items:center; aspect-ratio:4/5; cursor:default;
+  border-style:dashed; border-color:rgba(255,255,255,.14);
+  color:var(--ink-3); font-size:.74rem; letter-spacing:.1em;
+}
+.video-card.empty::after{ display:none; }
+.video-card.empty:hover{ transform:none; box-shadow:none; border-color:rgba(255,255,255,.14); }
+
+/* =====================================================================
+   TILE ENTRANCE
+   Photos and clips rise and settle in sequence as they scroll in. The
+   --i on each tile staggers them; it wraps every 6 so a long grid never
+   ends up waiting seconds for the last item.
+   ===================================================================== */
+.tile-in{
+  opacity:0; transform:translateY(20px) scale(.96);
+  transition:opacity .55s var(--ease), transform .55s var(--ease);
+  transition-delay:calc(var(--i, 0) * 60ms);
+}
+.tile-in.in{ opacity:1; transform:none; }
 
 .lightbox{
   position:fixed; inset:0; z-index:90; display:grid; place-items:center; padding:4vw;
@@ -419,9 +566,28 @@ body.nav-open{ overflow:hidden; }
   opacity:0; visibility:hidden; transition:opacity .25s, visibility 0s .25s;
 }
 .lightbox.open{ opacity:1; visibility:visible; transition:opacity .25s; }
-.lightbox img{ max-width:100%; max-height:86vh; border-radius:var(--radius-s); }
+.lightbox img,
+.lightbox video{
+  max-width:100%; max-height:86svh; border-radius:var(--radius-s);
+  display:block; background:#000;
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.95), 0 0 0 1px rgba(255,255,255,.06);
+}
+.lightbox [hidden]{ display:none; }
 .lightbox-close{ position:absolute; top:18px; right:22px; width:44px; height:44px; border-radius:50%; background:var(--bg-2); display:grid; place-items:center; transition:background .18s; }
 .lightbox-close:hover{ background:var(--red); }
+
+/* portrait photo on the About page */
+.portrait{
+  position:relative; aspect-ratio:4/5; overflow:hidden;
+  border-radius:var(--radius); border:1px solid var(--line-2);
+  background:var(--bg-2);
+}
+.portrait img{ width:100%; height:100%; object-fit:cover; object-position:center 30%; }
+/* a red wash along the bottom ties the photo to the rest of the palette */
+.portrait::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to top, rgba(220,38,38,.20), transparent 55%);
+}
 
 .video-frame{ position:relative; border-radius:var(--radius); overflow:hidden; border:1px solid var(--line-2); background:var(--bg-2); aspect-ratio:16/9; }
 .video-frame iframe, .video-frame video{ width:100%; height:100%; display:block; border:0; object-fit:cover; }

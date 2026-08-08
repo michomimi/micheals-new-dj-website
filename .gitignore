@@ -1,0 +1,4 @@
+# Full-resolution camera originals: kept locally, too large for git
+images/gallery/_originals/
+videos/_originals/
+.DS_Store
