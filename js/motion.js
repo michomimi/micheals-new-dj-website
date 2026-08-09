@@ -20,9 +20,80 @@
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
     items.forEach((el) => io.observe(el));
+
+    /* The observer deliberately ignores the bottom 8% of the viewport so
+       content does not animate while it is still half off screen. On
+       first paint that leaves anything in that band invisible until the
+       visitor scrolls, which reads as text failing to load.
+
+       The sweep below reveals whatever is genuinely on screen and leaves
+       the rest to the observer. It queries the DOM fresh every time
+       rather than closing over the initial list, so it also covers the
+       gallery and video tiles that app.js injects later. */
+    const sweepVisible = () => {
+      qa(".reveal:not(.in), .tile-in:not(.in)").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (!r.width && !r.height) return;         // not laid out / hidden
+        if (r.top < window.innerHeight && r.bottom > 0) el.classList.add("in");
+      });
+    };
+    window.addEventListener("load", sweepVisible, { once: true });
+    setTimeout(sweepVisible, 1200);
+
+    /* Resizing to a narrow width reflows the whole page: blocks that were
+       side by side stack, everything gets taller, and content that had
+       been far below the fold can land on screen without the visitor
+       scrolling a single pixel. A resize alone is not a reliable trigger
+       for the observer, so without this the newly exposed copy stays at
+       opacity 0 until something else nudges it, which is why shrinking
+       the window made text vanish until a refresh.
+
+       Debounced, because a dragged window edge fires this continuously. */
+    let resizeTimer;
+    const onViewportChange = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(sweepVisible, 120);
+    };
+    window.addEventListener("resize", onViewportChange, { passive: true });
+    window.addEventListener("orientationchange", onViewportChange, { passive: true });
+    /* Back/forward cache restores skip load, so sweep again on show. */
+    window.addEventListener("pageshow", sweepVisible);
+
+    /* Exposed so app.js can sweep after it renders, and for testing. */
+    window.sweepReveal = sweepVisible;
+
+    /* Called after anything rewrites chunks of the page, which for this
+       site means switching language: restoring the saved English HTML
+       re-inserts the original markup, so nested elements come back
+       WITHOUT their revealed state and, being new nodes, are no longer
+       watched by the observer. Left alone they would stay invisible for
+       the rest of the visit.
+
+       Anything the visitor has already reached (on screen, or scrolled
+       past, so top is above the fold) is shown immediately rather than
+       re-animated. Everything still below the fold goes back under the
+       observer so it animates in on scroll as normal. */
+    window.refreshReveal = () => {
+      qa(".reveal:not(.in), .tile-in:not(.in)").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (!r.width && !r.height) return;
+        if (r.top < window.innerHeight) el.classList.add("in");
+        else io.observe(el);
+      });
+    };
   } else {
     items.forEach((el) => el.classList.add("in"));
   }
+
+  /* When there is no observer (reduced motion, or an old browser) the
+     reveal is not staged at all, so the fallback simply shows anything
+     still hidden. Defined unconditionally so callers never have to test
+     for it. */
+  if (!window.sweepReveal) {
+    window.sweepReveal = () =>
+      qa(".reveal:not(.in), .tile-in:not(.in)").forEach((el) => el.classList.add("in"));
+  }
+  if (!window.refreshReveal) window.refreshReveal = window.sweepReveal;
 
   /* ---------- marquee: duplicate the track so the loop is seamless ----
      The CSS animates to -50%, which only lines up if the content is

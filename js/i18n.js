@@ -437,6 +437,13 @@ function applyLang(lang, { animate = false } = {}) {
 
   translateTree(isAr ? "ar" : "en");
 
+  /* Switching language rewrites whole elements, so nested content comes
+     back as brand new nodes: no revealed state, and no longer watched by
+     the scroll observer. refreshReveal restores both, otherwise the copy
+     stays invisible for the rest of the visit. It also covers the reflow,
+     since the two languages set at different lengths. */
+  if (typeof window.refreshReveal === "function") window.refreshReveal();
+
   const btn = document.getElementById("langToggle");
   if (btn) {
     /* The button shows both codes at once and highlights the active one

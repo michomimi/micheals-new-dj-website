@@ -67,7 +67,8 @@
       "Bash(rm -f __c_*.html)",
       "Bash(xargs -I{} echo \"stale .theme-toggle rules left: {}\")",
       "Bash(python3 -c ' *)",
-      "Bash(curl -s -o /dev/null -w \" __u.html -> %{http_code}\\\\n\" http://localhost:8081/__u.html)"
+      "Bash(curl -s -o /dev/null -w \" __u.html -> %{http_code}\\\\n\" http://localhost:8081/__u.html)",
+      "Bash(awk '/@media/{q=$0} /display:none|opacity:0|visibility:hidden/{if\\(q!=\"\"\\)print NR\": \"q\" -> \"$0}' css/styles.css)"
     ],
     "additionalDirectories": [
       "/Users/michealjabour/Desktop/micheals-new-dj-website"

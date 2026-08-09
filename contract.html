@@ -14,7 +14,14 @@
 if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
 d.dataset.theme=t;var l=localStorage.getItem("lang")==="ar"?"ar":"en";
 d.dataset.lang=l;d.lang=l;d.dir=l==="ar"?"rtl":"ltr";}
-catch(e){d.dataset.theme="dark";d.dataset.lang="en";}})();</script>
+catch(e){d.dataset.theme="dark";d.dataset.lang="en";}
+/* Turn the scroll-reveal on. Set here, before first paint, so the copy
+   never flashes in and then hides. The timer is the safety net: if the
+   reveal script has still not marked anything after 3.5s (blocked, slow
+   or broken), drop the class and every .reveal falls back to visible. */
+d.className+=" js";
+setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.classList.remove("js");}},2200);
+})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">

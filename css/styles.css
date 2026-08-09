@@ -17,8 +17,11 @@
   --bg-2:      #0E1014;   /* card           */
   --bg-3:      #16181E;   /* input / hover  */
   --ink:       #FFFFFF;
-  --ink-2:     rgba(255,255,255,.66);
-  --ink-3:     rgba(255,255,255,.40);
+  /* Body copy was sitting at .66, which reads grey against pure black.
+     Lifted so paragraphs are closer to the headings without going flat
+     white, which would remove the hierarchy between the two. */
+  --ink-2:     rgba(255,255,255,.84);
+  --ink-3:     rgba(255,255,255,.56);
   --red:       #DC2626;   /* primary accent */
   --red-hot:   #FF2E3E;   /* hover / glow   */
   --line:      rgba(255,255,255,.10);
@@ -77,41 +80,47 @@
    4.5:1, which the small uppercase eyebrow text would fail.
    ===================================================================== */
 :root[data-theme="light"]{
-  --bg:        #F7F8FA;
-  --bg-1:      #FFFFFF;
-  --bg-2:      #FFFFFF;
-  --bg-3:      #ECEEF2;
+  /* Warm-neutral greys rather than white. The page is the darkest of the
+     three surfaces and the card sits a step above it, so cards still read
+     as raised without needing a heavier border. Nothing here is #FFFFFF:
+     a pure white page glares, and it left the cards with nowhere lighter
+     to go, which is what flattened the contact form earlier. */
+  --bg:        #E7E9EF;   /* page            */
+  --bg-1:      #F1F3F7;   /* raised surface  */
+  --bg-2:      #F3F5F8;   /* card            */
+  --bg-3:      #D9DDE5;   /* input / hover   */
   --ink:       #0B0C0F;
   --ink-2:     rgba(11,12,15,.72);
-  --ink-3:     rgba(11,12,15,.48);
-  --red:       #C81E1E;
-  --red-hot:   #E02424;
-  --line:      rgba(11,12,15,.16);
-  --line-2:    rgba(11,12,15,.10);
-  --line-3:    rgba(11,12,15,.20);
+  --ink-3:     rgba(11,12,15,.50);
+  --red:       #C01B1B;
+  --red-hot:   #D82222;
+  --line:      rgba(11,12,15,.18);
+  --line-2:    rgba(11,12,15,.11);
+  --line-3:    rgba(11,12,15,.22);
 
-  --header-bg:      rgba(255,255,255,.62);
-  --header-bg-solid:rgba(255,255,255,.94);
-  --footer-bg:      rgba(236,238,242,.82);
-  --scrim:          rgba(247,248,250,.96);
-  --vignette:       rgba(11,12,15,.06);
-  --shadow:         rgba(11,12,15,.20);
-  --shadow-deep:    rgba(11,12,15,.30);
+  --header-bg:      rgba(238,240,245,.70);
+  --header-bg-solid:rgba(233,235,241,.95);
+  --footer-bg:      rgba(216,220,229,.85);
+  --scrim:          rgba(231,233,239,.96);
+  --vignette:       rgba(11,12,15,.07);
+  --shadow:         rgba(11,12,15,.22);
+  --shadow-deep:    rgba(11,12,15,.32);
   --media-shade:    rgba(0,0,0,.55);
 
   --sheen:   rgba(255,255,255,.55);
   --ripple:  rgba(255,255,255,.75);
-  --canvas-opacity: .32;
-  --glow:    0 0 42px -10px rgba(200,30,30,.42);
+  /* the canvas inverts to a pale wash, so it lifts the page back up;
+     pulled down to keep the darker ground from being washed out */
+  --canvas-opacity: .24;
+  --glow:    0 0 42px -10px rgba(192,27,27,.40);
 
-  /* The form lives on a white card, so a white field would disappear
-     into it and leave the whole block reading as one flat pale panel.
-     Fields are stepped down to a definite grey, with a border and label
+  /* The form sits on a card, so the field has to contrast with the CARD
+     rather than the page. Stepped down from it, with a border and label
      dark enough to give the form an edge. */
-  --field-bg:     #E4E7EE;
-  --field-border: rgba(11,12,15,.24);
-  --field-hover:  #D9DDE6;
-  --label-ink:    rgba(11,12,15,.66);
+  --field-bg:     #DCE0E9;
+  --field-border: rgba(11,12,15,.26);
+  --field-hover:  #CFD5E0;
+  --label-ink:    rgba(11,12,15,.68);
 }
 
 *{ box-sizing:border-box; margin:0; padding:0; }
@@ -280,8 +289,13 @@ body::after{
 
 .header-actions{ display:flex; align-items:center; gap:.6rem; }
 /* Book Me is the only full-size button in a row of small controls, so it
-   is stepped down from the default .btn padding to sit level with them. */
-.header-actions .btn{ padding:.55rem 1.05rem; font-size:.8rem; line-height:1.1; }
+   is stepped down from the default .btn padding to sit level with them.
+   nowrap because at phone widths the row got tight enough to break the
+   label, dropping "Me" onto a second line under "Book". */
+.header-actions .btn{
+  padding:.5rem .95rem; font-size:.78rem; line-height:1.1;
+  white-space:nowrap;
+}
 .hamburger{ display:none; width:42px; height:42px; border-radius:10px; }
 .hamburger span{ display:block; width:20px; height:2px; margin:4px auto; background:var(--ink); transition:transform .22s var(--ease), opacity .15s; }
 .hamburger[aria-expanded="true"] span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
@@ -530,6 +544,14 @@ body.nav-open{ overflow:hidden; }
   line-height:1; color:var(--red); letter-spacing:-.04em;
 }
 .deposit-row .btn{ flex:0 0 auto; }
+/* The header row (logo, language pill, theme switch, Book Me) runs out of
+   width well before the 400px breakpoint on a real phone, so it steps
+   down here first rather than waiting and breaking. */
+@media (max-width:560px){
+  .header-actions{ gap:.5rem; }
+  .header-actions .btn{ padding:.46rem .8rem; font-size:.75rem; }
+}
+
 @media (max-width:560px){
   .deposit-row{ align-items:stretch; }
   .deposit-row .btn{ width:100%; }
@@ -640,12 +662,13 @@ body.nav-open{ overflow:hidden; }
    --i on each tile staggers them; it wraps every 6 so a long grid never
    ends up waiting seconds for the last item.
    ===================================================================== */
-.tile-in{
+.tile-in{ opacity:1; transform:none; }
+html.js .tile-in{
   opacity:0; transform:translateY(20px) scale(.96);
   transition:opacity .55s var(--ease), transform .55s var(--ease);
   transition-delay:calc(var(--i, 0) * 60ms);
 }
-.tile-in.in{ opacity:1; transform:none; }
+html.js .tile-in.in{ opacity:1; transform:none; }
 
 .lightbox{
   position:fixed; inset:0; z-index:90; display:grid; place-items:center; padding:4vw;
@@ -968,8 +991,16 @@ body.nav-open{ overflow:hidden; }
 /* =====================================================================
    SCROLL REVEAL — short and understated, matching the reference
    ===================================================================== */
-.reveal{ opacity:0; transform:translateY(18px); transition:opacity .5s var(--ease), transform .5s var(--ease); }
-.reveal.in{ opacity:1; transform:none; }
+/* The hidden starting state is applied ONLY when .js is on <html>.
+
+   Previously .reveal was opacity:0 in the base stylesheet, so the copy
+   was invisible until motion.js loaded AND its observer fired. Any delay
+   or failure in that chain left readable text stranded at zero opacity,
+   which is what "I have to refresh to see the words" was. CSS arrives
+   before the scripts do, so the safe default has to be visible. */
+.reveal{ opacity:1; transform:none; }
+html.js .reveal{ opacity:0; transform:translateY(18px); transition:opacity .5s var(--ease), transform .5s var(--ease); }
+html.js .reveal.in{ opacity:1; transform:none; }
 .reveal.d1{ transition-delay:.06s } .reveal.d2{ transition-delay:.12s }
 .reveal.d3{ transition-delay:.18s } .reveal.d4{ transition-delay:.24s }
 
@@ -998,7 +1029,7 @@ body.nav-open{ overflow:hidden; }
 /* Small phones: the logo, the Book Me button and the hamburger stop
    fitting on one line around here, so the button loses its padding. */
 @media (max-width:400px){
-  .header-actions .btn{ padding:.5rem .82rem; font-size:.76rem; }
+  .header-actions .btn{ padding:.44rem .72rem; font-size:.72rem; }
   .brand-mark{ font-size:1.12rem; }
   .header-actions{ gap:.45rem; }
   .pkg{ padding:1.6rem 1.25rem; }
