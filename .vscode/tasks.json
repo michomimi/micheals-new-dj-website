@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "serve-dj",
+            "type": "shell",
+            "command": "lsof -ti tcp:8081 | xargs kill 2>/dev/null; python3 -u .vscode/devserver.py 8081 & SRV=$!; until curl -sf -o /dev/null http://127.0.0.1:8081/; do sleep 0.2; done; echo 'DJ SITE READY on http://localhost:8081'; wait $SRV",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "silent",
+                "panel": "dedicated"
+            },
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": "^__never_matches__$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^Serving HTTP|^lsof",
+                    "endsPattern": "DJ SITE READY"
+                }
+            }
+        },
+        {
+            "label": "stop-serve-dj",
+            "type": "shell",
+            "command": "lsof -ti tcp:8081 | xargs kill 2>/dev/null; echo 'DJ server on 8081 stopped'",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

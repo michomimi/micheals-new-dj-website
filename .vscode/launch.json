@@ -7,9 +7,11 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:8080",
-            "webRoot": "${workspaceFolder}"
+            "name": "Launch Chrome — DJ site (8081)",
+            "url": "http://localhost:8081",
+            "webRoot": "${workspaceFolder}",
+            "preLaunchTask": "serve-dj",
+            "postDebugTask": "stop-serve-dj"
         }
     ]
 }
