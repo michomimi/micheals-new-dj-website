@@ -58,7 +58,30 @@ const AR = {
   "Follow": "تابعني",
   "Terms and Conditions": "الشروط والأحكام",
   "Privacy Policy": "سياسة الخصوصية",
+  "All rights reserved.": "جميع الحقوق محفوظة.",
+  "Calgary, AB": "كالغاري، ألبرتا",
   "Open-format DJ · Calgary, AB": "دي جيه بجميع الأنماط · كالغاري، ألبرتا",
+
+  /* ---- marquee strip + hero scroll cue ---- */
+  "Scroll": "مرّر",
+  "Nightclubs": "النوادي الليلية",
+  "Birthdays": "أعياد الميلاد",
+  "Private Events": "مناسبات خاصة",
+  "Open Format": "جميع الأنماط",
+  "Arabic": "عربي",
+  "Hip-Hop": "هيب هوب",
+  "House": "هاوس",
+  "Afrobeats": "أفروبيتس",
+  "Top 40": "الأغاني الرائجة",
+
+  /* ---- contact info rows ---- */
+  "Call or text": "اتصال أو رسالة",
+  "Based in": "المقر",
+  "Response time": "وقت الرد",
+  "<span>Based in</span> Calgary, AB, available across Alberta":
+    "<span>المقر</span> كالغاري، ألبرتا، وأعمل في جميع أنحاء المقاطعة",
+  "<span>Response time</span> Usually same day, always within 48 hours":
+    "<span>وقت الرد</span> في نفس اليوم غالباً، وخلال ٤٨ ساعة دائماً",
 
   /* ---- breadcrumbs ---- */
   '<a href="index.html">Home</a> / About': '<a href="index.html">الرئيسية</a> / نبذة عني',
@@ -99,7 +122,7 @@ const AR = {
   "Full PA, wireless mics and dance-floor lighting available. Delivered, set up and struck without you lifting anything.":
     "نظام صوت متكامل وميكروفونات لاسلكية وإضاءة لساحة الرقص. تُنقل وتُركّب وتُفكّك دون أن ترفع أنت شيئاً.",
   "Events played": "مناسبة أحييتها",
-  "Behind the decks": "سنوات خلف الأجهزة",
+  "Behind the decks": "خلف الأجهزة",
   "Venues played": "صالة عملت فيها",
   "Floors filled": "ساحات ممتلئة",
   'What people say <span class="accent">after</span>': 'ما يقوله الناس <span class="accent">بعدها</span>',
@@ -230,6 +253,8 @@ const AR = {
   "Already agreed a date?": "اتفقنا على موعد؟",
   "Pick your package and pay the deposit, which is half the package price. The balance is due on the day, and I'll send written confirmation as soon as it clears.":
     "اختر باقتك وادفع العربون، وهو نصف قيمة الباقة. يُسدَّد الباقي يوم المناسبة، وسأرسل تأكيداً كتابياً فور وصول الدفعة.",
+  "Most booked": "الأكثر حجزاً",
+  "Deposit due": "العربون المستحق",
   "Your package": "باقتك",
   "Pay deposit": "ادفع العربون",
   /* Deposit picker options are built from CONFIG.packages, so the price
@@ -277,6 +302,13 @@ const AR = {
 /* ---------------------------------------------------------------------
    ATTRIBUTES — placeholders, aria-labels, titles
    --------------------------------------------------------------------- */
+/* Stat counter suffixes, matched on the data-suffix attribute. */
+const AR_SUFFIX = {
+  "+": "+",
+  "%": "٪",
+  " yrs": " سنوات",
+};
+
 const AR_ATTR = {
   "What's this about?": "ما موضوع رسالتك؟",
   "Menu": "القائمة",
@@ -297,15 +329,24 @@ const AR_TITLE = {
 /* Candidate elements. Deliberately leaf-ish: a container full of other
    blocks must not be listed, or swapping it would wipe its children. */
 const I18N_SEL = [
+  /* Headings and prose */
   "#page h1", "#page h2", "#page h3", "#page h4",
   "#page p", "#page li", "#page label", "#page button",
-  "#page a.btn", "#page figcaption", "#page summary", "#page option",
-  "#page small", "#page label > span",
+  "#page figcaption", "#page summary", "#page option", "#page small",
+  /* Inline carriers. A narrow tag list missed the marquee, the stat
+     captions and the contact rows, all of which are bare spans and divs.
+     Parents are visited before children, so a container that IS
+     translated detaches its children and they are skipped as stale. */
+  "#page span", "#page div", "#page b", "#page strong", "#page em", "#page a",
+  "#page td", "#page th",
+  ".marquee-track span", ".hero-scroll",
+  /* Shell */
   ".site-header .nav-link", ".site-header .btn",
   ".mobile-nav a",
   ".site-footer h4", ".site-footer p", ".site-footer li",
   ".site-footer .footer-nav a", ".site-footer .footer-contact span",
   ".site-footer .footer-contact a", ".site-footer .btn",
+  ".site-footer .footer-legal a", ".site-footer .footer-bottom span",
 ].join(", ");
 
 const normKey = (s) => s.replace(/\s+/g, " ").trim();
@@ -324,9 +365,13 @@ function translateTree(lang) {
     if (!el.isConnected) return;
 
     /* Never swap the innerHTML of anything holding a live form control or
-       a value JS wrote in (prices, deposit amounts). Rewriting the HTML
-       would replace the real control with a dead copy and drop the value.
-       Their inner text still translates via the narrower selectors above. */
+       a value JS wrote in (prices, deposit amounts, the animated stat
+       counters). Rewriting the HTML would replace the real control with a
+       dead copy and drop the value. `matches` covers the element itself,
+       `querySelector` its descendants; the counter <b> is the element,
+       the .stat wrapper is the ancestor, and both must be left alone.
+       Their sibling captions still translate on their own. */
+    if (el.matches("[data-price], [data-count]")) return;
     if (el.querySelector("input, select, textarea, [data-price], [data-count]")) return;
 
     if (el._en === undefined) el._en = el.innerHTML;
@@ -352,6 +397,20 @@ function translateTree(lang) {
         el.setAttribute(a, el[cache]);
       }
     });
+  });
+
+  /* The stat counters are animated by motion.js, which reads data-suffix
+     every frame and rewrites the text. Translating the element directly
+     would be overwritten on the next frame, so the SUFFIX is translated
+     instead and the visible text is set to the value the animation ends
+     on. Re-running the count-up afterwards lands on the same string. */
+  document.querySelectorAll("[data-count]").forEach((el) => {
+    if (el._enSuffix === undefined) el._enSuffix = el.dataset.suffix || "";
+    const suffix = lang === "ar"
+      ? (AR_SUFFIX[el._enSuffix] !== undefined ? AR_SUFFIX[el._enSuffix] : el._enSuffix)
+      : el._enSuffix;
+    el.dataset.suffix = suffix;
+    el.textContent = (el.dataset.count || "") + suffix;
   });
 
   if (document._enTitle === undefined) document._enTitle = document.title;

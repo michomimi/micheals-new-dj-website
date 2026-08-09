@@ -334,7 +334,10 @@ function injectShell() {
           </div>
         </div>
         <div class="footer-bottom">
-          <span>&copy; <span id="year"></span> ${esc(CONFIG.name)}. All rights reserved.</span>
+          <!-- "All rights reserved" is its own span so it can be translated
+               on its own: the sentence around it holds the year, which
+               changes, and would make an unstable translation key. -->
+          <span>&copy; <span id="year"></span> ${esc(CONFIG.name)}. <span>All rights reserved.</span></span>
           <nav class="footer-legal" aria-label="Legal">
             ${LEGAL.map((l) => `<a href="${l.href}">${l.label}</a>`).join("")}
           </nav>

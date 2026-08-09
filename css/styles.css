@@ -278,7 +278,10 @@ body::after{
 .nav-link:hover, .nav-link.is-active{ color:var(--ink); }
 .nav-link:hover::after, .nav-link.is-active::after{ width:100%; }
 
-.header-actions{ display:flex; align-items:center; gap:.8rem; }
+.header-actions{ display:flex; align-items:center; gap:.6rem; }
+/* Book Me is the only full-size button in a row of small controls, so it
+   is stepped down from the default .btn padding to sit level with them. */
+.header-actions .btn{ padding:.55rem 1.05rem; font-size:.8rem; line-height:1.1; }
 .hamburger{ display:none; width:42px; height:42px; border-radius:10px; }
 .hamburger span{ display:block; width:20px; height:2px; margin:4px auto; background:var(--ink); transition:transform .22s var(--ease), opacity .15s; }
 .hamburger[aria-expanded="true"] span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
@@ -995,7 +998,7 @@ body.nav-open{ overflow:hidden; }
 /* Small phones: the logo, the Book Me button and the hamburger stop
    fitting on one line around here, so the button loses its padding. */
 @media (max-width:400px){
-  .header-actions .btn{ padding:.72rem 1rem; font-size:.84rem; }
+  .header-actions .btn{ padding:.5rem .82rem; font-size:.76rem; }
   .brand-mark{ font-size:1.12rem; }
   .header-actions{ gap:.45rem; }
   .pkg{ padding:1.6rem 1.25rem; }
@@ -1026,18 +1029,18 @@ body.nav-open{ overflow:hidden; }
    ===================================================================== */
 .theme-switch{
   position:relative; flex:none;
-  width:60px; height:32px; border-radius:999px;
+  width:48px; height:26px; border-radius:999px;
   display:flex; align-items:center; justify-content:space-between;
-  padding:0 7px;
+  padding:0 5px;
   background:var(--bg-3);
   box-shadow:inset 0 0 0 1.4px var(--line);
   transition:box-shadow .18s, background-color .22s var(--ease);
 }
 .theme-switch:hover{ box-shadow:inset 0 0 0 1.4px var(--red); }
-.theme-switch:active .ts-knob{ width:24px; }   /* squashes toward the travel */
+.theme-switch:active .ts-knob{ width:19px; }   /* squashes toward the travel */
 
 .theme-switch .ts-ic{
-  width:14px; height:14px; flex:none; position:relative; z-index:1;
+  width:11px; height:11px; flex:none; position:relative; z-index:1;
   fill:none; stroke:currentColor; stroke-width:2;
   stroke-linecap:round; stroke-linejoin:round;
   transition:color .22s var(--ease), opacity .22s var(--ease);
@@ -1049,20 +1052,20 @@ body.nav-open{ overflow:hidden; }
 :root[data-theme="light"] .theme-switch .ts-moon{ color:var(--ink-3); opacity:.55; }
 
 .ts-knob{
-  position:absolute; top:50%; left:3px;
-  width:26px; height:26px; border-radius:50%;
+  position:absolute; top:50%; left:2.5px;
+  width:21px; height:21px; border-radius:50%;
   background:var(--ink); transform:translateY(-50%);
   transition:transform .26s var(--ease), background-color .22s var(--ease), width .12s;
 }
 /* light = knob travels to the sun end */
 :root[data-theme="light"] .ts-knob{
-  transform:translateY(-50%) translateX(28px);
+  transform:translateY(-50%) translateX(22px);
   background:var(--red);
 }
 /* In RTL the whole header mirrors, so the knob must travel the other way
    or it would slide away from the icon it is meant to land on. */
-:root[data-lang="ar"] .ts-knob{ left:auto; right:3px; }
-:root[data-lang="ar"][data-theme="light"] .ts-knob{ transform:translateY(-50%) translateX(-28px); }
+:root[data-lang="ar"] .ts-knob{ left:auto; right:2.5px; }
+:root[data-lang="ar"][data-theme="light"] .ts-knob{ transform:translateY(-50%) translateX(-22px); }
 
 /* =====================================================================
    LANGUAGE TOGGLE — En / Ar
@@ -1073,10 +1076,10 @@ body.nav-open{ overflow:hidden; }
    means the current language or the destination.
    ===================================================================== */
 .lang-toggle{
-  flex:none; height:32px; padding:0 .7rem;
-  display:inline-flex; align-items:center; gap:.28rem;
+  flex:none; height:26px; padding:0 .5rem;
+  display:inline-flex; align-items:center; gap:.22rem;
   border-radius:999px;
-  font-family:var(--display); font-weight:600; font-size:.8rem;
+  font-family:var(--display); font-weight:600; font-size:.7rem;
   line-height:1; letter-spacing:.02em;
   box-shadow:inset 0 0 0 1.4px var(--line);
   transition:box-shadow .18s, transform .2s var(--ease);
@@ -1100,12 +1103,12 @@ body.nav-open{ overflow:hidden; }
    earlier in the file, next to the other 400px overrides, meant the base
    sizes further down silently won and the shrink never happened. */
 @media (max-width:400px){
-  .theme-switch{ width:52px; height:28px; padding:0 6px; }
-  .theme-switch .ts-ic{ width:12px; height:12px; }
-  .ts-knob{ width:22px; height:22px; }
-  :root[data-theme="light"] .ts-knob{ transform:translateY(-50%) translateX(24px); }
-  :root[data-lang="ar"][data-theme="light"] .ts-knob{ transform:translateY(-50%) translateX(-24px); }
-  .lang-toggle{ height:28px; padding:0 .5rem; font-size:.72rem; }
+  .theme-switch{ width:44px; height:24px; padding:0 4px; }
+  .theme-switch .ts-ic{ width:10px; height:10px; }
+  .ts-knob{ width:19px; height:19px; }
+  :root[data-theme="light"] .ts-knob{ transform:translateY(-50%) translateX(20px); }
+  :root[data-lang="ar"][data-theme="light"] .ts-knob{ transform:translateY(-50%) translateX(-20px); }
+  .lang-toggle{ height:24px; padding:0 .42rem; font-size:.64rem; }
 }
 
 /* =====================================================================
