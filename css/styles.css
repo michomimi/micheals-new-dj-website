@@ -1165,3 +1165,31 @@ body.nav-open{ overflow:hidden; }
 
 /* Documents stay left-to-right: they are legal paperwork kept in English */
 .doc{ direction:ltr; text-align:left; }
+
+/* =====================================================================
+   LATIN DATA INSIDE RTL TEXT
+
+   A phone number is digits plus neutral characters ("+", spaces), and
+   the bidi algorithm resolves neutrals against the surrounding
+   paragraph. Inside an Arabic (RTL) block that pushes the leading "+"
+   to the far side and can reorder the digit groups, so +1 403 437 6153
+   renders as something like 6153 437 403 1+.
+
+   The stored value is never wrong, only its visual order. Isolating each
+   value in its own left-to-right run pins the display, which is why
+   numbers keep their English formatting in Arabic. Applied in both
+   languages: it is a no-op in LTR and cannot then be forgotten.
+
+   Kept to inline value carriers on purpose. Setting direction on a block
+   would also flip its text alignment and pull it to the wrong edge.
+   ===================================================================== */
+a[href^="tel:"],
+a[href^="mailto:"],
+[data-phone],
+[data-email],
+[data-price],
+.deposit-amount b,
+.footer-contact a{
+  direction:ltr;
+  unicode-bidi:isolate;
+}
