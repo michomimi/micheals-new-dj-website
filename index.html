@@ -4,12 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DJ Mishoo, Open-Format DJ in Calgary</title>
-<meta name="description" content="Calgary DJ. Weddings, clubs, corporate and private events, with high energy sets built around your room.">
+<meta name="description" content="Calgary DJ playing Arabic and English. Weddings, clubs, corporate and private events, with high energy sets built around your room.">
 <meta name="theme-color" content="#000000">
+<!-- Theme must be set before the stylesheet paints, otherwise a light-mode
+     visitor sees a black flash on every navigation. Deliberately inline and
+     synchronous: an external or deferred file would run too late. -->
+<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");
+if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
+d.dataset.theme=t;var l=localStorage.getItem("lang")==="ar"?"ar":"en";
+d.dataset.lang=l;d.lang=l;d.dir=l==="ar"?"rtl":"ltr";}
+catch(e){d.dataset.theme="dark";d.dataset.lang="en";}})();</script>
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="DJ Mishoo, Open-Format DJ in Calgary">
-<meta property="og:description" content="Calgary DJ. Weddings, clubs, corporate and private events.">
+<meta property="og:description" content="Calgary DJ playing Arabic and English. Weddings, clubs, corporate and private events.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,8 +39,9 @@
         <span>moves the <em class="accent" style="font-style:normal">room</em></span>
       </h1>
       <p class="hero-sub reveal d2">
-        Open-format DJ. Weddings, clubs, corporate nights and private
-        parties. Read the crowd, build the night, never let the floor drop.
+        Open-format DJ playing Arabic and English. Weddings, clubs, corporate
+        nights and private parties. Read the crowd, build the night, never let
+        the floor drop.
       </p>
       <div class="hero-cta reveal d3">
         <a class="btn btn-primary" href="booking.html">Check my availability</a>
@@ -48,6 +57,7 @@
     <div class="marquee-track">
       <span>Weddings</span><span>Nightclubs</span><span>Corporate</span>
       <span>Birthdays</span><span>Private Events</span><span>Open Format</span>
+      <span>Arabic</span>
       <span>Hip-Hop</span><span>House</span><span>Afrobeats</span><span>Top 40</span>
     </div>
   </div>
@@ -154,6 +164,7 @@
 </main>
 
 <script src="js/gl.js" defer></script>
+<script src="js/i18n.js" defer></script>
 <script src="js/app.js" defer></script>
 <script src="js/motion.js" defer></script>
 </body>

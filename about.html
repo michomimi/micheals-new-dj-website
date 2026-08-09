@@ -6,6 +6,14 @@
 <title>About DJ Mishoo</title>
 <meta name="description" content="Calgary open-format DJ. Background, gear and how a booking actually runs.">
 <meta name="theme-color" content="#000000">
+<!-- Theme must be set before the stylesheet paints, otherwise a light-mode
+     visitor sees a black flash on every navigation. Deliberately inline and
+     synchronous: an external or deferred file would run too late. -->
+<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");
+if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
+d.dataset.theme=t;var l=localStorage.getItem("lang")==="ar"?"ar":"en";
+d.dataset.lang=l;d.lang=l;d.dir=l==="ar"?"rtl":"ltr";}
+catch(e){d.dataset.theme="dark";d.dataset.lang="en";}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -41,6 +49,11 @@
             My style is open format, hip-hop into house, Afrobeats into Top 40, whatever the
             room is actually asking for. I'd rather watch the floor than the tracklist. That
             means the set you get on the night is built live, not pre-recorded and pressed play.
+          </p>
+          <p style="margin-bottom:1rem">
+            I DJ Arabic as well, mixed into the same set as the English material rather than
+            kept to its own bracket. If half your guest list speaks Arabic and half doesn't,
+            that is the room I am most comfortable in.
           </p>
           <p>
             The other half of the job is everything around the music: arriving early, keeping the
@@ -127,6 +140,7 @@
 </main>
 
 <script src="js/gl.js" defer></script>
+<script src="js/i18n.js" defer></script>
 <script src="js/app.js" defer></script>
 <script src="js/motion.js" defer></script>
 </body>

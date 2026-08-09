@@ -166,6 +166,101 @@ function brandMark() {
 }
 
 /* =====================================================================
+   THEME
+   The theme is applied by a tiny inline script in each <head>, before
+   the stylesheet paints, so the page never flashes the wrong colour.
+   Everything here is only about the button and the later switching.
+
+   localStorage holds an explicit choice and nothing else. While it is
+   empty the site follows the OS, including live changes; the first press
+   of the button is what pins it. That is why the media query listener
+   below checks for a stored value before reacting.
+   ===================================================================== */
+const THEME_KEY = "theme";
+
+/* A sliding switch rather than an icon button. role="switch" plus
+   aria-checked is what tells a screen reader this is a two-state control;
+   the visual knob alone carries no meaning. */
+const THEME_TOGGLE = `
+  <button class="theme-switch" id="themeToggle" type="button" role="switch"
+          aria-checked="false" aria-label="Switch theme" title="Switch theme">
+    <svg class="ts-ic ts-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="4.6"/>
+      <path d="M12 1.6v2.6M12 19.8v2.6M3.6 3.6l1.9 1.9M18.5 18.5l1.9 1.9M1.6 12h2.6M19.8 12h2.6M3.6 20.4l1.9-1.9M18.5 5.5l1.9-1.9"/>
+    </svg>
+    <svg class="ts-ic ts-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M20.5 14.2A8.4 8.4 0 019.8 3.5a8.4 8.4 0 1010.7 10.7z"/>
+    </svg>
+    <span class="ts-knob" aria-hidden="true"></span>
+  </button>`;
+
+function systemTheme() {
+  return window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+}
+
+/* Private-mode Safari throws on localStorage rather than returning null,
+   so every access is guarded. A failure here must not take the page down. */
+function storedTheme() {
+  try { return localStorage.getItem(THEME_KEY); } catch { return null; }
+}
+
+function applyTheme(theme, { animate = false } = {}) {
+  const root = document.documentElement;
+
+  /* The colour transition is opt-in per switch. Leaving it always on
+     would animate the whole page on first paint too, which reads as a
+     slow load rather than a deliberate change. */
+  if (animate) {
+    root.classList.add("theme-anim");
+    clearTimeout(applyTheme._t);
+    applyTheme._t = setTimeout(() => root.classList.remove("theme-anim"), 320);
+  }
+
+  root.dataset.theme = theme;
+
+  /* Keeps the mobile browser chrome in step with the page. */
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute("content", theme === "light" ? "#F7F8FA" : "#000000");
+
+  const btn = $("#themeToggle");
+  if (btn) {
+    const next = theme === "light" ? "dark" : "light";
+    const label = `Switch to ${next} mode`;
+    btn.setAttribute("aria-label", label);
+    btn.setAttribute("title", label);
+    /* checked = the light state, so the knob's position and the value a
+       screen reader announces describe the same thing. */
+    btn.setAttribute("aria-checked", String(theme === "light"));
+  }
+}
+
+function initTheme() {
+  /* The inline head script already set this; read it back rather than
+     recomputing, so the two can never disagree. */
+  applyTheme(document.documentElement.dataset.theme || storedTheme() || systemTheme());
+
+  const btn = $("#themeToggle");
+  if (btn) {
+    btn.addEventListener("click", () => {
+      const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+      try { localStorage.setItem(THEME_KEY, next); } catch { /* private mode */ }
+      applyTheme(next, { animate: true });
+    });
+  }
+
+  /* Follow the OS only until the visitor makes their own choice. */
+  if (window.matchMedia) {
+    const mq = window.matchMedia("(prefers-color-scheme: light)");
+    const onChange = (e) => {
+      if (!storedTheme()) applyTheme(e.matches ? "light" : "dark", { animate: true });
+    };
+    if (mq.addEventListener) mq.addEventListener("change", onChange);
+    else if (mq.addListener) mq.addListener(onChange);
+  }
+}
+
+/* =====================================================================
    HEADER + FOOTER — injected so there is one copy, not six
    ===================================================================== */
 function injectShell() {
@@ -181,6 +276,8 @@ function injectShell() {
         <a class="brand" href="index.html" aria-label="${esc(CONFIG.name)} home">${brandMark()}</a>
         <nav class="nav" aria-label="Main">${navLinks}</nav>
         <div class="header-actions">
+          <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language"><span data-lg="en">En</span><i aria-hidden="true">/</i><span data-lg="ar">Ar</span></button>
+          ${THEME_TOGGLE}
           <a class="btn btn-primary" href="booking.html">Book Me</a>
           <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
             <span></span><span></span><span></span>
@@ -635,6 +732,8 @@ function fillBrandText() {
 
 document.addEventListener("DOMContentLoaded", () => {
   injectShell();
+  initTheme();          // after injectShell, the button has to exist first
+  initLang();
   initHeader();
   fillBrandText();
   renderGallery();
@@ -645,4 +744,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initPackagePicker();
   initButtonFX();
   initForms();
+  /* Reviews, prices and package options are rendered above from CONFIG,
+     so they miss the first translation pass and need a second one. */
+  retranslate();
 });

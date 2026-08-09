@@ -6,6 +6,14 @@
 <title>DJ Mishoo Reviews</title>
 <meta name="description" content="What guests, couples and event organisers say after the night, plus a place to leave your own review.">
 <meta name="theme-color" content="#000000">
+<!-- Theme must be set before the stylesheet paints, otherwise a light-mode
+     visitor sees a black flash on every navigation. Deliberately inline and
+     synchronous: an external or deferred file would run too late. -->
+<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");
+if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
+d.dataset.theme=t;var l=localStorage.getItem("lang")==="ar"?"ar":"en";
+d.dataset.lang=l;d.lang=l;d.dir=l==="ar"?"rtl":"ltr";}
+catch(e){d.dataset.theme="dark";d.dataset.lang="en";}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -121,6 +129,7 @@
 </main>
 
 <script src="js/gl.js" defer></script>
+<script src="js/i18n.js" defer></script>
 <script src="js/app.js" defer></script>
 <script src="js/motion.js" defer></script>
 </body>

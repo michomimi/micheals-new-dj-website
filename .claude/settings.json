@@ -60,7 +60,14 @@
       "Bash(curl -s -o /dev/null -w \"css/styles.css -> %{http_code}\\\\n\" http://localhost:8081/css/styles.css)",
       "Bash(curl -s -o /dev/null -w \"js/app.js -> %{http_code}\\\\n\" http://localhost:8081/js/app.js)",
       "Bash(curl -sI http://localhost:8081/)",
-      "Bash(xargs kill)"
+      "Bash(xargs kill)",
+      "Bash(git diff *)",
+      "Bash(grep -n '^const \\\\$\\\\|^function \\\\$\\\\|^const on\\\\|^function on\\\\b\\\\|const on =' js/app.js)",
+      "Bash(cd /Users/michealjabour/Desktop/micheals-new-dj-website *)",
+      "Bash(rm -f __c_*.html)",
+      "Bash(xargs -I{} echo \"stale .theme-toggle rules left: {}\")",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s -o /dev/null -w \" __u.html -> %{http_code}\\\\n\" http://localhost:8081/__u.html)"
     ],
     "additionalDirectories": [
       "/Users/michealjabour/Desktop/micheals-new-dj-website"
