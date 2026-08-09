@@ -42,7 +42,13 @@
       "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --no-sandbox --hide-scrollbars --window-size=1000,2400 --screenshot=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/shot2.png file:///private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/preview.html)",
       "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --no-sandbox --hide-scrollbars --window-size=1000,1500 --screenshot=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/shot-tail.png file:///private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/preview-tail.html)",
       "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --no-sandbox --hide-scrollbars --virtual-time-budget=3000 --window-size=1200,2600 --screenshot=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/form.png file:///Users/michealjabour/Desktop/micheals-new-dj-website/contract.html)",
-      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --no-sandbox --no-pdf-header-footer --print-to-pdf=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/agreement.pdf file:///private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/preview.html)"
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --no-sandbox --no-pdf-header-footer --print-to-pdf=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/agreement.pdf file:///private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/67b608dd-791b-4f16-92b1-c2fceed03763/scratchpad/preview.html)",
+      "Bash(gh auth *)",
+      "Bash(xargs -0 du -h)",
+      "Bash(git -C /Users/michealjabour/Desktop/micheals-new-dj-website remote -v)",
+      "Bash(git -C /Users/michealjabour/Desktop/royal-bake remote -v)",
+      "Bash(git -C /Users/michealjabour/Desktop/royal-bake status -sb)",
+      "Bash(git -C /Users/michealjabour/Desktop/royal-bake log --oneline -5)"
     ],
     "additionalDirectories": [
       "/Users/michealjabour/Desktop/micheals-new-dj-website"
