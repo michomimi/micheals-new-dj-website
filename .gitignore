@@ -3,3 +3,4 @@ images/gallery/_originals/
 videos/_originals/
 videos/_removed/
 .DS_Store
+.vscode/sftp.json

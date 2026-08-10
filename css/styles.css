@@ -11,6 +11,14 @@
    Anything that was a raw rgba(0,0,0)/rgba(255,255,255) literal is now a
    token, otherwise it would stay dark-shaped when the theme flips. */
 :root{
+  /* Tells the browser which way round the UI is, so it draws its own
+     controls to match: the date picker's calendar glyph, number spinners,
+     scrollbars and the picker popup itself. Without this the calendar
+     icon is painted dark and vanishes against a dark field. It is a
+     browser-drawn glyph in shadow DOM, so this is the supported lever
+     rather than trying to restyle it. */
+  color-scheme: dark;
+
   /* colour */
   --bg:        #000000;
   --bg-1:      #07070A;   /* raised surface */
@@ -80,6 +88,8 @@
    4.5:1, which the small uppercase eyebrow text would fail.
    ===================================================================== */
 :root[data-theme="light"]{
+  color-scheme: light;
+
   /* Warm-neutral greys rather than white. The page is the darkest of the
      three surfaces and the card sits a step above it, so cards still read
      as raised without needing a heavier border. Nothing here is #FFFFFF:
@@ -1332,3 +1342,72 @@ body.nav-open .to-top{ opacity:0; visibility:hidden; transform:translateY(14px) 
   .to-top:hover{ transform:none; }
 }
 @media print{ .to-top{ display:none !important; } }
+
+/* The contract and invoice documents are always light paper, in both
+   themes, so their controls must be drawn light regardless. */
+.doc, .doc *{ color-scheme: light; }
+
+/* Belt and braces for engines that ignore color-scheme on the indicator:
+   lift the glyph on dark fields so it can be seen and clicked. */
+:root:not([data-theme="light"]) input[type="date"]::-webkit-calendar-picker-indicator,
+:root:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indicator{
+  filter:invert(1) brightness(1.8);
+  opacity:.9;
+  cursor:pointer;
+}
+:root:not([data-theme="light"]) .doc input[type="date"]::-webkit-calendar-picker-indicator,
+:root:not([data-theme="light"]) .doc input[type="time"]::-webkit-calendar-picker-indicator{
+  filter:none; opacity:1;
+}
+
+/* =====================================================================
+   LARGE SCREENS
+
+   Everything was tuned for a laptop and then simply stopped: the
+   container caps at 1240px, the display type stops growing at 4.6rem,
+   and .hero-inner is capped at 920px with no auto margin, so it hugs the
+   left edge of that column. Maximised on a big monitor the result is a
+   narrow strip of small text sitting off-centre in a lot of empty space.
+
+   These steps let the container, the type and the hero block keep
+   scaling with the screen instead of freezing at laptop size.
+   ===================================================================== */
+@media (min-width:1500px){
+  :root{ --maxw:1400px; }
+
+  h1{ font-size:clamp(4.6rem, 5vw, 6rem); }
+  h2{ font-size:clamp(2.7rem, 3vw, 3.4rem); }
+  h3{ font-size:1.26rem; }
+  .lead{ font-size:1.2rem; max-width:64ch; }
+  .card p{ font-size:1.02rem; }
+  .eyebrow{ font-size:.78rem; }
+
+  /* The hero block grows with the container and is centred within it, so
+     it reads as sitting in the middle of the screen rather than pinned
+     to one side. The copy inside stays left aligned: centred ragged text
+     at this size is hard to read across long lines. */
+  .hero-inner{ max-width:1150px; margin-inline:auto; }
+  .hero-sub{ font-size:1.34rem; max-width:58ch; }
+
+  .stat b{ font-size:3.1rem; }
+}
+
+@media (min-width:1900px){
+  :root{ --maxw:1560px; }
+
+  h1{ font-size:clamp(6rem, 5.2vw, 7.2rem); }
+  h2{ font-size:3.6rem; }
+  .lead{ font-size:1.28rem; }
+  .hero-inner{ max-width:1300px; }
+  .hero-sub{ font-size:1.46rem; }
+  .stat b{ font-size:3.6rem; }
+}
+
+/* Ultrawide: stop widening the text column. Past roughly 1700px a line
+   of body copy becomes tiring to read because the eye loses the start of
+   the next line, so the container holds and only the type keeps growing. */
+@media (min-width:2400px){
+  :root{ --maxw:1700px; }
+  h1{ font-size:7.6rem; }
+  .hero-inner{ max-width:1440px; }
+}

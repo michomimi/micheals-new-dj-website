@@ -11,7 +11,7 @@ const CONFIG = {
   brandLead:  "DJ",                 // logo: the white part
   brandAccent:"MISHOO",             // logo: the red part (leave "" for all white)
   tagline:    "Open-format DJ · Calgary, AB",
-  email:      "michel.jabour52@gmail.com",
+  email:      "info@djmishoo.ca",
   phone:      "+1 403 437 6153",    // blank hides it
   whatsapp:   "https://wa.me/14034376153",   // built from the phone number above
   city:       "Calgary, AB",
@@ -51,12 +51,32 @@ const CONFIG = {
   ],
 
   /* ---- FORMS ------------------------------------------------------
-     A static site cannot email you on its own. Create a free form
-     endpoint (Formspree, Web3Forms, Basin) and paste the URL here.
-     Until then, forms fall back to opening the visitor's email app so
-     an enquiry is never silently lost.
+     THIS SITE HAS NO SERVER. It is plain files on GitHub Pages, and a
+     page cannot send email by itself: sending requires a mail server,
+     and any password put in this file would be public. So enquiries go
+     through a form service, which receives the submission and emails it
+     to you. Both options below are free.
+
+     EASIEST — Web3Forms, no account needed:
+       1. Go to https://web3forms.com
+       2. Type in info@djmishoo.ca and press Create Access Key
+       3. They email you a key that looks like
+          "a1b2c3d4-0000-0000-0000-abcdef123456"
+       4. Paste it between the quotes below and save.
+     That is the whole job. Every form on the site then emails you.
+
+     ALTERNATIVE — Formspree: sign up, create a form, paste the URL it
+     gives you into formEndpoint instead.
+
+     With neither filled in, forms fall back to opening the visitor's own
+     email app, so an enquiry is never silently lost, but the visitor has
+     to press send themselves and many will not bother.
      ------------------------------------------------------------------ */
-  formEndpoint: "",
+  /* This key is meant to be public: it only says "deliver to the address
+     this key was created for". It cannot read anything, and it is safe to
+     commit. Delivery goes to info@djmishoo.ca. */
+  web3formsKey: "92606942-7ab7-45ef-806f-8116b040c408",
+  formEndpoint: "",                 // ← or a Formspree/Basin URL instead
 
   /* ---- GALLERY ----------------------------------------------------
      Name your photos 01.jpg, 02.jpg ... up to `count`, and drop them in
@@ -258,6 +278,46 @@ function initTheme() {
     if (mq.addEventListener) mq.addEventListener("change", onChange);
     else if (mq.addListener) mq.addListener(onChange);
   }
+}
+
+/* =====================================================================
+   DATE FIELDS — move on once the date is complete
+
+   A date input is one control made of three segments the browser draws
+   itself. Moving between those segments as you type is the browser's own
+   behaviour and cannot be scripted: they live in shadow DOM that pages
+   cannot reach. Chrome and Firefox advance year to month to day on their
+   own; Safari is the one that makes you press Right or Tab.
+
+   What a page CAN do is take over once the whole date is filled, which
+   removes the Tab press that actually costs time: the one out of the date
+   and on to the next question.
+
+   Only fires on the empty-to-filled transition. Firing on every complete
+   value would yank focus away mid-correction the moment someone edited a
+   digit of a date they had already typed.
+   ===================================================================== */
+function initDateAdvance() {
+  $$('input[type="date"]').forEach((el) => {
+    /* A partially typed date reports value "", so a non-empty value here
+       means every segment is filled and the date is valid. */
+    el.dataset.wasFilled = el.value ? "1" : "";
+
+    el.addEventListener("input", () => {
+      const filled = !!el.value;
+      const wasFilled = el.dataset.wasFilled === "1";
+      el.dataset.wasFilled = filled ? "1" : "";
+      if (!filled || wasFilled) return;
+
+      const scope = el.form || document;
+      const fields = $$(
+        'input:not([type="hidden"]):not([disabled]), select, textarea, button[type="submit"]',
+        scope
+      ).filter((f) => f.offsetParent !== null);      // skip anything hidden
+      const next = fields[fields.indexOf(el) + 1];
+      if (next) next.focus();
+    });
+  });
 }
 
 /* =====================================================================
@@ -573,13 +633,77 @@ function initForms() {
   $$("form[data-form]").forEach((form) => {
     const status = $(".form-status", form);
 
+    /* Honeypot. A published email address attracts bots that fill in every
+       field they can find and submit. This one is invisible and off the
+       tab order, so a person can neither see nor reach it; anything that
+       fills it in is automated. Added from JS so the markup stays clean
+       and there is nothing in the HTML for a bot to learn to skip. */
+    const trap = document.createElement("input");
+    trap.type = "text";
+    trap.name = "company_website";      // plausible enough that bots fill it
+    trap.tabIndex = -1;
+    trap.autocomplete = "off";
+    trap.setAttribute("aria-hidden", "true");
+    trap.style.cssText =
+      "position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none";
+    form.appendChild(trap);
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const data = Object.fromEntries(new FormData(form).entries());
 
+      /* Report success to the bot and send nothing. Telling it the truth
+         only teaches it to try again with the field left blank. */
+      if (data.company_website) {
+        form.reset();
+        status.textContent = "Thanks, I will get back to you shortly.";
+        status.className = "form-status ok";
+        return;
+      }
+      delete data.company_website;
+
       if (!data.name || !data.email) {
         status.textContent = "Please add your name and email.";
         status.className = "form-status err";
+        return;
+      }
+
+      /* Web3Forms takes the whole form plus an access key and emails it
+         on. Sent as JSON so the payload is explicit: a readable subject,
+         and reply-to set to the guest, which means hitting Reply in the
+         inbox writes straight back to them instead of to the robot. */
+      if (CONFIG.web3formsKey) {
+        status.textContent = "Sending…";
+        status.className = "form-status";
+        const label = form.dataset.form || "website";
+        try {
+          const res = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            /* The guest's answers go in FIRST so the fields set below win.
+               Spreading them last let a form that happens to have its own
+               "subject" box overwrite the subject line, and the email
+               arrived with no sign of which form it came from. */
+            body: JSON.stringify({
+              ...data,
+              access_key: CONFIG.web3formsKey,
+              subject: data.subject
+                ? `${data.subject} — ${label} form`
+                : `${label} enquiry from ${data.name}`,
+              from_name: `${CONFIG.name} website`,
+              replyto: data.email,
+            }),
+          });
+          const out = await res.json().catch(() => ({}));
+          if (!res.ok || out.success === false) throw new Error(out.message || res.status);
+          form.reset();
+          status.textContent = "Thanks, I will get back to you shortly.";
+          status.className = "form-status ok";
+        } catch {
+          status.textContent =
+            "Couldn't send just now. Please try again, or message me on Instagram or WhatsApp.";
+          status.className = "form-status err";
+        }
         return;
       }
 
@@ -808,6 +932,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initPackagePicker();
   initButtonFX();
   initForms();
+  initDateAdvance();
   initToTop();
   /* Reviews, prices and package options are rendered above from CONFIG,
      so they miss the first translation pass and need a second one. */

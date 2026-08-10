@@ -68,7 +68,19 @@
       "Bash(xargs -I{} echo \"stale .theme-toggle rules left: {}\")",
       "Bash(python3 -c ' *)",
       "Bash(curl -s -o /dev/null -w \" __u.html -> %{http_code}\\\\n\" http://localhost:8081/__u.html)",
-      "Bash(awk '/@media/{q=$0} /display:none|opacity:0|visibility:hidden/{if\\(q!=\"\"\\)print NR\": \"q\" -> \"$0}' css/styles.css)"
+      "Bash(awk '/@media/{q=$0} /display:none|opacity:0|visibility:hidden/{if\\(q!=\"\"\\)print NR\": \"q\" -> \"$0}' css/styles.css)",
+      "Bash(cat)",
+      "Bash(curl -s -X POST https://api.web3forms.com/submit -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{ *)",
+      "Bash(dig +short MX djmishoo.ca)",
+      "Bash(nslookup -type=MX djmishoo.ca)",
+      "Bash(dig +short A djmishoo.ca)",
+      "Bash(dig +short TXT djmishoo.ca)",
+      "Bash(dig +short NS djmishoo.ca)",
+      "Bash(dig +short MX google.com)",
+      "Bash(dig +short NS github.com)",
+      "Bash(dig djmishoo.ca ANY +noall +answer +comments)",
+      "Bash(whois djmishoo.ca)",
+      "Bash(curl -s https://michomimi.github.io/micheals-new-dj-website/js/app.js)"
     ],
     "additionalDirectories": [
       "/Users/michealjabour/Desktop/micheals-new-dj-website"
