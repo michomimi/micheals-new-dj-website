@@ -255,6 +255,12 @@ const AR = {
     "اختر باقتك وادفع العربون، وهو نصف قيمة الباقة. يُسدَّد الباقي يوم المناسبة، وسأرسل تأكيداً كتابياً فور وصول الدفعة.",
   "Most booked": "الأكثر حجزاً",
   "Deposit due": "العربون المستحق",
+  "Send your deposit by Interac e-Transfer": "أرسل العربون عبر التحويل الإلكتروني إنتراك",
+  "Amount": "المبلغ",
+  "Send to": "أرسل إلى",
+  "Message": "الملاحظة",
+  "Copy": "نسخ",
+  "Copied": "تم النسخ",
   "Your package": "باقتك",
   "Pay deposit": "ادفع العربون",
   /* Deposit picker options are built from CONFIG.packages, so the price

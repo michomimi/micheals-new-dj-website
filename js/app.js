@@ -44,6 +44,26 @@ const CONFIG = {
      ------------------------------------------------------------------ */
   depositRate: 0.5,                 // half the package price
 
+  /* ---- DEPOSITS BY INTERAC e-TRANSFER ------------------------------
+     The free route: no processor, no percentage taken, money lands in
+     your bank directly.
+
+     There is no such thing as a clickable e-transfer link. The guest
+     always starts the transfer from their own banking app, so the most a
+     website can do is state the amount, the address and the reference
+     clearly, and make the address one tap to copy. That is what this
+     builds.
+
+     `address` must be the address you registered for Autodeposit at your
+     bank, otherwise the guest gets asked to invent a security question
+     and you have to chase them for the answer.
+     ------------------------------------------------------------------ */
+  etransfer: {
+    enabled:     true,
+    address:     "info@djmishoo.ca",
+    autodeposit: true,              // set false if Autodeposit is not registered yet
+  },
+
   packages: [
     { id: "essential", name: "Essential", price: 800,  deposit: "" },  // ← $400 Stripe link
     { id: "signature", name: "Signature", price: 1500, deposit: "" },  // ← $750 Stripe link
@@ -548,29 +568,91 @@ function initDeposit() {
     const due = depositFor(pkg);
     amount.textContent = money(due);
 
+    /* A card link is optional. With one set the button appears; without
+       one it is hidden outright rather than shown dead, because there is
+       a real way to pay right underneath it and a greyed-out "coming
+       soon" button next to working instructions just reads as broken. */
     if (pkg.deposit && pkg.deposit.trim()) {
+      btn.hidden = false;
       btn.href = pkg.deposit;
       btn.target = "_blank";
       btn.rel = "noopener";
-      btn.removeAttribute("aria-disabled");
-      btn.style.opacity = "";
-      btn.style.cursor = "";
-      btn.title = "";
-      btn.textContent = `Pay ${money(due)} deposit`;
+      btn.textContent = `Pay ${money(due)} by card`;
     } else {
-      /* no link for this package yet — stay visible but clearly dead,
-         so a half-configured site never takes a real payment wrongly */
+      btn.hidden = true;
       btn.removeAttribute("href");
-      btn.setAttribute("aria-disabled", "true");
-      btn.style.opacity = ".55";
-      btn.style.cursor = "not-allowed";
-      btn.title = `Add the ${pkg.name} deposit link in js/app.js`;
-      btn.textContent = "Payment link coming soon";
+    }
+
+    /* Interac e-transfer instructions */
+    const et = CONFIG.etransfer || {};
+    const panel = $("#etransfer");
+    if (panel) {
+      const usable = et.enabled && et.address && et.address.trim();
+      panel.hidden = !usable;
+      if (usable) {
+        $("#etAmount").textContent = money(due);
+        $("#etAddress").textContent = et.address;
+        /* The reference is the only thing tying a payment to a booking.
+           Without it you get an amount in your account and no idea whose
+           wedding it belongs to. */
+        $("#etRef").textContent = `${pkg.name} deposit, your name and event date`;
+        $("#etNote").textContent = et.autodeposit
+          ? "Autodeposit is on, so there is no security question to set and it lands straight in the account."
+          : "You will be asked to set a security question. Use the event date in YYYY-MM-DD form and tell me what you chose.";
+      }
     }
   };
 
   select.addEventListener("change", update);
   update();
+
+  /* Copy the address. Typing an email by hand into a banking app is where
+     e-transfers go astray, and a wrong address either bounces or pays a
+     stranger. The clipboard API needs a secure context, so there is a
+     select-the-text fallback for plain http and older browsers. */
+  const copyBtn = $("#etCopy");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", async () => {
+      const address = (CONFIG.etransfer && CONFIG.etransfer.address) || "";
+      if (!address) return;
+      const done = () => {
+        const previous = copyBtn.textContent;
+        copyBtn.textContent = "Copied";
+        copyBtn.classList.add("is-copied");
+        setTimeout(() => {
+          copyBtn.textContent = previous;
+          copyBtn.classList.remove("is-copied");
+        }, 1600);
+      };
+      /* Three levels, because the button must never do nothing visible.
+         The clipboard API needs a secure context AND a focused document,
+         so it fails more often than you would expect; the old fallback
+         could itself throw when there was no selection object, leaving
+         the guest with a button that appeared broken. */
+      try {
+        await navigator.clipboard.writeText(address);
+        done();
+        return;
+      } catch { /* fall through */ }
+
+      try {
+        const range = document.createRange();
+        range.selectNodeContents($("#etAddress"));
+        const sel = window.getSelection();
+        if (!sel) throw new Error("no selection");
+        sel.removeAllRanges();
+        sel.addRange(range);
+        copyBtn.textContent = "Selected, copy it";
+        setTimeout(() => { copyBtn.textContent = "Copy"; }, 2600);
+        return;
+      } catch { /* fall through */ }
+
+      /* Nothing worked: the address is on screen anyway, so say so
+         rather than leaving the press unacknowledged. */
+      copyBtn.textContent = "Copy it above";
+      setTimeout(() => { copyBtn.textContent = "Copy"; }, 2600);
+    });
+  }
 }
 
 /* =====================================================================

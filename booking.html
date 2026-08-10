@@ -135,7 +135,30 @@ setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.c
             <b id="depositAmount">&hellip;</b>
           </div>
 
-          <a class="btn btn-primary" id="depositBtn" href="#">Pay deposit</a>
+          <a class="btn btn-primary" id="depositBtn" href="#" hidden>Pay deposit</a>
+        </div>
+
+        <!-- Interac e-Transfer instructions. Amount, address and reference
+             are filled in by js/app.js from CONFIG.etransfer and whichever
+             package is selected above, so nothing here is hard-coded. -->
+        <div class="etransfer" id="etransfer" hidden>
+          <p class="etransfer-head">Send your deposit by Interac e-Transfer</p>
+          <ol class="etransfer-steps">
+            <li>
+              <span>Amount</span>
+              <b id="etAmount">&hellip;</b>
+            </li>
+            <li>
+              <span>Send to</span>
+              <code id="etAddress">&hellip;</code>
+              <button class="btn-copy" id="etCopy" type="button">Copy</button>
+            </li>
+            <li>
+              <span>Message</span>
+              <em id="etRef">&hellip;</em>
+            </li>
+          </ol>
+          <p class="etransfer-note" id="etNote"></p>
         </div>
 
         <p class="form-note">
