@@ -80,7 +80,8 @@
       "Bash(dig +short NS github.com)",
       "Bash(dig djmishoo.ca ANY +noall +answer +comments)",
       "Bash(whois djmishoo.ca)",
-      "Bash(curl -s https://michomimi.github.io/micheals-new-dj-website/js/app.js)"
+      "Bash(curl -s https://michomimi.github.io/micheals-new-dj-website/js/app.js)",
+      "Bash(dig djmishoo.ca +noall +comments)"
     ],
     "additionalDirectories": [
       "/Users/michealjabour/Desktop/micheals-new-dj-website"
