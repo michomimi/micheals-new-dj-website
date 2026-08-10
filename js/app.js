@@ -261,6 +261,62 @@ function initTheme() {
 }
 
 /* =====================================================================
+   BACK TO TOP
+   Appears once the visitor is near the foot of the page, where there is
+   nothing left to read and the way back is a long scroll.
+   ===================================================================== */
+function initToTop() {
+  const btn = $("#toTop");
+  if (!btn) return;
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Scroll fires far more often than the screen refreshes, so the read is
+     deferred to the next frame. Reading scrollHeight in the handler
+     itself would force a layout on every one of those events. */
+  let queued = false;
+  let settle;
+  const update = () => {
+    queued = false;
+    clearTimeout(settle);
+    const total = Math.max(
+      document.documentElement.scrollHeight, document.body.scrollHeight);
+    const reachedEnd = total - (window.scrollY + window.innerHeight) < 420;
+    /* On a page barely taller than the window there is no scroll worth
+       undoing, so the button would just be clutter. */
+    const worthIt = total > window.innerHeight * 1.6;
+    btn.classList.toggle("show", reachedEnd && worthIt);
+  };
+  const onScroll = () => {
+    /* A trailing timer as well as the frame callback. requestAnimationFrame
+       is the right primitive while the page is actually painting, but it
+       is throttled or suspended in background tabs and other low-activity
+       states, and if it never fires the button is stuck in whatever state
+       it was last left in. The timer guarantees the state settles. */
+    clearTimeout(settle);
+    settle = setTimeout(update, 120);
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(update);
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  update();
+
+  btn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+    /* Send keyboard focus back to the top too, otherwise the next Tab
+       would resume from the footer the visitor just left. preventScroll
+       stops the focus call from jumping the page and cancelling the
+       smooth scroll that has only just started. */
+    const first = $(".site-header .brand");
+    if (first) first.focus({ preventScroll: true });
+    btn.classList.remove("show");
+  });
+}
+
+/* =====================================================================
    HEADER + FOOTER — injected so there is one copy, not six
    ===================================================================== */
 function injectShell() {
@@ -291,6 +347,11 @@ function injectShell() {
           p.id === current ? ' aria-current="page"' : ""
         } href="${p.href}">${p.label}</a>`).join("")}
     </nav>
+    <button class="to-top" id="toTop" type="button" aria-label="Back to top" title="Back to top">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+      </svg>
+    </button>
   `);
 
   /* Each contact row is a labelled pair rather than a bare link, so the
@@ -747,6 +808,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initPackagePicker();
   initButtonFX();
   initForms();
+  initToTop();
   /* Reviews, prices and package options are rendered above from CONFIG,
      so they miss the first translation pass and need a second one. */
   retranslate();

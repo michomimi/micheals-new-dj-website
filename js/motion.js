@@ -95,6 +95,82 @@
   }
   if (!window.refreshReveal) window.refreshReveal = window.sweepReveal;
 
+  /* =====================================================================
+     PAGE TRANSITIONS
+
+     Hold the navigation just long enough to play the exit animation, then
+     follow the link. The matching entry animation is pure CSS on the next
+     page, so nothing has to survive the document swap.
+
+     Almost all of the work here is deciding what NOT to touch. Getting
+     this wrong breaks the browser in ways people notice immediately:
+     open-in-new-tab, downloads, mailto and tel handoffs, and in-page
+     anchors that should smooth-scroll rather than reload.
+     ===================================================================== */
+  const root = document.documentElement;
+
+  /* A restore from the back/forward cache replays neither load nor the
+     entry animation, so a page frozen mid-exit would come back invisible.
+     Clearing the class on pageshow is what stops "go back and the page is
+     blank" — the single most likely way this feature could break. */
+  window.addEventListener("pageshow", () => root.classList.remove("is-leaving"));
+
+  /* The entry animation starts the content at opacity 0. If it never runs
+     to completion the page would sit there blank, which is the same
+     failure the scroll reveal had. Check shortly after load and, if the
+     content is still invisible and we are not mid-navigation, drop the
+     animations altogether. */
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      if (root.classList.contains("is-leaving")) return;
+      const pg = q("#page");
+      if (pg && getComputedStyle(pg).opacity === "0") root.classList.add("anim-failsafe");
+    }, 900);
+  });
+
+  const navTarget = (a, e) => {
+    if (e.defaultPrevented) return null;              // lightbox et al. got it
+    if (e.button !== 0) return null;                  // middle/right click
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return null;
+    if (!a || !a.getAttribute("href")) return null;
+    if (a.hasAttribute("download")) return null;
+    if (a.target && a.target !== "_self") return null;
+    if (a.getAttribute("rel") === "external") return null;
+
+    let url;
+    try { url = new URL(a.href, location.href); } catch { return null; }
+
+    if (url.origin !== location.origin) return null;  // off-site
+    if (url.protocol !== "http:" && url.protocol !== "https:") return null; // mailto:, tel:
+    /* Same document: this is an in-page anchor such as #enquiry. Leave it
+       to the browser, which already smooth-scrolls via scroll-behavior. */
+    if (url.pathname === location.pathname && url.search === location.search) return null;
+    return url;
+  };
+
+  if (!reduce) {
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest ? e.target.closest("a[href]") : null;
+      if (!a) return;
+      const url = navTarget(a, e);
+      if (!url) return;
+
+      e.preventDefault();
+      root.classList.add("is-leaving");
+
+      /* Navigate when the exit finishes. A timer rather than animationend
+         because an interrupted or skipped animation would never fire the
+         event and the click would be silently swallowed. */
+      let gone = false;
+      const go = () => { if (!gone) { gone = true; location.href = url.href; } };
+      setTimeout(go, 210);
+
+      /* If the browser blocks or defers the navigation, do not leave the
+         visitor staring at a faded-out page. */
+      setTimeout(() => root.classList.remove("is-leaving"), 2500);
+    });
+  }
+
   /* ---------- marquee: duplicate the track so the loop is seamless ----
      The CSS animates to -50%, which only lines up if the content is
      present exactly twice. Duplicating here keeps the HTML readable. */

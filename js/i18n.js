@@ -312,6 +312,7 @@ const AR_SUFFIX = {
 const AR_ATTR = {
   "What's this about?": "ما موضوع رسالتك؟",
   "Menu": "القائمة",
+  "Back to top": "العودة إلى الأعلى",
   "Switch to light mode": "التبديل إلى الوضع الفاتح",
   "Switch to dark mode": "التبديل إلى الوضع الداكن",
 };

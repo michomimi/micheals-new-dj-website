@@ -1224,3 +1224,111 @@ a[href^="mailto:"],
   direction:ltr;
   unicode-bidi:isolate;
 }
+
+/* =====================================================================
+   PAGE TRANSITIONS
+
+   Navigating between pages was an instant cut. This fades the content
+   out, navigates, then eases the next page in, so moving from Book Me to
+   the booking page reads as one continuous move rather than a jump.
+
+   Only #page is animated, never <body>. A transform on an ancestor
+   becomes the containing block for position:fixed descendants, which
+   would strand the sticky header and the lightbox mid-screen. The
+   lightbox lives outside #page, and the header and footer are siblings
+   of it, so all three stay put while the content moves.
+
+   Gated on html.js: with scripts off there is nothing to fade back in,
+   so the content must simply be visible.
+   ===================================================================== */
+html.js #page{
+  /* backwards, not both: after it finishes the element returns to its
+     own style rather than holding the animation's last frame, so a
+     stalled or skipped animation can never strand it. */
+  animation:pageIn .38s var(--ease) backwards;
+}
+html.js.is-leaving #page{
+  animation:pageOut .22s var(--ease) both;
+}
+@keyframes pageIn{
+  from{ opacity:0; transform:translateY(10px); }
+  to  { opacity:1; transform:none; }
+}
+@keyframes pageOut{
+  from{ opacity:1; transform:none; }
+  to  { opacity:0; transform:translateY(-8px); }
+}
+
+/* The header and footer come with it, softly, so the whole frame settles
+   rather than the middle sliding under fixed furniture. Opacity only:
+   it makes a stacking context but not a containing block, so the sticky
+   header keeps sticking. */
+html.js .site-header,
+html.js .site-footer{ animation:chromeIn .5s var(--ease) backwards; }
+html.js.is-leaving .site-header,
+html.js.is-leaving .site-footer{ animation:chromeOut .22s var(--ease) both; }
+@keyframes chromeIn { from{ opacity:0 } to{ opacity:1 } }
+@keyframes chromeOut{ from{ opacity:1 } to{ opacity:0 } }
+
+@media (prefers-reduced-motion:reduce){
+  html.js #page, html.js.is-leaving #page,
+  html.js .site-header, html.js .site-footer,
+  html.js.is-leaving .site-header, html.js.is-leaving .site-footer{
+    animation:none !important; opacity:1 !important; transform:none !important;
+  }
+}
+
+/* Last line of defence. If the entry animation has not left the content
+   visible shortly after load, motion.js sets this and the animations are
+   dropped entirely. Text being readable beats text being animated. */
+html.js.anim-failsafe #page,
+html.js.anim-failsafe .site-header,
+html.js.anim-failsafe .site-footer{
+  animation:none !important; opacity:1 !important; transform:none !important;
+}
+
+/* =====================================================================
+   BACK TO TOP
+   Sits below the header (60) and the mobile drawer (59) so it can never
+   cover navigation, and well below the lightbox (90).
+
+   inset-inline-end rather than right: it mirrors to the left side on its
+   own when the page is in Arabic, with no RTL override needed.
+   ===================================================================== */
+.to-top{
+  position:fixed; z-index:55;
+  inset-block-end:20px; inset-inline-end:20px;
+  width:46px; height:46px; border-radius:50%;
+  display:grid; place-items:center;
+  background:var(--red); color:var(--on-red);
+  box-shadow:0 14px 30px -14px var(--shadow), var(--glow);
+  opacity:0; visibility:hidden; transform:translateY(14px) scale(.92);
+  transition:opacity .24s var(--ease), transform .24s var(--ease),
+             background-color .18s, visibility 0s .24s;
+}
+/* visibility is delayed on the way out and immediate on the way in, so
+   the hidden button is never a click target sitting over the footer */
+.to-top.show{
+  opacity:1; visibility:visible; transform:none;
+  transition:opacity .24s var(--ease), transform .24s var(--ease),
+             background-color .18s;
+}
+.to-top:hover{ background:var(--red-hot); transform:translateY(-3px); }
+.to-top:active{ transform:scale(.93); transition-duration:.08s; }
+.to-top svg{
+  width:20px; height:20px; fill:none; stroke:currentColor;
+  stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round;
+}
+/* the drawer covers the page, so the button has no business floating over it */
+body.nav-open .to-top{ opacity:0; visibility:hidden; transform:translateY(14px) scale(.92); }
+
+@media (max-width:560px){
+  .to-top{ width:42px; height:42px; inset-block-end:16px; inset-inline-end:16px; }
+  .to-top svg{ width:18px; height:18px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .to-top{ transition:opacity .01s, visibility 0s; transform:none; }
+  .to-top.show{ transform:none; }
+  .to-top:hover{ transform:none; }
+}
+@media print{ .to-top{ display:none !important; } }
