@@ -8,7 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css">
+<!-- ?v= is a cache buster. Both GitHub Pages and browsers hold these
+     files for a while, so without it a deploy can leave a visitor on
+     new HTML with the old CSS or JS, which renders half-styled and
+     leaves fresh copy untranslated. Bump the date on every deploy. -->
+<link rel="stylesheet" href="css/styles.css?v=20260811">
 <style>
   /* This page is a scratch pad for choosing a background. Delete it, and
      this block, once the choice is made. */
@@ -58,7 +62,7 @@
 
 <nav class="picker" id="picker" aria-label="Background options"></nav>
 
-<script src="js/gl.js"></script>
+<script src="js/gl.js?v=20260811"></script>
 <script>
   /* Buttons swap the shader live. gl.js exposes setBackground() and the
      list of available looks. */
