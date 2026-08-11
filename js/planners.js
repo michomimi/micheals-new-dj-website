@@ -211,6 +211,12 @@
     status.textContent = "Sending…";
     status.className = "form-status";
 
+    /* `reason` separates the two very different failures: the request
+       never left the browser (blocked by an extension, offline, or an
+       origin the service refuses), versus the service answering and
+       saying no. They need different fixes, and a single "couldn't send"
+       message sends people chasing the wrong one. */
+    let reason = "";
     if (CONFIG.web3formsKey) {
       try {
         const res = await fetch("https://api.web3forms.com/submit", {
@@ -225,12 +231,22 @@
           }),
         });
         const out = await res.json().catch(() => ({}));
-        if (!res.ok || out.success === false) throw new Error();
+        if (!res.ok || out.success === false) {
+          reason = out.message || `the service replied ${res.status}`;
+          throw new Error(reason);
+        }
         status.textContent = `Sent to ${CONFIG.email}. Download your own PDF below.`;
         status.className = "form-status ok";
         return;
-      } catch {
-        /* fall through to the manual route */
+      } catch (err) {
+        /* A TypeError here means the request never got out of the browser
+           at all, which is what an ad blocker or a blocked origin looks
+           like. Anything else came back from the service. */
+        if (!reason) {
+          reason = err && err.name === "TypeError"
+            ? "the request was blocked before it left your browser"
+            : "the connection failed";
+        }
       }
     }
 
@@ -251,7 +267,7 @@
     const href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(kind)}` +
                  `&body=${encodeURIComponent(body)}`;
     status.innerHTML =
-      `Couldn't send automatically, an ad blocker or your connection may have stopped it. ` +
+      `Couldn't send automatically${reason ? `: ${esc(reason)}` : ""}. ` +
       `<a href="${href}" style="color:var(--red);text-decoration:underline">Email it to me instead</a>, ` +
       `or download the PDF below and send it to ${esc(CONFIG.email)}.`;
     status.className = "form-status err";
