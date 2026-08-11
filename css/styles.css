@@ -1505,3 +1505,66 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{ transform:scale(1.1
   .etransfer-steps li > span{ flex:0 0 100%; }   /* label above the value */
   .etransfer-steps li{ gap:.35rem; }
 }
+
+/* =====================================================================
+   NAV FLASH
+   A pulse of light runs along the nav, one link at a time.
+
+   It animates OPACITY, not colour. The first attempt flashed from
+   --ink-2 to --ink, but body text sits at 84% opacity, so that was a
+   change of one sixth and effectively invisible. Resting the links
+   dimmer gives the flash somewhere to travel from, and opacity behaves
+   the same in both themes where a hard-coded white would not.
+
+   The glow is a token because it has to be light on the dark page and
+   dark on the light one; a white glow on white is nothing at all.
+   ===================================================================== */
+:root{ --flash-glow: rgba(255,255,255,.85); }
+:root[data-theme="light"]{ --flash-glow: rgba(11,12,15,.35); }
+
+@keyframes navFlash{
+  0%, 48%, 100% { opacity:.55; text-shadow:none; }
+  60%           { opacity:1;
+                  text-shadow:0 0 20px var(--flash-glow), 0 0 7px var(--flash-glow); }
+  72%           { opacity:.55; text-shadow:none; }
+}
+
+/* full-strength colour, held back by opacity so the flash has range */
+.nav-link{
+  color:var(--ink);
+  opacity:.55;
+  animation:navFlash 4.5s var(--ease) infinite;
+}
+/* staggered so the light travels along the row rather than the whole
+   nav blinking at once */
+.nav .nav-link:nth-child(1){ animation-delay:0s;   }
+.nav .nav-link:nth-child(2){ animation-delay:.13s; }
+.nav .nav-link:nth-child(3){ animation-delay:.26s; }
+.nav .nav-link:nth-child(4){ animation-delay:.39s; }
+.nav .nav-link:nth-child(5){ animation-delay:.52s; }
+.nav .nav-link:nth-child(6){ animation-delay:.65s; }
+
+/* The current page is already held bright, and hover is a deliberate
+   response to the visitor. Both beat the animation, or the link under
+   the cursor would keep dimming itself. */
+.nav-link:hover,
+.nav-link:focus-visible,
+.nav-link.is-active{
+  animation:none;
+  opacity:1;
+  color:var(--ink);
+  text-shadow:none;
+}
+
+/* Arabic mirrors the row, so the light travels the other way to still
+   read as moving along the nav rather than against it. */
+:root[data-lang="ar"] .nav .nav-link:nth-child(1){ animation-delay:.65s; }
+:root[data-lang="ar"] .nav .nav-link:nth-child(2){ animation-delay:.52s; }
+:root[data-lang="ar"] .nav .nav-link:nth-child(3){ animation-delay:.39s; }
+:root[data-lang="ar"] .nav .nav-link:nth-child(4){ animation-delay:.26s; }
+:root[data-lang="ar"] .nav .nav-link:nth-child(5){ animation-delay:.13s; }
+:root[data-lang="ar"] .nav .nav-link:nth-child(6){ animation-delay:0s;   }
+
+@media (prefers-reduced-motion:reduce){
+  .nav-link{ animation:none; opacity:1; }
+}
