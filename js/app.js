@@ -504,6 +504,16 @@ function injectShell() {
     ? ""
     : `<div class="socials" style="margin-top:1.4rem">${socialLinks()}</div>`;
 
+  /* Same idea for the footer's booking button. The contact page is one
+     long answer to "how do I reach you" and already sends people to the
+     booking page twice in its own content, so a third button sitting
+     under the footer's "Get in touch" column was just repetition. Other
+     pages keep it: there the footer is the only booking prompt at the
+     bottom of the page. */
+  const footerCta = current === "contact"
+    ? ""
+    : `<a class="btn btn-primary" href="booking.html">Book a date</a>`;
+
   document.body.insertAdjacentHTML("beforeend", `
     <footer class="site-footer">
       <div class="wrap">
@@ -520,7 +530,7 @@ function injectShell() {
           <div>
             <h4>Get in touch</h4>
             <ul class="footer-contact">${contactRows}</ul>
-            <a class="btn btn-primary" href="booking.html">Book a date</a>
+            ${footerCta}
           </div>
         </div>
         <div class="footer-bottom">
