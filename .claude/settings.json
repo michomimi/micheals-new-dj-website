@@ -99,10 +99,14 @@
       "Bash(sed -n '/pkg-tag\\\\|class=\"pkg\"/,+6p' booking.html)",
       "Bash(grep -n 'mailto:\\\\${CONFIG.email}' js/app.js)",
       "Bash(awk '{print \"  \"$9\" \"$5\" bytes\"}')",
-      "Bash(curl -s --max-time 12 https://djmishoo.ca/contact.html?cb=__TRACKED_VAR__)"
+      "Bash(curl -s --max-time 12 https://djmishoo.ca/contact.html?cb=__TRACKED_VAR__)",
+      "Bash(npx playwright *)",
+      "Bash(sed -i '' 's/?v=21/?v=22/g' *.html && grep -o \"?v=[0-9]*\" *.html | sort -u)",
+      "Bash(awk 'BEGIN{c=0} {n=gsub\\(/\\\\/\\\\*/,\"/*\"\\); m=gsub\\(/\\\\*\\\\//,\"*/\"\\); c+=n-m} END{print \"unclosed comments:\", c}' css/animations.css css/styles.css)"
     ],
     "additionalDirectories": [
-      "/Users/michealjabour/Desktop/micheals-new-dj-website"
+      "/Users/michealjabour/Desktop/micheals-new-dj-website",
+      "/Users/michealjabour/Desktop/royal-bake"
     ]
   }
 }
