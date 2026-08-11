@@ -68,6 +68,12 @@
   --display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
   --sans:    "Outfit", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 
+  /* Anton carries the big type: condensed, single heavy weight, built for
+     poster sizes. It is deliberately NOT used for h3, buttons or nav. At
+     small sizes its weight and tight counters turn to mud, so those keep
+     Space Grotesk and the two faces split by job rather than compete. */
+  --display-xl: "Anton", "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+
   /* system */
   --radius:   14px;
   --radius-s: 10px;
@@ -162,10 +168,13 @@ ul{ list-style:none; }
 .eyebrow.center{ justify-content:center; }
 .eyebrow.center::after{ content:""; width:24px; height:2px; background:var(--red); }
 
-h1{ font-family:var(--display); font-weight:700; text-transform:uppercase;
-    font-size:clamp(2.2rem,5.8vw,4.6rem); line-height:1.02; letter-spacing:-.035em; }
-h2{ font-family:var(--display); font-weight:600; text-transform:uppercase;
-    font-size:clamp(1.65rem,3.6vw,2.7rem); line-height:1.08; letter-spacing:-.028em; }
+/* Anton ships one weight (400) and is already condensed, so the negative
+   tracking that suited Space Grotesk would jam the letters together here.
+   Both are dialled back rather than inherited. */
+h1{ font-family:var(--display-xl); font-weight:400; text-transform:uppercase;
+    font-size:clamp(2.4rem,6.2vw,5.2rem); line-height:1; letter-spacing:-.004em; }
+h2{ font-family:var(--display-xl); font-weight:400; text-transform:uppercase;
+    font-size:clamp(1.8rem,3.9vw,3rem); line-height:1.04; letter-spacing:-.004em; }
 h3{ font-family:var(--display); font-weight:600; text-transform:uppercase;
     font-size:1.14rem; line-height:1.2; letter-spacing:-.015em; }
 .accent{ color:var(--red); }
@@ -889,7 +898,10 @@ html.js .tile-in.in{ opacity:1; transform:none; }
   box-shadow:0 40px 80px -50px rgba(0,0,0,.9);
   font-size:.95rem; line-height:1.6;
 }
-.doc h2{ color:#14161a; font-size:1.9rem; letter-spacing:-.03em; }
+/* The documents keep Space Grotesk. Anton is a poster face and reads as
+   shouting on a contract someone signs and prints. */
+.doc h2{ font-family:var(--display); font-weight:600;
+         color:#14161a; font-size:1.9rem; letter-spacing:-.03em; }
 .doc h3{
   color:#14161a; font-size:.82rem; letter-spacing:.16em; text-transform:uppercase;
   margin:1.8rem 0 .6rem; padding-bottom:.4rem; border-bottom:1px solid #e3e6ea;
@@ -1013,6 +1025,74 @@ html.js .reveal{ opacity:0; transform:translateY(18px); transition:opacity .5s v
 html.js .reveal.in{ opacity:1; transform:none; }
 .reveal.d1{ transition-delay:.06s } .reveal.d2{ transition-delay:.12s }
 .reveal.d3{ transition-delay:.18s } .reveal.d4{ transition-delay:.24s }
+
+/* =====================================================================
+   HERO HEADLINE
+
+   Two things happen. The lines wipe upward one after another on arrival,
+   and the red words keep a light moving across them for as long as the
+   page is open, so the headline never fully settles.
+
+   Done with no JavaScript and no extra markup on purpose. The obvious
+   build is to split the words into spans from JS, but i18n.js swaps the
+   whole innerHTML of the h1 when the language changes, which would throw
+   any injected markup away and, worse, poison the English cache it keys
+   the Arabic lookup on. Driving it off the <span> lines that are already
+   in the HTML means the Arabic headline animates identically for free:
+   its translation carries the same three spans and the same <em>.
+
+   Gated on html.js .in so the lines only move once the reveal has fired.
+   With scripts off or blocked the class never lands, no animation is
+   declared, and the headline is simply there. Nothing can leave it stuck
+   invisible.
+   ===================================================================== */
+   The per-character build is the one that runs in English. Arabic cannot
+   be split without breaking its letter joins, so it falls back to wiping
+   the lines instead, which needs no extra markup. Both are gated the same
+   way, and neither is the state the headline sits in by default.
+   ===================================================================== */
+
+/* Fallback: whole lines wipe upward. Arabic, and anything the splitter
+   declined to touch. */
+html.js .hero h1.in:not(.hl-split) span{
+  animation:hlWipe .85s cubic-bezier(.2,.85,.25,1) both;
+}
+html.js .hero h1.in:not(.hl-split) span:nth-child(2){ animation-delay:.11s; }
+html.js .hero h1.in:not(.hl-split) span:nth-child(3){ animation-delay:.22s; }
+@keyframes hlWipe{
+  from{ clip-path:inset(0 0 100% 0); transform:translateY(.24em); }
+  to  { clip-path:inset(0 0 -18% 0); transform:translateY(0); }
+}
+
+/* Cascade, then wave. <i> is the character carrier and is italic by
+   default, hence the reset. The two animations are listed together with
+   their own delays: the rise finishes at roughly 1.35s on the last
+   character, so the drift is held back to 1.5s and they never fight over
+   the transform. */
+.hero h1 i.hl-c{ display:inline-block; font-style:normal; will-change:transform, opacity; }
+html.js .hero h1.in.hl-split i.hl-c{
+  animation:hlRise .6s cubic-bezier(.2,.85,.25,1) both,
+            hlWave 2.8s ease-in-out infinite;
+  animation-delay:calc(var(--i) * .022s), calc(1.5s + var(--i) * .045s);
+}
+@keyframes hlRise{
+  from{ transform:translateY(.5em); opacity:0; }
+  to  { transform:translateY(0); opacity:1; }
+}
+@keyframes hlWave{
+  0%,100%{ transform:translateY(0); }
+  50%    { transform:translateY(-.085em); }
+}
+
+/* No gradient sweep on the accent. A background-clip:text fill is painted
+   by the <em>, and once the splitter puts every character in its own
+   inline-block the em has no text of its own left to clip to, so the red
+   words disappear entirely. The wave already keeps the line alive. */
+
+@media (prefers-reduced-motion:reduce){
+  html.js .hero h1.in span,
+  html.js .hero h1.in.hl-split i.hl-c{ animation:none; }
+}
 
 /* =====================================================================
    RESPONSIVE

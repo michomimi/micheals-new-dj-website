@@ -96,6 +96,88 @@
   if (!window.refreshReveal) window.refreshReveal = window.sweepReveal;
 
   /* =====================================================================
+     HERO HEADLINE — cascade, then drift
+
+     Each character gets its own box so it can carry its own delay: they
+     rise in one after another, then settle into a slow wave that never
+     stops. CSS drives both, this only builds the boxes and numbers them.
+
+     Not done for Arabic. Arabic is cursive and its letters change shape
+     depending on what they join to, so putting every letter in a separate
+     inline-block severs those joins and the word comes apart into
+     disconnected stumps. The Arabic headline keeps the line-level wipe
+     instead, which needs no splitting. Same reason the split is skipped
+     under reduced motion: no animation, no reason to touch the markup.
+
+     i18n.js rewrites the whole headline when the language changes, which
+     wipes the split, so it calls refreshHeadline afterwards. Re-entry is
+     safe: an already-split headline still has its character nodes and is
+     left alone.
+     ===================================================================== */
+  /* The English headline exactly as it was authored, kept from before the
+     first split. i18n.js keys its Arabic lookup on an element's English
+     innerHTML, cached under `_en` the first time it sees it, so anything
+     holding split markup at that moment can never match the dictionary
+     again. Switching back to English can also hand back a brand new h1
+     rebuilt from an ancestor's cache, and that node arrives with no `_en`
+     of its own, so it needs seeding from here rather than from whatever
+     it happens to contain. */
+  let pristine = null;
+
+  const buildHeadline = () => {
+    const h1 = q(".hero h1");
+    if (!h1 || reduce) return;
+
+    const already = !!h1.querySelector("i.hl-c");
+    const isAr = document.documentElement.dataset.lang === "ar";
+    if (!already && !isAr && pristine === null) pristine = h1.innerHTML;
+    if (pristine !== null && h1._en === undefined) h1._en = pristine;
+
+    if (isAr) { h1.classList.remove("hl-split"); return; }
+    if (already) { h1.classList.add("hl-split"); return; }
+
+    let n = 0;
+    const splitText = (node) => {
+      const frag = document.createDocumentFragment();
+      for (const ch of node.nodeValue) {
+        const i = document.createElement("i");
+        i.className = "hl-c";
+        /* A trailing space between two inline-blocks collapses away, so
+           the gaps are held open with a non-breaking space. */
+        i.textContent = ch === " " ? " " : ch;
+        i.style.setProperty("--i", n++);
+        frag.appendChild(i);
+      }
+      node.parentNode.replaceChild(frag, node);
+    };
+    /* Walks into the <em> rather than over it, so the red keeps its
+       colour and the accent survives the split. */
+    const walk = (el) => [...el.childNodes].forEach((c) => {
+      if (c.nodeType === 3) { if (c.nodeValue.trim()) splitText(c); }
+      else walk(c);
+    });
+    walk(h1);
+    h1.classList.add("hl-split");
+  };
+
+  window.refreshHeadline = buildHeadline;
+
+  /* Held until DOMContentLoaded so i18n has cached its English originals
+     first. app.js calls initLang from that event and registered its
+     listener before this file ran, so its pass is guaranteed to go first.
+     Splitting any earlier poisons the cache, and not only the h1's:
+     .hero-inner matches i18n's "#page div" selector, so it stores that
+     whole subtree and hands it back wholesale when the visitor returns to
+     English, headline markup and all.
+
+     The test is against "complete", not "loading". A deferred script runs
+     after parsing, when readyState has already advanced to "interactive"
+     and DOMContentLoaded has still not fired, so a "loading" check falls
+     through and runs immediately, which is the very thing being avoided. */
+  if (document.readyState === "complete") buildHeadline();
+  else document.addEventListener("DOMContentLoaded", buildHeadline);
+
+  /* =====================================================================
      PAGE TRANSITIONS
 
      Hold the navigation just long enough to play the exit animation, then

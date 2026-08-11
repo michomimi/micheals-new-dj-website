@@ -483,6 +483,11 @@ function applyLang(lang, { animate = false } = {}) {
      since the two languages set at different lengths. */
   if (typeof window.refreshReveal === "function") window.refreshReveal();
 
+  /* The hero headline is split into per-character nodes to animate, and
+     the swap above just replaced the lot with plain text. Same contract
+     as refreshReveal: motion.js owns it, this only says when. */
+  if (typeof window.refreshHeadline === "function") window.refreshHeadline();
+
   const btn = document.getElementById("langToggle");
   if (btn) {
     /* The button shows both codes at once and highlights the active one
