@@ -1223,11 +1223,18 @@ html.js .reveal.in{ opacity:1; transform:none; }
 
    Kept to inline value carriers on purpose. Setting direction on a block
    would also flip its text alignment and pull it to the wrong edge.
+
+   .reach-card is exactly that case and has to be excluded: the whole card
+   is the <a>, and app.js gives it a mailto:/tel: href, so it was matching
+   here and rendering left to right in Arabic. The icon sat on the wrong
+   side and the copy hugged the wrong edge, while the WhatsApp card next
+   to it (no tel/mailto href) stayed right to left. The card shows no
+   Latin value of its own, so it needs no isolation.
    ===================================================================== */
-a[href^="tel:"],
-a[href^="mailto:"],
-[data-phone],
-[data-email],
+a[href^="tel:"]:not(.reach-card),
+a[href^="mailto:"]:not(.reach-card),
+[data-phone]:not(.reach-card),
+[data-email]:not(.reach-card),
 [data-price],
 .deposit-amount b,
 .footer-contact a{

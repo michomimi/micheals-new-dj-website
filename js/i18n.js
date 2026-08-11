@@ -304,6 +304,18 @@ const AR = {
   "Quickest way to reach me is Instagram or WhatsApp. For a formal quote, use the booking form so I have the details in one place.":
     "أسرع طريقة للوصول إليّ هي إنستغرام أو واتساب. وللحصول على عرض سعر رسمي، استخدم نموذج الحجز لتصلني كل التفاصيل في مكان واحد.",
   "Booking page": "صفحة الحجز",
+
+  /* Reach cards. Keyed on the full inner HTML, so the flag inside the
+     WhatsApp title travels with it rather than being left in English. */
+  'WhatsApp <em class="reach-flag">fastest</em>':
+    'واتساب <em class="reach-flag">الأسرع</em>',
+  "Message me and you will usually have an answer the same day.":
+    "راسلني وستصلك الإجابة في نفس اليوم غالباً.",
+  "Best if you have a lot of detail, or need something in writing.":
+    "الأفضل إن كانت لديك تفاصيل كثيرة، أو تحتاج شيئاً مكتوباً.",
+  "If your date is inside two weeks, phone me. It is quicker than typing.":
+    "إن كان موعدك خلال أسبوعين، اتصل بي. هذا أسرع من الكتابة.",
+
   "Tell me four things": "أخبرني بأربعة أمور",
   "However you get in touch, these are all I need to tell you straight away whether I am free and what it costs.":
     "بأي طريقة تتواصل بها، هذه كل ما أحتاجه لأخبرك فوراً إن كنت متفرغاً وبكم.",
@@ -315,6 +327,8 @@ const AR = {
     "<b>المناسبة</b><span>عرس، عيد ميلاد، حفل شركة، ليلة في نادٍ</span>",
   "<b>The vibe</b><span>Arabic, English, both, and anything you love or hate</span>":
     "<b>الأجواء</b><span>عربي، أجنبي، أو الاثنان، وما تحبه أو تكرهه</span>",
+  'Ready to book rather than ask? The <a href="booking.html" style="color:var(--red)">booking page</a> has packages, deposits and the agreement.':
+    'جاهز للحجز بدل السؤال؟ <a href="booking.html" style="color:var(--red)">صفحة الحجز</a> فيها الباقات والعربون والاتفاقية.',
   "Your name": "الاسم",
   "Subject": "الموضوع",
   "Message": "الرسالة",
