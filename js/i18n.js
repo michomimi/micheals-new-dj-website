@@ -155,6 +155,11 @@ const AR = {
   "The other half of the job is everything around the music: arriving early, keeping the timeline on track, and handling the mic so nobody has to think about logistics.":
     "النصف الآخر من العمل هو كل ما يحيط بالموسيقى: الحضور مبكراً، وضبط توقيت الفقرات، وإدارة الميكروفون حتى لا ينشغل أحد بالتنظيم.",
   "Check availability": "تحقق من التوفر",
+  /* The about page asks for packages rather than a date: it is a page
+     about who I am, so pushing straight to availability read as chasing
+     the booking too early. Same destination, which is where the packages
+     and prices are. */
+  "Check packages": "تصفّح الباقات",
   "See the gallery": "شاهد الصور",
   "How it works": "كيف تسير الأمور",
   'Four steps, <span class="accent">no surprises</span>': 'أربع خطوات، <span class="accent">بلا مفاجآت</span>',
