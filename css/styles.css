@@ -1693,3 +1693,38 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{ transform:scale(1.1
   #planDoc .doc-meta{ table-layout:auto; }
   #planDoc .doc-meta th{ width:auto; white-space:normal; }
 }
+
+/* =====================================================================
+   BACK BUTTON — top of every inner page
+   Sits above the eyebrow so it reads as leaving the page rather than as
+   part of the page's own content.
+   ===================================================================== */
+.back-btn{
+  display:inline-flex; align-items:center; gap:.45rem;
+  margin-bottom:1.1rem; padding:.42rem .85rem .42rem .7rem;
+  border-radius:999px;
+  font-family:var(--display); font-weight:600;
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-2);
+  box-shadow:inset 0 0 0 1.3px var(--line);
+  transition:color .18s, box-shadow .18s, transform .2s var(--ease);
+}
+.back-btn:hover{
+  color:var(--red); box-shadow:inset 0 0 0 1.3px var(--red);
+  transform:translateX(-3px);          /* nudges the way it is about to go */
+}
+.back-btn:active{ transform:scale(.95); transition-duration:.08s; }
+.back-btn svg{
+  width:15px; height:15px; flex:none;
+  fill:none; stroke:currentColor; stroke-width:2.2;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+/* In Arabic the page reads right to left, so "back" points the other way
+   and the hover nudge has to follow it. */
+:root[data-lang="ar"] .back-btn svg{ transform:scaleX(-1); }
+:root[data-lang="ar"] .back-btn:hover{ transform:translateX(3px); }
+
+@media (prefers-reduced-motion:reduce){
+  .back-btn:hover{ transform:none; }
+}
+@media print{ .back-btn{ display:none !important; } }

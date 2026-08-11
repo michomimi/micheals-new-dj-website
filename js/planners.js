@@ -348,6 +348,22 @@
     const printBtn = q("#printPlan");
     if (printBtn) printBtn.addEventListener("click", () => window.print());
 
+    /* Back to the form. Once the sheet is built it covers the screen and
+       the form is far above it, so there was no obvious way back to
+       change an answer. Hiding the sheet rather than reloading keeps
+       every field exactly as it was typed. */
+    const editBtn = q("#editPlan");
+    if (editBtn) {
+      editBtn.addEventListener("click", () => {
+        stage.hidden = true;
+        const status = q("#planStatus");
+        if (status) { status.textContent = ""; status.className = "form-status"; }
+        form.scrollIntoView({ behavior: "smooth", block: "start" });
+        const first = form.querySelector("input, textarea, select");
+        if (first) first.focus({ preventScroll: true });
+      });
+    }
+
     const sendBtn = q("#sendPlan");
     if (sendBtn) {
       sendBtn.addEventListener("click", () =>

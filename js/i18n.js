@@ -68,6 +68,8 @@ const AR = {
   "Open-format DJ · Calgary, AB": "دي جيه بجميع الأنماط · كالغاري، ألبرتا",
 
   /* ---- marquee strip + hero scroll cue ---- */
+  "Back": "رجوع",
+  "Back to the form": "العودة إلى النموذج",
   "Scroll": "مرّر",
   "Nightclubs": "النوادي الليلية",
   "Birthdays": "أعياد الميلاد",

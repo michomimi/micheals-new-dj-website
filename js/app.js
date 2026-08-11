@@ -345,6 +345,51 @@ function initDateAdvance() {
 }
 
 /* =====================================================================
+   BACK BUTTON
+
+   Injected into the page header of every inner page. The home page has a
+   hero rather than a .page-head, so it is skipped automatically, which is
+   right: there is nowhere above home to go back to.
+
+   history.back() alone is not enough. Someone arriving from a search
+   result, a shared link or a bookmark has no previous page on this site,
+   and going back would throw them off it entirely, or do nothing at all
+   if the tab is new. So the previous page is only used when it is one of
+   ours, and home is the fallback.
+   ===================================================================== */
+function initBackButton() {
+  const head = $(".page-head .wrap");
+  if (!head) return;                       // home, or a page without a header
+
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "back-btn reveal";
+  btn.id = "backBtn";
+  btn.innerHTML =
+    `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+       <path d="M15 5l-7 7 7 7"/>
+     </svg><span>Back</span>`;
+  head.insertBefore(btn, head.firstChild);
+
+  const cameFromThisSite = () => {
+    if (!document.referrer) return false;
+    try { return new URL(document.referrer).origin === location.origin; }
+    catch { return false; }
+  };
+
+  btn.addEventListener("click", () => {
+    /* history.length is 1 on a fresh tab, so there is genuinely nothing
+       behind us even if a referrer exists. */
+    if (cameFromThisSite() && window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+    document.documentElement.classList.add("is-leaving");
+    setTimeout(() => { window.location.href = "index.html"; }, 210);
+  });
+}
+
+/* =====================================================================
    BACK TO TOP
    Appears once the visitor is near the foot of the page, where there is
    nothing left to read and the way back is a long scroll.
@@ -1048,6 +1093,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initButtonFX();
   initForms();
   initDateAdvance();
+  initBackButton();
   initToTop();
   /* Reviews, prices and package options are rendered above from CONFIG,
      so they miss the first translation pass and need a second one. */

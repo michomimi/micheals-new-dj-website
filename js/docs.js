@@ -232,6 +232,29 @@
 
       print.addEventListener("click", () => window.print());
       if (send) send.addEventListener("click", sendCopy);
+
+      /* Back to the form, keeping every answer as typed. Re-signing is
+         required afterwards: the signature belongs to the wording that
+         was on screen when it was given, so an edit has to invalidate it
+         rather than carry a name over onto changed terms. */
+      const edit = q("#editDoc");
+      if (edit && !edit.dataset.wired) {
+        edit.dataset.wired = "1";
+        edit.addEventListener("click", () => {
+          q("#contractStage").hidden = true;
+          if (sig) sig.value = "";
+          if (agree) agree.checked = false;
+          check();
+          const status = q("#docStatus");
+          if (status) { status.textContent = ""; status.className = "form-status"; }
+          const f = q("#contractForm");
+          if (f) {
+            f.scrollIntoView({ behavior: "smooth", block: "start" });
+            const first = f.querySelector("input, textarea, select");
+            if (first) first.focus({ preventScroll: true });
+          }
+        });
+      }
     }
 
     async function sendCopy() {
