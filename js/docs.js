@@ -280,10 +280,19 @@
           const res = await fetch("https://api.web3forms.com/submit", {
             method: "POST",
             headers: { "Content-Type": "application/json", Accept: "application/json" },
+            /* Four standard fields, with the detail inside `message`.
+               Sending each answer as its own field trips the service's
+               spam checks, which reject the submission outright. */
             body: JSON.stringify({
-              ...summary,
               access_key: CONFIG.web3formsKey,
+              name: summary.client || "Website guest",
+              email: summary.email || "",
               subject: `${summary.document} — ${summary.client || "guest"} — ${summary.eventDate || ""}`.trim(),
+              message: Object.entries(summary)
+                .filter(([, v]) => v !== "" && v !== undefined && v !== null)
+                .map(([k, v]) => `${k.replace(/([a-z])([A-Z])/g, "$1 $2")
+                  .replace(/^./, (c) => c.toUpperCase())}: ${v}`)
+                .join("\n"),
               from_name: `${CONFIG.name} website`,
               replyto: summary.email || "",
             }),

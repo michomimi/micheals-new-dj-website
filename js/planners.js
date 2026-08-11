@@ -207,6 +207,20 @@
   }
 
   /* ---------- send a copy ---------- */
+  /* One readable block of text: "Label: value", blank line between
+     sections, so the email reads like the sheet the guest just saw. */
+  function asMessage(kind, payload) {
+    const lines = [`${kind}`, ""];
+    Object.entries(payload).forEach(([k, v]) => {
+      if (!v) return;
+      const label = k
+        .replace(/([a-z])([A-Z])/g, "$1 $2")
+        .replace(/^./, (c) => c.toUpperCase());
+      lines.push(String(v).includes("\n") ? `${label}:\n${v}` : `${label}: ${v}`);
+    });
+    return lines.join("\n");
+  }
+
   async function sendCopy(kind, payload, status, btn) {
     status.textContent = "Sending…";
     status.className = "form-status";
@@ -222,10 +236,19 @@
         const res = await fetch("https://api.web3forms.com/submit", {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
+          /* Deliberately shaped like an ordinary contact form: name,
+             email, subject, message, and nothing else. The first version
+             sent every answer as its own field, which meant keys such as
+             "Grand entrance" with spaces and capitals, and the service
+             rejected the whole submission "for security reasons". The
+             detail now travels inside `message`, which is also easier to
+             read in an inbox than eighteen separate rows. */
           body: JSON.stringify({
-            ...payload,
             access_key: CONFIG.web3formsKey,
+            name: payload.client || "Website guest",
+            email: payload.email || "",
             subject: `${kind} from ${payload.client || "a guest"}`,
+            message: asMessage(kind, payload),
             from_name: `${CONFIG.name} website`,
             replyto: payload.email || "",
           }),
@@ -259,11 +282,7 @@
 
        So say plainly that it did not send, and give a link they choose to
        press. The sheet is pre-filled into the message either way. */
-    const body = Object.entries(payload)
-      .filter(([, v]) => v)
-      .map(([k, v]) => `${k}: ${v}`)
-      .join("\n")
-      .slice(0, 1500);
+    const body = asMessage(kind, payload).slice(0, 1500);
     const href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(kind)}` +
                  `&body=${encodeURIComponent(body)}`;
     status.innerHTML =
