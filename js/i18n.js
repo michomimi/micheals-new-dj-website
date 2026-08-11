@@ -99,8 +99,8 @@ const AR = {
 
   /* ---- home ---- */
   "Calgary, Alberta": "كالغاري، ألبرتا",
-  '<span>Music that</span> <span>moves the <em class="accent" style="font-style:normal">room</em></span>':
-    '<span>موسيقى تُحرّك</span> <span>القاعة <em class="accent" style="font-style:normal">بأكملها</em></span>',
+  '<span>I don\'t play</span> <span>a set,</span> <span>I play <em class="accent" style="font-style:normal">your room</em></span>':
+    '<span>لا أشغّل</span> <span>قائمة جاهزة،</span> <span>بل أشغّل <em class="accent" style="font-style:normal">حفلتك</em></span>',
   "Open-format DJ playing Arabic and English. Weddings, clubs, corporate nights and private parties. Read the crowd, build the night, never let the floor drop.":
     "دي جيه بجميع الأنماط، عربي وأجنبي. أعراس ونوادٍ وحفلات شركات ومناسبات خاصة. أقرأ الحضور، وأبني الليلة، ولا أدع السهرة تهدأ.",
   "Check my availability": "تحقق من توفري",
