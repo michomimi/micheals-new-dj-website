@@ -56,6 +56,11 @@ const AR = {
   "WhatsApp": "واتساب",
   "Message me": "راسلني",
   "Follow": "تابعني",
+  "Booking Agreement": "اتفاقية الحجز",
+  "Booking agreement": "اتفاقية الحجز",
+  "Open the agreement": "افتح الاتفاقية",
+  "Fill in your details, sign it with your name, and download the finished agreement as a PDF. You can send me a copy in one click at the end, so we both have the same thing in writing: dates, times, what is included and what it costs.":
+    "املأ بياناتك، ووقّع باسمك، ثم نزّل الاتفاقية النهائية بصيغة PDF. ويمكنك إرسال نسخة لي بنقرة واحدة في النهاية، ليكون لدينا الاتفاق نفسه مكتوباً: التواريخ والأوقات وما يشمله السعر وتكلفته.",
   "Terms and Conditions": "الشروط والأحكام",
   "Privacy Policy": "سياسة الخصوصية",
   "All rights reserved.": "جميع الحقوق محفوظة.",
@@ -297,6 +302,17 @@ const AR = {
   "Quickest way to reach me is Instagram or WhatsApp. For a formal quote, use the booking form so I have the details in one place.":
     "أسرع طريقة للوصول إليّ هي إنستغرام أو واتساب. وللحصول على عرض سعر رسمي، استخدم نموذج الحجز لتصلني كل التفاصيل في مكان واحد.",
   "Booking page": "صفحة الحجز",
+  "Tell me four things": "أخبرني بأربعة أمور",
+  "However you get in touch, these are all I need to tell you straight away whether I am free and what it costs.":
+    "بأي طريقة تتواصل بها، هذه كل ما أحتاجه لأخبرك فوراً إن كنت متفرغاً وبكم.",
+  "<b>The date</b><span>And rough hours, if you know them</span>":
+    "<b>التاريخ</b><span>والساعات التقريبية إن كنت تعرفها</span>",
+  "<b>The venue</b><span>Or the area, if it is not booked yet</span>":
+    "<b>المكان</b><span>أو المنطقة إن لم يُحجز بعد</span>",
+  "<b>The occasion</b><span>Wedding, birthday, corporate, club night</span>":
+    "<b>المناسبة</b><span>عرس، عيد ميلاد، حفل شركة، ليلة في نادٍ</span>",
+  "<b>The vibe</b><span>Arabic, English, both, and anything you love or hate</span>":
+    "<b>الأجواء</b><span>عربي، أجنبي، أو الاثنان، وما تحبه أو تكرهه</span>",
   "Your name": "الاسم",
   "Subject": "الموضوع",
   "Message": "الرسالة",

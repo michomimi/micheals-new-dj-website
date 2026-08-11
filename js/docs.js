@@ -111,14 +111,6 @@
       clause: "Ceremony sound, including a microphone for vows and readings" },
     { id: "svcCocktail", short: "Cocktail hour music",
       clause: "Cocktail hour and dinner background music" },
-    { id: "svcLight",    short: "Dance floor lighting",
-      clause: "Dance floor lighting" },
-    { id: "svcUplight",  short: "Uplighting",
-      clause: "Uplighting, colour matched to the event" },
-    { id: "svcDryIce",   short: "Dry ice",
-      clause: "Dry ice low fog, subject to clause 12" },
-    { id: "svcSpark",    short: "Cold spark fountains",
-      clause: "Cold spark fountains, subject to clause 12" },
   ];
 
   function initContract() {
@@ -199,8 +191,6 @@
         depositDue: val("depositDue"),
         overtime:   parseFloat(val("overtime")) || 0,
         payMethod:  val("payMethod"),
-        mustPlay:   val("mustPlay"),
-        noPlay:     val("noPlay"),
         notes:      val("notes"),
         promoOptOut: checked("promoOptOut"),
         agreed:     val("agreementDate"),
@@ -209,6 +199,13 @@
       q("#contractStage").hidden = false;
       wireSignature();
       q("#contractStage").scrollIntoView({ behavior: "smooth", block: "start" });
+
+      /* Send the details the moment the agreement is generated, without
+         waiting for the signature. A guest who fills the whole form and
+         then closes the tab before signing is the common case, and their
+         details would otherwise be lost entirely. Signing sends a second,
+         clearly-labelled copy. */
+      sendCopy();
     });
 
     /* the print button unlocks only once the client has typed their name
@@ -242,7 +239,7 @@
       const ticked = SERVICES.filter((s) => checked(s.id)).map((s) => s.short);
 
       const summary = {
-        document:   "Signed booking agreement",
+        document:   val("sigName") ? "Signed booking agreement" : "Booking agreement (details, not yet signed)",
         reference:  reference(val("eventDate"), val("client")),
         signedBy:   val("sigName"),
         signedOn:   today(),
@@ -268,11 +265,40 @@
         depositDue: val("depositDue"),
         overtime:   val("overtime"),
         payMethod:  val("payMethod"),
-        mustPlay:   val("mustPlay"),
-        doNotPlay:  val("noPlay"),
         promoOptOut: checked("promoOptOut") ? "yes" : "no",
         notes:      val("notes"),
       };
+
+      /* Web3Forms first: this is what actually reaches the inbox. The
+         older formEndpoint branch below is kept for anyone who swaps in
+         Formspree instead, and the mail app is the last resort so a
+         completed agreement is never simply lost. */
+      if (CONFIG.web3formsKey) {
+        status.textContent = "Sending…";
+        status.className = "form-status";
+        try {
+          const res = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify({
+              ...summary,
+              access_key: CONFIG.web3formsKey,
+              subject: `${summary.document} — ${summary.client || "guest"} — ${summary.eventDate || ""}`.trim(),
+              from_name: `${CONFIG.name} website`,
+              replyto: summary.email || "",
+            }),
+          });
+          const out = await res.json().catch(() => ({}));
+          if (!res.ok || out.success === false) throw new Error();
+          status.textContent = summary.signedBy
+            ? "Sent. I have the signed agreement. Keep your own PDF using the download button."
+            : "Sent. I have your details. Sign below and download your PDF when you are ready.";
+          status.className = "form-status ok";
+          return;
+        } catch {
+          /* fall through to the routes below */
+        }
+      }
 
       if (!CONFIG.formEndpoint) {
         if (!CONFIG.email) {
@@ -293,8 +319,10 @@
         window.location.href =
           `mailto:${CONFIG.email}?subject=${encodeURIComponent(
             "Signed agreement " + summary.reference)}&body=${body}`;
-        status.textContent = "Opening your email app. Please also attach the printed PDF.";
-        status.className = "form-status ok";
+        status.textContent =
+          "Couldn't send automatically. Your email app has been opened with the details, " +
+          "please press send there, and attach the PDF.";
+        status.className = "form-status err";
         return;
       }
 
@@ -678,12 +706,13 @@
             Alberta have jurisdiction over any dispute.</li>
       </ol>
 
-      <h3>Appendix A: music and special requests</h3>
+      <h3>Appendix A: music and extras</h3>
       <p class="doc-quiet">Forms part of this agreement, see article 13.</p>
-      <table class="doc-table">
-        <tr><th>Must play</th><td>${d.mustPlay ? lines(d.mustPlay) : '<span class="doc-blank" style="min-width:70%"></span>'}</td></tr>
-        <tr><th>Do not play</th><td>${d.noPlay ? lines(d.noPlay) : '<span class="doc-blank" style="min-width:70%"></span>'}</td></tr>
-      </table>
+      <p class="doc-lead">Song choices and the lighting or effects for this event are recorded on
+        two separate sheets, the music plan and the extras sheet, both supplied by the client and
+        held with this agreement. They are kept separate so they can be revised at any time before
+        the event without altering or re-signing these terms. The most recent version of each
+        received in writing is the one that applies.</p>
 
       <h3>Appendix B: anything else agreed</h3>
       <p class="doc-quiet">Anything written here has the same force as the articles above.</p>

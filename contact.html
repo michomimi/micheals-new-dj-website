@@ -101,28 +101,58 @@ setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.c
           </div>
         </div>
 
-        <form class="form card reveal d1" data-form="contact">
-          <div class="field">
-            <label for="c-name">Your name</label>
-            <input id="c-name" name="name" type="text" autocomplete="name" required>
-          </div>
-          <div class="field">
-            <label for="c-email">Email</label>
-            <input id="c-email" name="email" type="email" autocomplete="email" required>
-          </div>
-          <div class="field">
-            <label for="c-subject">Subject</label>
-            <input id="c-subject" name="subject" type="text" placeholder="What's this about?">
-          </div>
-          <div class="field">
-            <label for="c-message">Message</label>
-            <textarea id="c-message" name="message" required></textarea>
+        <div class="reveal d1">
+
+          <!-- Reach-me cards. hrefs are filled in by js/app.js from CONFIG,
+               so the address and number live in one place. Anything without
+               a URL set is hidden rather than linking nowhere. -->
+          <div class="reach">
+            <a class="reach-card" data-whatsapp href="#">
+              <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M12 3a9 9 0 00-7.7 13.6L3 21l4.5-1.2A9 9 0 1012 3z"/><path d="M8.6 8.5c.2-.4.4-.4.6-.4h.4c.2 0 .4 0 .5.4l.6 1.4c.1.2 0 .3 0 .4l-.4.5c-.1.2-.2.3 0 .5a5.5 5.5 0 002.5 2.2c.3.1.4.1.5-.1l.5-.6c.2-.2.3-.1.5 0l1.3.7c.2.1.3.2.3.4"/></svg>
+              <span class="reach-body">
+                <span class="reach-title">WhatsApp <em class="reach-flag">fastest</em></span>
+                <span class="reach-desc">Message me and you will usually have an answer the same day.</span>
+              </span>
+            </a>
+
+            <a class="reach-card" data-email href="#">
+              <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+              <span class="reach-body">
+                <span class="reach-title">Email</span>
+                <span class="reach-desc">Best if you have a lot of detail, or need something in writing.</span>
+              </span>
+            </a>
+
+            <a class="reach-card" data-phone href="#">
+              <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a1 1 0 01-1 1A16 16 0 014 5a1 1 0 011-1z"/></svg>
+              <span class="reach-body">
+                <span class="reach-title">Call or text</span>
+                <span class="reach-desc">If your date is inside two weeks, phone me. It is quicker than typing.</span>
+              </span>
+            </a>
           </div>
 
-          <button class="btn btn-primary btn-block" type="submit">Send message</button>
-          <p class="form-status" role="status" aria-live="polite"></p>
-          <p class="form-note">No spam, no list. Your details are only used to reply.</p>
-        </form>
+          <!-- Does the job the old contact form did: gets the four things
+               needed to answer, without making anyone fill in a form. -->
+          <div class="card" style="margin-top:1.2rem">
+            <h3>Tell me four things</h3>
+            <p style="margin-top:.4rem;font-size:.95rem">
+              However you get in touch, these are all I need to tell you straight away whether
+              I am free and what it costs.
+            </p>
+            <ol class="ask-list">
+              <li><b>The date</b><span>And rough hours, if you know them</span></li>
+              <li><b>The venue</b><span>Or the area, if it is not booked yet</span></li>
+              <li><b>The occasion</b><span>Wedding, birthday, corporate, club night</span></li>
+              <li><b>The vibe</b><span>Arabic, English, both, and anything you love or hate</span></li>
+            </ol>
+            <p class="form-note" style="margin-top:1.2rem">
+              Ready to book rather than ask? The
+              <a href="booking.html" style="color:var(--red)">booking page</a> has packages,
+              deposits and the agreement.
+            </p>
+          </div>
+        </div>
 
       </div>
     </div>

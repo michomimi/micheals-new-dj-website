@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extras and Effects, DJ Mishoo</title>
+<meta name="description" content="Choose the lighting and effects for your event, with a plain description of what each one does.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<!-- Theme must be set before the stylesheet paints, otherwise a light-mode
+     visitor sees a black flash on every navigation. Deliberately inline and
+     synchronous: an external or deferred file would run too late. -->
+<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");
+if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
+d.dataset.theme=t;var l=localStorage.getItem("lang")==="ar"?"ar":"en";
+d.dataset.lang=l;d.lang=l;d.dir=l==="ar"?"rtl":"ltr";}
+catch(e){d.dataset.theme="dark";d.dataset.lang="en";}
+/* Turn the scroll-reveal on. Set here, before first paint, so the copy
+   never flashes in and then hides. The timer is the safety net: if the
+   reveal script has still not marked anything after 3.5s (blocked, slow
+   or broken), drop the class and every .reveal falls back to visible. */
+d.className+=" js";
+setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.classList.remove("js");}},2200);
+})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body data-page="extras">
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<main id="page">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow reveal">Extras</p>
+      <h1 class="reveal d1">Lighting and <span class="accent">effects</span></h1>
+      <p class="crumbs reveal d2"><a href="index.html">Home</a> / <a href="booking.html">Booking</a> / Extras</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0" class="doc-form">
+    <div class="wrap">
+      <div class="grid grid-2" style="gap:clamp(2rem,5vw,3.4rem); align-items:start">
+
+        <div class="reveal">
+          <h2>Choose your extras</h2>
+          <p style="margin-bottom:1rem">Every option below says plainly what it does, so you are not
+     picking from a list of names you have never heard.</p>
+     <p style="margin-bottom:1rem">Anything marked <strong>venue approval needed</strong> has to
+     be cleared with your venue in advance. It is the most common reason an effect gets pulled
+     on the day, so it is worth asking early.</p>
+     <p>Prices are confirmed separately. Ticking a box here records what you want, it does not
+     add anything to your bill on its own.</p>
+        </div>
+
+        <form class="form card reveal d1" id="plannerForm">
+
+          <div class="form-group" role="group" aria-labelledby="lg-you">
+            <p class="form-legend" id="lg-you">Your details</p>
+            <div class="field">
+              <label for="client">Full name</label>
+              <input id="client" name="client" type="text" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="eventDate">Event date</label>
+                <input id="eventDate" name="eventDate" type="date" required>
+              </div>
+              <div class="field">
+                <label for="venue">Venue</label>
+                <input id="venue" name="venue" type="text">
+              </div>
+            </div>
+          </div>
+
+          <div id="extrasList"></div>
+
+          <div class="form-group" role="group" aria-labelledby="lg-xnotes">
+            <p class="form-legend" id="lg-xnotes">Anything else</p>
+            <div class="field">
+              <label for="extrasNotes">Notes</label>
+              <textarea id="extrasNotes" name="extrasNotes" rows="4"
+                placeholder="Where you want the sparks, a colour for the uplighting, timing for the fog..."></textarea>
+            </div>
+          </div>
+
+
+          <button class="btn btn-primary btn-block" type="submit">Build the sheet</button>
+          <p class="form-note">Pressing this sends your sheet to DJ Mishoo and shows you a copy to download.</p>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="planStage" style="padding-top:0" hidden>
+    <div class="wrap">
+      <article class="doc" id="planDoc"></article>
+
+      <div class="doc-actions no-print">
+        <div class="hero-cta">
+          <button class="btn btn-primary" id="printPlan">Download as PDF</button>
+          <button class="btn btn-ghost" id="sendPlan">Send</button>
+        </div>
+        <p class="form-status" id="planStatus" role="status" aria-live="polite"></p>
+        <p class="form-note">
+          Download uses your browser's print dialog. Choose <strong>Save as PDF</strong> as the
+          destination. You can come back and change this any time before the event.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/gl.js" defer></script>
+<script src="js/i18n.js" defer></script>
+<script src="js/app.js" defer></script>
+<script src="js/planners.js" defer></script>
+<script src="js/motion.js" defer></script>
+</body>
+</html>

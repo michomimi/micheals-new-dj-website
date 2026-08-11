@@ -60,7 +60,10 @@ const CONFIG = {
      ------------------------------------------------------------------ */
   etransfer: {
     enabled:     true,
-    address:     "info@djmishoo.ca",
+    /* Deliberately NOT the same as CONFIG.email above. That address is
+       what the site shows publicly and where enquiries land; this is
+       where money is sent, and the two are allowed to differ. */
+    address:     "michel.jabour52@gmail.com",
     autodeposit: true,              // set false if Autodeposit is not registered yet
   },
 
@@ -171,8 +174,9 @@ const PAGES = [
 /* Legal pages live in the footer only, deliberately kept out of PAGES so
    they never appear in the main navigation. */
 const LEGAL = [
-  { id: "terms",   label: "Terms and Conditions", href: "terms.html"   },
-  { id: "privacy", label: "Privacy Policy",       href: "privacy.html" },
+  { id: "contract", label: "Booking Agreement",    href: "contract.html" },
+  { id: "terms",    label: "Terms and Conditions", href: "terms.html"    },
+  { id: "privacy",  label: "Privacy Policy",       href: "privacy.html"  },
 ];
 
 const ICONS = {
@@ -555,8 +559,12 @@ function renderPrices() {
 function initDeposit() {
   const select = $("#depositPackage");
   const amount = $("#depositAmount");
+  /* The card payment button was removed: deposits are e-transfer only.
+     It is no longer required for this section to work, so it must not be
+     part of the guard, or removing it would silently disable the whole
+     deposit card. */
   const btn    = $("#depositBtn");
-  if (!select || !amount || !btn) return;
+  if (!select || !amount) return;
 
   select.innerHTML = CONFIG.packages
     .map((p) => `<option value="${p.id}">${esc(p.name)} (${money(p.price)})</option>`)
@@ -568,19 +576,20 @@ function initDeposit() {
     const due = depositFor(pkg);
     amount.textContent = money(due);
 
-    /* A card link is optional. With one set the button appears; without
-       one it is hidden outright rather than shown dead, because there is
-       a real way to pay right underneath it and a greyed-out "coming
-       soon" button next to working instructions just reads as broken. */
-    if (pkg.deposit && pkg.deposit.trim()) {
-      btn.hidden = false;
-      btn.href = pkg.deposit;
-      btn.target = "_blank";
-      btn.rel = "noopener";
-      btn.textContent = `Pay ${money(due)} by card`;
-    } else {
-      btn.hidden = true;
-      btn.removeAttribute("href");
+    /* Card payment is gone from the markup. The handling stays, guarded,
+       so dropping a Stripe link into CONFIG.packages and putting the
+       button back is all it would take to re-enable it. */
+    if (btn) {
+      if (pkg.deposit && pkg.deposit.trim()) {
+        btn.hidden = false;
+        btn.href = pkg.deposit;
+        btn.target = "_blank";
+        btn.rel = "noopener";
+        btn.textContent = `Pay ${money(due)} by card`;
+      } else {
+        btn.hidden = true;
+        btn.removeAttribute("href");
+      }
     }
 
     /* Interac e-transfer instructions */
@@ -696,14 +705,32 @@ function initButtonFX() {
    doesn't have to pick it twice.
    ===================================================================== */
 function initPackagePicker() {
-  const select = $("#b-package");
-  if (!select) return;
+  const enquiry = $("#b-package");     // package dropdown on the enquiry form
+  const deposit = $("#depositPackage"); // package dropdown on the deposit card
+  if (!enquiry && !deposit) return;
 
   $$("[data-package]").forEach((el) => {
     el.addEventListener("click", () => {
-      const wanted = el.dataset.package;
-      const match = [...select.options].find((o) => o.value === wanted);
-      if (match) select.value = wanted;
+      const wanted = el.dataset.package;      // display name, e.g. "Signature"
+
+      /* Enquiry form: matched on the visible name. */
+      if (enquiry) {
+        const match = [...enquiry.options].find((o) => o.value === wanted);
+        if (match) enquiry.value = wanted;
+      }
+
+      /* Deposit card: its options are keyed by package id, not name, so
+         the name is resolved through CONFIG rather than compared directly.
+         Selecting it in code does not fire `change`, so the event is
+         dispatched by hand, which is what recalculates the half-price
+         deposit and rewrites the e-transfer instructions. */
+      if (deposit) {
+        const pkg = CONFIG.packages.find((p) => p.name === wanted);
+        if (pkg) {
+          deposit.value = pkg.id;
+          deposit.dispatchEvent(new Event("change"));
+        }
+      }
     });
   });
 }
@@ -988,16 +1015,22 @@ function fillBrandText() {
       el.textContent = "WhatsApp coming soon";
     }
   });
-  $$("[data-email]").forEach((el) => {
-    el.textContent = CONFIG.email || "Email coming soon";
-    if (el.tagName === "A" && CONFIG.email) el.href = `mailto:${CONFIG.email}`;
-  });
-  $$("[data-phone]").forEach((el) => {
-    el.textContent = CONFIG.phone || "Phone coming soon";
-    if (el.tagName === "A" && CONFIG.phone) {
-      el.href = `tel:${CONFIG.phone.replace(/[^\d+]/g, "")}`;
-    }
-  });
+  /* Two shapes of element carry these attributes: a plain link whose text
+     IS the address, and a card built of an icon and several spans. Writing
+     textContent into the second kind destroys the card and leaves a bare
+     address where the whole layout used to be, so the text is only filled
+     in when there is no element markup to lose. */
+  const fillContact = (el, value, fallback, href) => {
+    if (!el.firstElementChild) el.textContent = value || fallback;
+    if (el.tagName === "A" && value) el.href = href;
+  };
+
+  $$("[data-email]").forEach((el) =>
+    fillContact(el, CONFIG.email, "Email coming soon", `mailto:${CONFIG.email}`));
+
+  $$("[data-phone]").forEach((el) =>
+    fillContact(el, CONFIG.phone, "Phone coming soon",
+      `tel:${String(CONFIG.phone).replace(/[^\d+]/g, "")}`));
 }
 
 document.addEventListener("DOMContentLoaded", () => {

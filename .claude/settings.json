@@ -94,7 +94,11 @@
       "Bash(curl -sI --max-time 12 https://michomimi.github.io/micheals-new-dj-website/)",
       "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost:8081/privacy.html)",
       "Bash(echo \" privacy.html -> $\\(curl -s -o /dev/null -w '%{http_code}' http://localhost:8081/privacy.html\\)\")",
-      "Bash(curl -s http://localhost:8081/privacy.html)"
+      "Bash(curl -s http://localhost:8081/privacy.html)",
+      "Bash(sed -n '/^function initPackagePicker/,/^}/p' js/app.js)",
+      "Bash(sed -n '/pkg-tag\\\\|class=\"pkg\"/,+6p' booking.html)",
+      "Bash(grep -n 'mailto:\\\\${CONFIG.email}' js/app.js)",
+      "Bash(awk '{print \"  \"$9\" \"$5\" bytes\"}')"
     ],
     "additionalDirectories": [
       "/Users/michealjabour/Desktop/micheals-new-dj-website"
