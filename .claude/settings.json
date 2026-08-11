@@ -155,7 +155,14 @@
       "Bash(python3 - /private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/14bc970f-a729-4d59-aade-0f8263b6472d/scratchpad)",
       "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --hide-scrollbars --screenshot=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/14bc970f-a729-4d59-aade-0f8263b6472d/scratchpad/fonts2.png --window-size=760,2280 file:///private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/14bc970f-a729-4d59-aade-0f8263b6472d/scratchpad/cmp.html)",
       "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --window-size=1440,900 --virtual-time-budget=8000 --dump-dom file://__TRACKED_VAR__/__ph.html)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://djmishoo.ca/preview-hero.html\")"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://djmishoo.ca/preview-hero.html\")",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --virtual-time-budget=10000 --hide-scrollbars --screenshot=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/14bc970f-a729-4d59-aade-0f8263b6472d/scratchpad/prev.png --window-size=1290,1620 file://__TRACKED_VAR__/__probe.html)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --virtual-time-budget=20000 --hide-scrollbars --screenshot=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/14bc970f-a729-4d59-aade-0f8263b6472d/scratchpad/prev2.png --window-size=1290,820 file://__TRACKED_VAR__/__probe.html)",
+      "Bash(curl -s \"https://djmishoo.ca/preview-hero.html\")",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --window-size=1440,900 --virtual-time-budget=9000 --dump-dom file://__TRACKED_VAR__/__t.html)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --virtual-time-budget=20000 --hide-scrollbars --screenshot=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/14bc970f-a729-4d59-aade-0f8263b6472d/scratchpad/newhero.png --window-size=1310,760 file://__TRACKED_VAR__/__probe.html)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --virtual-time-budget=20000 --hide-scrollbars --screenshot=/private/tmp/claude-501/-Users-michealjabour-Desktop-micheals-new-dj-website/14bc970f-a729-4d59-aade-0f8263b6472d/scratchpad/newhero2.png --window-size=1310,760 file://__TRACKED_VAR__/__probe.html)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --window-size=1440,900 --virtual-time-budget=12000 --dump-dom file://__TRACKED_VAR__/__t.html)"
     ],
     "additionalDirectories": [
       "/Users/michealjabour/Desktop/micheals-new-dj-website",
