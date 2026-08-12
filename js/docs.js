@@ -804,9 +804,42 @@
     if (window.armBotTrap) window.armBotTrap(form);
 
     const now = new Date();
-    if (q("#invNo") && !val("invNo")) {
-      q("#invNo").value = "INV-" + today().replace(/-/g, "") + "-01";
-    }
+
+    /* A receipt numbered INV- looks like the wrong document, so the prefix
+       follows the type. Only ever rewritten while the box still holds a
+       generated number: the moment it is typed in by hand it is left
+       alone, since a number quoted to a guest must not move. */
+    const autoNo = (mode) =>
+      (mode === "invoice" ? "INV-" : "RCT-") + today().replace(/-/g, "") + "-01";
+    const isAutoNo = (v) => /^(INV|RCT)-\d{8}-\d+$/.test(v);
+    const syncNo = (mode) => {
+      const box = q("#invNo");
+      if (box && (!box.value || isAutoNo(box.value))) box.value = autoNo(mode);
+    };
+
+    /* The document type decides what the amount box is for, so the box
+       follows it: greyed out and explained on a paid-in-full receipt,
+       where the figure comes from the total, and a due date only makes
+       sense on something that is still owed.
+
+       Defined after the number helpers above, and called only once they
+       exist: a const is not hoisted, so calling this any earlier throws
+       and takes the whole generator down with it. */
+    const modeSel = q("#docMode");
+    const syncMode = () => {
+      const mode = modeSel ? modeSel.value : "invoice";
+      const paidBox = q("#paid"), hint = q("#paidHint"), dueRow = q("#dueDate");
+      if (paidBox) {
+        paidBox.disabled = mode === "receipt-full";
+        paidBox.closest(".field").classList.toggle("is-off", paidBox.disabled);
+      }
+      if (hint) hint.hidden = mode !== "receipt-full";
+      if (dueRow) dueRow.closest(".field").hidden = mode !== "invoice";
+      syncNo(mode);
+    };
+    if (modeSel) modeSel.addEventListener("change", syncMode);
+    syncMode();
+
     if (q("#invDate")) q("#invDate").value = today();
     if (q("#dueDate")) {
       const due = new Date(now.getTime() + 14 * 864e5);
@@ -841,12 +874,17 @@
       const taxRate  = parseFloat(val("taxRate")) || 0;
       const tax      = subtotal * (taxRate / 100);
       const total    = subtotal + tax;
-      const paid     = parseFloat(val("paid")) || 0;
-      const balance  = Math.max(total - paid, 0);
-      const isReceipt = q("#docMode") && q("#docMode").value === "receipt";
+      /* Three document states. A paid-in-full receipt takes its amount
+         from the total rather than from the box, so the figure printed on
+         the document cannot contradict the total sitting above it. */
+      const mode      = q("#docMode") ? q("#docMode").value : "invoice";
+      const isReceipt = mode.indexOf("receipt") === 0;
+      const paidFull  = mode === "receipt-full";
+      const paid      = paidFull ? total : (parseFloat(val("paid")) || 0);
+      const balance   = Math.max(total - paid, 0);
 
       out.innerHTML = invoiceHTML({
-        isReceipt, items, subtotal, taxRate, tax, total, paid, balance,
+        isReceipt, paidFull, items, subtotal, taxRate, tax, total, paid, balance,
         invNo:   val("invNo"),
         invDate: val("invDate"),
         dueDate: val("dueDate"),
@@ -888,7 +926,11 @@
         </div>
       </header>
 
-      ${d.isReceipt && d.balance === 0 ? `<p class="doc-stamp">Paid in full</p>` : ""}
+      ${d.isReceipt
+          ? (d.balance === 0
+              ? `<p class="doc-stamp">Paid in full</p>`
+              : `<p class="doc-stamp doc-stamp-part">Part payment received</p>`)
+          : ""}
 
       <section class="doc-parties">
         <div>
@@ -908,8 +950,11 @@
           <tr><th>Subtotal</th><td class="doc-num">${money(d.subtotal)}</td></tr>
           ${d.taxRate ? `<tr><th>GST (${d.taxRate}%)</th><td class="doc-num">${money(d.tax)}</td></tr>` : ""}
           <tr><th>Total</th><td class="doc-num"><strong>${money(d.total)}</strong></td></tr>
-          ${d.paid ? `<tr><th>Deposit received</th><td class="doc-num">− ${money(d.paid)}</td></tr>` : ""}
-          <tr class="doc-due"><th>${d.balance === 0 ? "Balance" : "Balance due"}</th>
+          ${d.paid ? `<tr><th>${d.isReceipt ? "Amount received" : "Deposit received"}</th>
+              <td class="doc-num">− ${money(d.paid)}</td></tr>` : ""}
+          <tr class="doc-due"><th>${
+              d.balance === 0 ? "Balance" :
+              d.isReceipt ? "Balance remaining" : "Balance due"}</th>
               <td class="doc-num"><strong>${money(d.balance)}</strong></td></tr>
         </tfoot>
       </table>

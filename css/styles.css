@@ -1042,6 +1042,16 @@ html.js .tile-in.in{ opacity:1; transform:none; }
   border:2px solid #157f3d; color:#157f3d !important;
   font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:.78rem;
 }
+/* A part payment is not the same news as paid in full, so it does not get
+   to wear the same green. Amber reads as "in progress" at a glance, which
+   is what stops a deposit receipt being mistaken for a settled account. */
+.doc-stamp-part{ border-color:#a86407; color:#a86407 !important; }
+
+/* Sits under the amount box on the invoice page, not on the document. */
+.field-hint{ font-size:.76rem; color:var(--ink-3); margin-top:.4rem; }
+/* A field the current document type does not use. Dimmed rather than
+   hidden, so the form does not jump about as the type is changed. */
+.field.is-off{ opacity:.5; }
 
 .doc-sign{ display:grid; grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr)); gap:2rem; margin-top:1.6rem; }
 .doc-sig-line{
