@@ -210,20 +210,16 @@ function socialLinks() {
 }
 
 /* beamed pair of eighth notes, sitting after the name in the logo */
-/* The logo, stacked: DJ tracked out over a red rule, the name beneath.
-   Built here rather than shipped as an image so it stays live text, which
-   means it scales with the layout, stays crisp on any screen, and is read
-   by search engines and screen readers as the business name.
+/* The supplied logo artwork. Drawn as a CSS background rather than an
+   <img> for one reason: the light theme needs a different file, because
+   the white half of the artwork disappears on a pale page, and CSS can
+   swap a background by theme where it cannot swap an <img> source.
 
-   With brandAccent empty the whole name sits on the lower line and the
-   upper one is dropped, rather than printing an empty rule. */
+   role="img" with the name as its label keeps that accessible: assistive
+   software announces the business name, which a decorative background
+   would otherwise lose. */
 function brandMark() {
-  const lead   = CONFIG.brandAccent ? CONFIG.brandLead : "";
-  const name   = CONFIG.brandAccent || CONFIG.name;
-  const top    = lead
-    ? `<span class="bm-lead">${esc(lead)}</span><span class="bm-rule"></span>`
-    : "";
-  return `<span class="brand-mark">${top}<span class="bm-name">${esc(name)}</span></span>`;
+  return `<span class="brand-logo" role="img" aria-label="${esc(CONFIG.name)}"></span>`;
 }
 
 /* =====================================================================
