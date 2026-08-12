@@ -343,12 +343,26 @@ body::after{
 .site-header.scrolled{ background:var(--header-bg-solid); border-color:var(--line-2); }
 .header-inner{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
 .brand{ display:inline-flex; align-items:center; gap:.6rem; }
+/* The logo. Everything is sized in em off one font-size, so the whole
+   lockup scales by changing that single value: 1.5rem in the header,
+   larger in the footer where there is room. Anton, matching the display
+   type, rather than the UI face. */
 .brand-mark{
-  display:inline-flex; align-items:center; gap:.34em;
-  font-family:var(--display); font-weight:700; text-transform:uppercase;
-  font-size:1.26rem; letter-spacing:-.03em; line-height:1;
+  display:inline-flex; flex-direction:column; align-items:center;
+  font-family:var(--display-xl); font-weight:400; text-transform:uppercase;
+  font-size:1.9rem; line-height:1;
 }
-.brand-mark em{ font-style:normal; color:var(--red); }
+/* Tracked out so the two letters read as a word rather than initials,
+   and indented by the same amount so the trailing space does not throw
+   the block off centre. */
+.bm-lead{ font-size:.42em; letter-spacing:.34em; text-indent:.34em;
+          line-height:1; color:var(--ink); }
+.bm-rule{ width:100%; height:.055em; background:var(--red);
+          margin:.15em 0 .1em; }
+.bm-name{ font-size:1em; line-height:.92; color:var(--red); }
+
+/* Room to breathe in the footer, where it anchors the column. */
+.site-footer .brand-mark{ font-size:2.2rem; align-items:flex-start; }
 
 /* music note after the name. Sized in em so it scales with the logo. */
 .brand-logo{ height:36px; width:auto; }

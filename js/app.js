@@ -210,10 +210,20 @@ function socialLinks() {
 }
 
 /* beamed pair of eighth notes, sitting after the name in the logo */
+/* The logo, stacked: DJ tracked out over a red rule, the name beneath.
+   Built here rather than shipped as an image so it stays live text, which
+   means it scales with the layout, stays crisp on any screen, and is read
+   by search engines and screen readers as the business name.
+
+   With brandAccent empty the whole name sits on the lower line and the
+   upper one is dropped, rather than printing an empty rule. */
 function brandMark() {
-  const lead   = CONFIG.brandLead || CONFIG.name;
-  const accent = CONFIG.brandAccent ? ` <em>${esc(CONFIG.brandAccent)}</em>` : "";
-  return `<span class="brand-mark">${esc(lead)}${accent}</span>`;
+  const lead   = CONFIG.brandAccent ? CONFIG.brandLead : "";
+  const name   = CONFIG.brandAccent || CONFIG.name;
+  const top    = lead
+    ? `<span class="bm-lead">${esc(lead)}</span><span class="bm-rule"></span>`
+    : "";
+  return `<span class="brand-mark">${top}<span class="bm-name">${esc(name)}</span></span>`;
 }
 
 /* =====================================================================
