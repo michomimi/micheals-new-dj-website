@@ -169,5 +169,19 @@
       "/Users/michealjabour/Desktop/royal-bake",
       "/Users/michealjabour/Desktop/micheals-new-dj-website/js"
     ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"${CLAUDE_PROJECT_DIR:-.}\" || exit 0\ngit rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0\n[ \"$(git rev-parse --abbrev-ref HEAD 2>/dev/null)\" = \"main\" ] || exit 0\nif [ -n \"$(git status --porcelain)\" ]; then\n  git add -A && git commit -q -m \"Auto-commit from Claude Code $(date '+%Y-%m-%d %H:%M')\"\nfi\nif [ -n \"$(git log origin/main..main --oneline 2>/dev/null)\" ]; then\n  if git push -q origin main; then echo '{\"systemMessage\":\"Auto-pushed to origin/main\"}'\n  else echo '{\"systemMessage\":\"Auto-push FAILED. Run: git push origin main\"}'; fi\nfi\nexit 0",
+            "timeout": 120,
+            "statusMessage": "Committing and pushing to origin/main"
+          }
+        ]
+      }
+    ]
   }
 }
