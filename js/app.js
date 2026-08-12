@@ -518,13 +518,18 @@ function injectShell() {
     ? ""
     : `<div class="socials" style="margin-top:1.4rem">${socialLinks()}</div>`;
 
-  /* Same idea for the footer's booking button. The contact page is one
-     long answer to "how do I reach you" and already sends people to the
-     booking page twice in its own content, so a third button sitting
-     under the footer's "Get in touch" column was just repetition. Other
-     pages keep it: there the footer is the only booking prompt at the
-     bottom of the page. */
-  const footerCta = current === "contact"
+  /* Same idea for the footer's booking button, on the two pages where it
+     has nothing left to offer.
+
+     On booking it points at the page the visitor is already reading, so
+     it was a button that goes nowhere. On contact, the page is one long
+     answer to "how do I reach you" and already sends people to the
+     booking page twice in its own content, so a third prompt in the
+     footer was repetition.
+
+     Everywhere else it stays: there the footer is the only booking
+     prompt at the bottom of the page. */
+  const footerCta = (current === "contact" || current === "booking")
     ? ""
     : `<a class="btn btn-primary" href="booking.html">Book a date</a>`;
 
