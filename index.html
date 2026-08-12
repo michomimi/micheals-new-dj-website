@@ -22,9 +22,6 @@ d.className+=" js";
 setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.classList.remove("js");}},2200);
 })();</script>
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="DJ Mishoo, Open-Format DJ in Calgary">
-<meta property="og:description" content="Calgary DJ playing Arabic and English. Weddings, clubs, corporate and private events.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,7 +31,124 @@ setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.c
      new HTML with the old CSS or JS, which renders half-styled and
      leaves fresh copy untranslated. Bump this on every deploy: the
      date, plus -2, -3 and so on if you deploy twice in a day. -->
-<link rel="stylesheet" href="css/styles.css?v=20260811-7">
+<link rel="stylesheet" href="css/styles.css?v=20260811-8">
+
+<!-- Icons. favicon.ico covers bookmarks and older clients that request it
+     by that fixed path; the PNGs cover tabs, Android and the iOS home
+     screen. Same red mark at every size. -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Canonical plus link-preview cards. Without og:image a link pasted into
+     WhatsApp or Instagram shows no picture at all, which is how most
+     people arrive here. -->
+<link rel="canonical" href="https://djmishoo.ca/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DJ Mishoo">
+<meta property="og:locale" content="en_CA">
+<meta property="og:url" content="https://djmishoo.ca/">
+<meta property="og:title" content="DJ Mishoo, Open-Format DJ in Calgary">
+<meta property="og:description" content="Calgary DJ playing Arabic and English. Weddings, clubs, corporate and private events, with high energy sets built around your room.">
+<meta property="og:image" content="https://djmishoo.ca/images/social/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DJ Mishoo, open-format DJ in Calgary">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DJ Mishoo, Open-Format DJ in Calgary">
+<meta name="twitter:description" content="Calgary DJ playing Arabic and English. Weddings, clubs, corporate and private events, with high energy sets built around your room.">
+<meta name="twitter:image" content="https://djmishoo.ca/images/social/og.jpg">
+
+<!-- Tells search engines this is a Calgary business rather than
+     leaving them to infer it from the prose. Values mirror CONFIG
+     in js/app.js; change them together. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": [
+    "LocalBusiness",
+    "MusicGroup"
+  ],
+  "@id": "https://djmishoo.ca/#business",
+  "name": "DJ Mishoo",
+  "description": "Open-format DJ in Calgary, Alberta, playing Arabic and English. Weddings, clubs, corporate nights and private parties.",
+  "url": "https://djmishoo.ca/",
+  "image": "https://djmishoo.ca/images/social/og.jpg",
+  "logo": "https://djmishoo.ca/icon-512.png",
+  "email": "info@djmishoo.ca",
+  "telephone": "+14034376153",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Calgary",
+    "addressRegion": "AB",
+    "addressCountry": "CA"
+  },
+  "areaServed": [
+    {
+      "@type": "City",
+      "name": "Calgary"
+    },
+    {
+      "@type": "State",
+      "name": "Alberta"
+    }
+  ],
+  "knowsLanguage": [
+    "en",
+    "ar"
+  ],
+  "sameAs": [
+    "https://www.instagram.com/dj_mishoo",
+    "https://www.tiktok.com/@dj.micheal21"
+  ],
+  "makesOffer": [
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Wedding DJ"
+      }
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Club and bar DJ"
+      }
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Corporate event DJ"
+      }
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Private party DJ"
+      }
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "MC and hosting"
+      }
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Sound and lighting hire"
+      }
+    }
+  ]
+}
+</script>
 </head>
 
 <body data-page="home">
@@ -176,9 +290,9 @@ setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.c
 
 </main>
 
-<script src="js/gl.js?v=20260811-7" defer></script>
-<script src="js/i18n.js?v=20260811-7" defer></script>
-<script src="js/app.js?v=20260811-7" defer></script>
-<script src="js/motion.js?v=20260811-7" defer></script>
+<script src="js/gl.js?v=20260811-8" defer></script>
+<script src="js/i18n.js?v=20260811-8" defer></script>
+<script src="js/app.js?v=20260811-8" defer></script>
+<script src="js/motion.js?v=20260811-8" defer></script>
 </body>
 </html>

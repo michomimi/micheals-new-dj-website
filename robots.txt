@@ -1,0 +1,13 @@
+# The planner, invoice and agreement pages are working tools rather than
+# pages anyone should land on from a search result. They already carry a
+# noindex tag; this keeps crawlers off them in the first place.
+User-agent: *
+Allow: /
+Disallow: /contract.html
+Disallow: /invoice.html
+Disallow: /extras.html
+Disallow: /music.html
+Disallow: /preview-background.html
+Disallow: /preview-hero.html
+
+Sitemap: https://djmishoo.ca/sitemap.xml

@@ -13,7 +13,7 @@
      new HTML with the old CSS or JS, which renders half-styled and
      leaves fresh copy untranslated. Bump this on every deploy: the
      date, plus -2, -3 and so on if you deploy twice in a day. -->
-<link rel="stylesheet" href="css/styles.css?v=20260811-7">
+<link rel="stylesheet" href="css/styles.css?v=20260811-8">
 <style>
   /* This page is a scratch pad for choosing a background. Delete it, and
      this block, once the choice is made. */
@@ -38,6 +38,14 @@
     color:var(--ink-3); text-align:center; width:max-content; max-width:90vw;
   }
 </style>
+
+<!-- Icons. favicon.ico covers bookmarks and older clients that request it
+     by that fixed path; the PNGs cover tabs, Android and the iOS home
+     screen. Same red mark at every size. -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png">
+<link rel="manifest" href="/site.webmanifest">
 </head>
 
 <body data-page="preview">
@@ -63,7 +71,7 @@
 
 <nav class="picker" id="picker" aria-label="Background options"></nav>
 
-<script src="js/gl.js?v=20260811-7"></script>
+<script src="js/gl.js?v=20260811-8"></script>
 <script>
   /* Buttons swap the shader live. gl.js exposes setBackground() and the
      list of available looks. */

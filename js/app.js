@@ -101,6 +101,20 @@ const CONFIG = {
   web3formsKey: "92606942-7ab7-45ef-806f-8116b040c408",
   formEndpoint: "",                 // ← or a Formspree/Basin URL instead
 
+  /* ---- ANALYTICS --------------------------------------------------
+     Deliberately empty. While it is empty nothing third party loads and
+     privacy.html stays accurate, because that page currently promises
+     in writing that this site runs no analytics and sets no cookies.
+
+     To switch it on, sign up somewhere cookieless (Plausible, Umami and
+     GoatCounter all qualify) and paste the two values their setup page
+     gives you. Then update privacy.html in the same commit, or the
+     policy becomes a false statement the moment this deploys. */
+  analytics: {
+    src:    "",     // e.g. "https://plausible.io/js/script.js"
+    domain: "",     // e.g. "djmishoo.ca"
+  },
+
   /* ---- GALLERY ----------------------------------------------------
      Name your photos 01.jpg, 02.jpg ... up to `count`, and drop them in
      the folder below. A slot with no file yet shows a labelled
@@ -1088,8 +1102,22 @@ function fillBrandText() {
       `tel:${String(CONFIG.phone).replace(/[^\d+]/g, "")}`));
 }
 
+/* Loads the analytics tag only once CONFIG.analytics.src is filled in, so
+   an empty config means not one third-party request leaves the page.
+   Deferred and async: measurement must never delay the site rendering. */
+function initAnalytics() {
+  const a = CONFIG.analytics;
+  if (!a || !a.src) return;
+  const s = document.createElement("script");
+  s.defer = true;
+  s.src = a.src;
+  if (a.domain) s.dataset.domain = a.domain;
+  document.head.appendChild(s);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   injectShell();
+  initAnalytics();
   initTheme();          // after injectShell, the button has to exist first
   initLang();
   initHeader();

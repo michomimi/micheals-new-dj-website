@@ -29,7 +29,34 @@ setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.c
      new HTML with the old CSS or JS, which renders half-styled and
      leaves fresh copy untranslated. Bump this on every deploy: the
      date, plus -2, -3 and so on if you deploy twice in a day. -->
-<link rel="stylesheet" href="css/styles.css?v=20260811-7">
+<link rel="stylesheet" href="css/styles.css?v=20260811-8">
+
+<!-- Icons. favicon.ico covers bookmarks and older clients that request it
+     by that fixed path; the PNGs cover tabs, Android and the iOS home
+     screen. Same red mark at every size. -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Canonical plus link-preview cards. Without og:image a link pasted into
+     WhatsApp or Instagram shows no picture at all, which is how most
+     people arrive here. -->
+<link rel="canonical" href="https://djmishoo.ca/privacy.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DJ Mishoo">
+<meta property="og:locale" content="en_CA">
+<meta property="og:url" content="https://djmishoo.ca/privacy.html">
+<meta property="og:title" content="Privacy Policy, DJ Mishoo">
+<meta property="og:description" content="What personal information this site collects, why, who it is shared with, and your rights over it.">
+<meta property="og:image" content="https://djmishoo.ca/images/social/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DJ Mishoo, open-format DJ in Calgary">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Privacy Policy, DJ Mishoo">
+<meta name="twitter:description" content="What personal information this site collects, why, who it is shared with, and your rights over it.">
+<meta name="twitter:image" content="https://djmishoo.ca/images/social/og.jpg">
 </head>
 
 <body data-page="privacy">
@@ -232,9 +259,9 @@ setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.c
 
 </main>
 
-<script src="js/gl.js?v=20260811-7" defer></script>
-<script src="js/i18n.js?v=20260811-7" defer></script>
-<script src="js/app.js?v=20260811-7" defer></script>
-<script src="js/motion.js?v=20260811-7" defer></script>
+<script src="js/gl.js?v=20260811-8" defer></script>
+<script src="js/i18n.js?v=20260811-8" defer></script>
+<script src="js/app.js?v=20260811-8" defer></script>
+<script src="js/motion.js?v=20260811-8" defer></script>
 </body>
 </html>
