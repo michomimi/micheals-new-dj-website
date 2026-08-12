@@ -117,6 +117,7 @@
     const form = q("#contractForm");
     const out  = q("#contractDoc");
     if (!form || !out) return;
+    if (window.armBotTrap) window.armBotTrap(form);
 
     /* package dropdown comes from CONFIG so prices cannot drift */
     const pkgSel = q("#pkg");
@@ -259,6 +260,17 @@
 
     async function sendCopy() {
       const status = q("#docStatus");
+
+      /* Same trap as the enquiry forms. Reporting success to the bot and
+         sending nothing beats telling it the truth, which only teaches it
+         to retry with the field left blank. */
+      const theForm = q("#contractForm") || q("#invoiceForm");
+      if (window.botTrapTripped && window.botTrapTripped(theForm)) {
+        status.textContent = "Sent. Keep your own PDF copy using the print button.";
+        status.className = "form-status ok";
+        return;
+      }
+
       const ticked = SERVICES.filter((s) => checked(s.id)).map((s) => s.short);
 
       const summary = {
@@ -789,6 +801,7 @@
     const form = q("#invoiceForm");
     const out  = q("#invoiceDoc");
     if (!form || !out) return;
+    if (window.armBotTrap) window.armBotTrap(form);
 
     const now = new Date();
     if (q("#invNo") && !val("invNo")) {

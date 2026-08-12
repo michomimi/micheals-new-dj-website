@@ -222,6 +222,13 @@
   }
 
   async function sendCopy(kind, payload, status, btn) {
+    /* Same trap as the enquiry forms: report success, send nothing. */
+    if (window.botTrapTripped && window.botTrapTripped(document.querySelector("#plannerForm"))) {
+      status.textContent = "Sent. Keep your own copy using the print button.";
+      status.className = "form-status ok";
+      return;
+    }
+
     status.textContent = "Sending…";
     status.className = "form-status";
 
@@ -300,6 +307,7 @@
 
     const form = q("#plannerForm");
     if (!form) return;
+    if (window.armBotTrap) window.armBotTrap(form);
     const stage = q("#planStage");
     const out   = q("#planDoc");
     const kind  = page === "music" ? "Music plan" : "Extras and effects";

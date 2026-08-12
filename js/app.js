@@ -812,24 +812,44 @@ function initPackagePicker() {
 /* =====================================================================
    FORMS — post to CONFIG.formEndpoint, else fall back to mailto:
    ===================================================================== */
+/* Honeypot. A published email address attracts bots that fill in every
+   field they can find and submit. This one is invisible and off the tab
+   order, so a person can neither see nor reach it; anything that fills it
+   in is automated. Added from JS so the markup stays clean and there is
+   nothing in the HTML for a bot to learn to skip.
+
+   On window because the agreement, invoice and planner pages send their
+   own documents through the same endpoint and need the same trap. One
+   definition, so the field name cannot drift between the two.
+
+   Worth being honest about the limit: the Web3Forms key is public, as it
+   has to be, so anything determined can post straight past this. It stops
+   the indiscriminate form-fillers, not a targeted nuisance. */
+function armBotTrap(form) {
+  if (!form || form.querySelector('input[name="company_website"]')) return;
+  const trap = document.createElement("input");
+  trap.type = "text";
+  trap.name = "company_website";      // plausible enough that bots fill it
+  trap.tabIndex = -1;
+  trap.autocomplete = "off";
+  trap.setAttribute("aria-hidden", "true");
+  trap.style.cssText =
+    "position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none";
+  form.appendChild(trap);
+}
+/* True when the invisible field came back filled in. */
+function botTrapTripped(form) {
+  const t = form && form.querySelector('input[name="company_website"]');
+  return !!(t && t.value);
+}
+window.armBotTrap = armBotTrap;
+window.botTrapTripped = botTrapTripped;
+
 function initForms() {
   $$("form[data-form]").forEach((form) => {
     const status = $(".form-status", form);
 
-    /* Honeypot. A published email address attracts bots that fill in every
-       field they can find and submit. This one is invisible and off the
-       tab order, so a person can neither see nor reach it; anything that
-       fills it in is automated. Added from JS so the markup stays clean
-       and there is nothing in the HTML for a bot to learn to skip. */
-    const trap = document.createElement("input");
-    trap.type = "text";
-    trap.name = "company_website";      // plausible enough that bots fill it
-    trap.tabIndex = -1;
-    trap.autocomplete = "off";
-    trap.setAttribute("aria-hidden", "true");
-    trap.style.cssText =
-      "position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none";
-    form.appendChild(trap);
+    armBotTrap(form);
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
