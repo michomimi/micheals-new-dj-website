@@ -4,3 +4,7 @@ videos/_originals/
 videos/_removed/
 .DS_Store
 .vscode/sftp.json
+# Claude Code config. Kept local: .nojekyll disables Jekyll, so every
+# tracked file is published, and this one carries absolute home-directory
+# paths and the names of unrelated projects.
+.claude/
