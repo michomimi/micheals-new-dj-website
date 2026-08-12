@@ -81,7 +81,35 @@ setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.c
     who has the address can open it. Real sign-in is not possible on
     static hosting: see the note at the foot of the page.
   -->
-  <section style="padding-top:0">
+
+  <!-- The password screen. Hidden once unlocked; the tools below it are
+       hidden until then. See js/gate.js for what this does and does not
+       protect. -->
+  <section id="gate" style="padding-top:0">
+    <div class="wrap">
+      <div class="card reveal" style="max-width:440px">
+        <h3>Sign in</h3>
+        <p style="margin-top:.6rem;font-size:.94rem">
+          Your tools. One address to remember.
+        </p>
+        <form id="gateForm" style="margin-top:1.2rem">
+          <div class="field">
+            <label for="gatePass">Password</label>
+            <input id="gatePass" type="password" autocomplete="current-password"
+                   required autofocus>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit"
+                  style="margin-top:1rem">Open</button>
+          <p class="form-status" id="gateStatus" role="status" aria-live="polite"></p>
+        </form>
+        <p class="form-note" style="margin-top:1.2rem">
+          Stays open on this device until you sign out.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="tools" hidden style="padding-top:0">
     <div class="wrap">
 
       <div class="grid grid-2" style="gap:1.2rem; align-items:stretch">
@@ -137,6 +165,7 @@ setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.c
 
       <div class="hero-cta reveal d4" style="margin-top:2rem">
         <a class="btn btn-ghost" href="index.html">Back to the site</a>
+        <button class="btn btn-ghost" type="button" id="gateOut">Sign out</button>
       </div>
     </div>
   </section>
@@ -146,5 +175,6 @@ setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.c
 <script src="js/i18n.js?v=20260812-1" defer></script>
 <script src="js/app.js?v=20260812-1" defer></script>
 <script src="js/motion.js?v=20260812-1" defer></script>
+<script src="js/gate.js?v=20260812-1" defer></script>
 </body>
 </html>
