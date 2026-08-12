@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Content Security Policy. Declared here because GitHub Pages cannot send
+     real headers. Placed before the theme script below so that script is
+     actually governed by it.
+
+     script-src carries no 'unsafe-inline': the two inline scripts on this
+     site are allowed by SHA-256 hash instead. EDITING EITHER ONE CHANGES
+     ITS HASH AND THE BROWSER WILL REFUSE TO RUN IT. The hashes cover the
+     theme bootstrap below and the JSON-LD block on the home page; regenerate
+     them if you touch either. Styles still need 'unsafe-inline' because the
+     markup uses style="" attributes throughout.
+
+     Two things this cannot do from a meta tag, by spec: frame-ancestors
+     (clickjacking) and HSTS. Both need real response headers, which means
+     putting a CDN in front of the site.
+
+     Adding analytics later means adding its origin to script-src and
+     connect-src, or it will be blocked silently. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; img-src 'self' data:; font-src https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'sha256-8X3/9Kw8ewCmmsWgc/zNLD+vAtWv1jacv0uvokvWdto=' 'sha256-9KinzBZbqPt7lRM0lAQWFUAf/djlXigKdZwSxhVk2PU='; connect-src 'self' https://api.web3forms.com; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<title>Admin, DJ Mishoo</title>
+<meta name="description" content="Private tools index.">
+<meta name="theme-color" content="#000000">
+<!-- Theme must be set before the stylesheet paints, otherwise a light-mode
+     visitor sees a black flash on every navigation. Deliberately inline and
+     synchronous: an external or deferred file would run too late. -->
+<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");
+if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
+d.dataset.theme=t;var l=localStorage.getItem("lang")==="ar"?"ar":"en";
+d.dataset.lang=l;d.lang=l;d.dir=l==="ar"?"rtl":"ltr";}
+catch(e){d.dataset.theme="dark";d.dataset.lang="en";}
+/* Turn the scroll-reveal on. Set here, before first paint, so the copy
+   never flashes in and then hides. The timer is the safety net: if the
+   reveal script has still not marked anything after 3.5s (blocked, slow
+   or broken), drop the class and every .reveal falls back to visible. */
+d.className+=" js";
+setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.classList.remove("js");}},2200);
+})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- ?v= is a cache buster. Both GitHub Pages and browsers hold these
+     files for a while, so without it a deploy can leave a visitor on
+     new HTML with the old CSS or JS, which renders half-styled and
+     leaves fresh copy untranslated. Bump this on every deploy: the
+     date, plus -2, -3 and so on if you deploy twice in a day. -->
+<link rel="stylesheet" href="css/styles.css?v=20260812-1">
+
+<!-- Icons. favicon.ico covers bookmarks and older clients that request it
+     by that fixed path; the PNGs cover tabs, Android and the iOS home
+     screen. Same red mark at every size. -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<meta name="robots" content="noindex, nofollow">
+</head>
+
+<body data-page="admin">
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<main id="page">
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="eyebrow reveal">Admin</p>
+      <h1 class="reveal d1">Your <span class="accent">tools</span></h1>
+      <p class="crumbs reveal d2">Not linked from the site. Bookmark this page.</p>
+    </div>
+  </section>
+
+  <!--
+    An index, not a lock. This page is noindex and linked from nothing, so
+    it will not be found by searching or by browsing the site, but anyone
+    who has the address can open it. Real sign-in is not possible on
+    static hosting: see the note at the foot of the page.
+  -->
+  <section style="padding-top:0">
+    <div class="wrap">
+
+      <div class="grid grid-2" style="gap:1.2rem; align-items:stretch">
+
+        <a class="card reveal" href="invoice.html">
+          <p class="eyebrow" style="margin-bottom:.7rem">Yours only</p>
+          <h3>Invoice &amp; receipt</h3>
+          <p>Bill for a booking, or receipt a payment. Three types: invoice with a
+            balance owing, receipt paid in full, receipt for a deposit or part
+            payment. Save as PDF and email it.</p>
+        </a>
+
+        <a class="card reveal d1" href="contract.html">
+          <p class="eyebrow" style="margin-bottom:.7rem">Client facing</p>
+          <h3>Booking agreement</h3>
+          <p>The agreement for a date: fee, deposit, hours, gear and what is
+            included. The client signs their name and sends a copy back.</p>
+        </a>
+
+        <a class="card reveal d2" href="music.html">
+          <p class="eyebrow" style="margin-bottom:.7rem">Client facing</p>
+          <h3>Music plan</h3>
+          <p>Set pieces, must plays, do not plays and the genres they want.
+            Filled in by the client a few weeks before the night.</p>
+        </a>
+
+        <a class="card reveal d3" href="extras.html">
+          <p class="eyebrow" style="margin-bottom:.7rem">Client facing</p>
+          <h3>Extras and effects</h3>
+          <p>Lighting, cold sparks, haze, extra sound. Flags the ones a venue has
+            to approve, which is the usual reason an extra gets cancelled.</p>
+        </a>
+
+      </div>
+
+      <div class="card reveal d4" style="margin-top:1.6rem">
+        <h3>Two things to know</h3>
+        <p style="margin-top:.6rem">
+          <strong>This is a bookmark, not a login.</strong> The site is static
+          files with no server, so there is nothing that can check a password
+          before sending a page. Anyone with the exact address can open any of
+          these. None of them store client data, they only format what is typed
+          into them, so there is nothing sitting here to be taken.
+        </p>
+        <p style="margin-top:.8rem">
+          <strong>Three of the four are meant for clients.</strong> The
+          agreement, music plan and extras sheet are all linked from the booking
+          page on purpose, because the client is the one who fills them in.
+          Putting those behind a sign-in only you can pass would stop them
+          working. Only the invoice page is yours alone.
+        </p>
+      </div>
+
+      <div class="hero-cta reveal d4" style="margin-top:2rem">
+        <a class="btn btn-ghost" href="index.html">Back to the site</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="js/gl.js?v=20260812-1" defer></script>
+<script src="js/i18n.js?v=20260812-1" defer></script>
+<script src="js/app.js?v=20260812-1" defer></script>
+<script src="js/motion.js?v=20260812-1" defer></script>
+</body>
+</html>

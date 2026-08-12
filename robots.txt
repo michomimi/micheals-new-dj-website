@@ -4,6 +4,7 @@
 User-agent: *
 Allow: /
 Disallow: /contract.html
+Disallow: /admin.html
 Disallow: /invoice.html
 Disallow: /extras.html
 Disallow: /music.html
