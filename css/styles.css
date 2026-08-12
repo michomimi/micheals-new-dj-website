@@ -48,7 +48,11 @@
 
   /* text that sits on the red fill stays white in both themes */
   --on-red:  #fff;
-  --sheen:   rgba(255,255,255,.28);    /* button hover sweep */
+  --sheen:   rgba(255,255,255,.28);    /* button sweep, on a red fill */
+  /* Outlined buttons need their own: a white sweep over a transparent
+     button is invisible against a pale page, so this one is tinted and
+     shows on either ground. */
+  --sheen-ghost: rgba(255,255,255,.20);
   --ripple:  rgba(255,255,255,.6);     /* button press ripple */
   --canvas-opacity: .9;
 
@@ -124,6 +128,7 @@
   --media-shade:    rgba(0,0,0,.55);
 
   --sheen:   rgba(255,255,255,.55);
+  --sheen-ghost: rgba(220,38,38,.20);
   --ripple:  rgba(255,255,255,.75);
   /* the canvas inverts to a pale wash, so it lifts the page back up;
      pulled down to keep the darker ground from being washed out */
@@ -215,6 +220,62 @@ section{ padding:clamp(60px,9vw,124px) 0; position:relative; }
              transform .22s var(--ease), background-position .6s var(--ease);
 }
 .btn:hover{ background-position:-60% 0; }
+
+/* =====================================================================
+   WAVE LIGHT
+
+   A band of light crosses every button on a loop, rather than only while
+   the pointer is on it. The hover sweep above still works, but it can
+   only ever be seen by someone already pointing at the button, so on a
+   phone it never showed at all.
+
+   Painted by ::after instead of by animating the button's own
+   background-position, which the hover sweep already owns: an animation
+   beats a transition in the cascade and would have killed it outright.
+
+   z-index:-1 puts the band above the button's fill and behind its label.
+   .btn already isolates and clips; the other two are given the same so
+   the light cannot slide out past the rounded ends.
+   ===================================================================== */
+.back-btn, .btn-copy{ position:relative; isolation:isolate; overflow:hidden; }
+
+.btn::after,
+.back-btn::after,
+.btn-copy::after{
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background-image:linear-gradient(105deg,
+    transparent 42%, var(--sheen) 50%, transparent 58%);
+  background-size:250% 100%;
+  background-repeat:no-repeat;
+  animation:btnWave 4.2s var(--ease) infinite;
+}
+/* Outlined buttons carry no fill for a white band to show against. */
+.btn-ghost::after,
+.btn-copy::after{
+  background-image:linear-gradient(105deg,
+    transparent 42%, var(--sheen-ghost) 50%, transparent 58%);
+}
+/* The crossing takes roughly 1.9s and the band then waits off screen for
+   the rest of the cycle, so the light passes now and then instead of
+   strobing under the reader. */
+@keyframes btnWave{
+  0%      { background-position:175% 0; }
+  45%,100%{ background-position:-75% 0; }
+}
+/* Neighbours start fractionally apart, so a row lights up as one wave
+   travelling across it rather than every button flashing together. */
+.btn:nth-of-type(2)::after{ animation-delay:.32s; }
+.btn:nth-of-type(3)::after{ animation-delay:.64s; }
+.btn:nth-of-type(4)::after{ animation-delay:.96s; }
+
+/* Nothing should invite a press on a control that is not available. */
+.btn[aria-disabled="true"]::after{ animation:none; background-image:none; }
+
+@media (prefers-reduced-motion:reduce){
+  .btn::after, .back-btn::after, .btn-copy::after{
+    animation:none; background-image:none;
+  }
+}
 
 .btn::before{
   content:""; position:absolute; z-index:-1;
@@ -396,7 +457,10 @@ body.nav-open{ overflow:hidden; }
 @keyframes scrollPulse{ 0%,100%{ opacity:.35; transform:scaleY(.7); transform-origin:top } 50%{ opacity:1; transform:scaleY(1) } }
 
 /* page banner (inner pages) */
-.page-head{ padding-top:calc(var(--header-h) + clamp(52px,9vw,110px)); padding-bottom:clamp(30px,5vw,60px); }
+/* Tightened from clamp(52px,9vw,110px). The back button now sits at the
+   top of this block, and the old gap left it stranded in empty space
+   rather than reading as the top of the page. */
+.page-head{ padding-top:calc(var(--header-h) + clamp(26px,4.6vw,56px)); padding-bottom:clamp(30px,5vw,60px); }
 .crumbs{ font-size:.8rem; color:var(--ink-3); margin-top:1rem; }
 .crumbs a:hover{ color:var(--red); }
 
@@ -1786,24 +1850,34 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{ transform:scale(1.1
    Sits above the eyebrow so it reads as leaving the page rather than as
    part of the page's own content.
    ===================================================================== */
+/* Solid red rather than a thin grey outline. As a hairline in --ink-2 it
+   sat at the same weight as the breadcrumb under it and was routinely
+   missed. It is the only way back on a subpage, so it is now the
+   brightest thing above the heading.
+
+   Left in normal flow as the first child of .page-head .wrap. That keeps
+   it at the top left, aligned to the same edge as the heading at every
+   width, and means it can never sit on top of the copy the way a pinned
+   element would once the page scrolls. */
 .back-btn{
-  display:inline-flex; align-items:center; gap:.45rem;
-  margin-bottom:1.1rem; padding:.42rem .85rem .42rem .7rem;
+  display:inline-flex; align-items:center; gap:.5rem;
+  margin-bottom:1.5rem; padding:.72rem 1.35rem .72rem 1.05rem;
   border-radius:999px;
   font-family:var(--display); font-weight:600;
-  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
-  color:var(--ink-2);
-  box-shadow:inset 0 0 0 1.3px var(--line);
-  transition:color .18s, box-shadow .18s, transform .2s var(--ease);
+  font-size:.92rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--on-red); background-color:var(--red);
+  position:relative; isolation:isolate; overflow:hidden;
+  transition:background-color .18s, box-shadow .18s, transform .2s var(--ease);
 }
 .back-btn:hover{
-  color:var(--red); box-shadow:inset 0 0 0 1.3px var(--red);
+  background-color:var(--red-hot); color:var(--on-red);
+  box-shadow:var(--glow);
   transform:translateX(-3px);          /* nudges the way it is about to go */
 }
 .back-btn:active{ transform:scale(.95); transition-duration:.08s; }
 .back-btn svg{
-  width:15px; height:15px; flex:none;
-  fill:none; stroke:currentColor; stroke-width:2.2;
+  width:19px; height:19px; flex:none;
+  fill:none; stroke:currentColor; stroke-width:2.4;
   stroke-linecap:round; stroke-linejoin:round;
 }
 /* In Arabic the page reads right to left, so "back" points the other way
