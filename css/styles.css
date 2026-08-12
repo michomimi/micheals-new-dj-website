@@ -351,14 +351,25 @@ body::after{
 .brand-mark em{ font-style:normal; color:var(--red); }
 
 /* music note after the name. Sized in em so it scales with the logo. */
-.brand-note{ width:1.05em; height:1.05em; flex:0 0 auto; color:var(--red);
-             transform-origin:60% 80%; transition:transform .2s var(--ease); }
-.brand-note .head{ fill:currentColor; stroke:none; }
-.brand-note .stem{ fill:none; stroke:currentColor; stroke-width:1.9;
-                   stroke-linecap:round; stroke-linejoin:round; }
-/* it lifts and tilts when the logo is hovered, rather than bobbing
-   forever in a fixed header where the motion would nag */
-.brand:hover .brand-note{ transform:translateY(-2px) rotate(-10deg); }
+/* The meem mark. Sized in em so it tracks the wordmark next to it at
+   every breakpoint instead of needing its own media queries. The grooves
+   are painted in the page background rather than punched through, which
+   keeps one flat shape that survives being scaled down to a tab icon. */
+.brand-logo-mark{ width:1.72em; height:1.72em; flex:0 0 auto; display:block;
+                  transform-origin:55% 60%; transition:transform .25s var(--ease); }
+.brand-logo-mark .disc,
+.brand-logo-mark .tail{ fill:var(--red); }
+.brand-logo-mark .groove circle{ fill:none; stroke:var(--bg); stroke-opacity:.42; }
+.brand-logo-mark .groove circle:nth-child(1){ stroke-width:3.5; }
+.brand-logo-mark .groove circle:nth-child(2){ stroke-width:2.9; }
+.brand-logo-mark .groove circle:nth-child(3){ stroke-width:2.6; }
+.brand-logo-mark .hole{ fill:var(--bg); }
+/* it turns a few degrees on hover, like a record being cued, rather than
+   spinning forever in a fixed header where the motion would nag */
+.brand:hover .brand-logo-mark{ transform:rotate(-14deg); }
+@media (prefers-reduced-motion:reduce){
+  .brand:hover .brand-logo-mark{ transform:none; }
+}
 .brand-logo{ height:36px; width:auto; }
 
 .nav{ display:flex; gap:1.9rem; }

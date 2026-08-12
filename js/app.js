@@ -210,17 +210,32 @@ function socialLinks() {
 }
 
 /* beamed pair of eighth notes, sitting after the name in the logo */
-const NOTE_MARK = `
-  <svg class="brand-note" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <path class="stem" d="M9 17.4V5.1l10-2.2v12.3"/>
-    <circle class="head" cx="6.5" cy="18" r="2.7"/>
-    <circle class="head" cx="16.5" cy="15.7" r="2.7"/>
+/* The mark is the Arabic letter meem, م, which is already a loop with a
+   descending tail and so doubles as a record with the arm coming off it.
+   It carries the open-format, Arabic-and-English position without a word
+   of explanation, and unlike a generic note or waveform it belongs to
+   this name only.
+
+   Inline rather than an <img> so it inherits currentColor, needs no
+   second request, and cannot be blocked by the content security policy.
+   The grooves are drawn on the disc rather than cut out of it, so the
+   shape still holds together at favicon size where they disappear. */
+const LOGO_MARK = `
+  <svg class="brand-logo-mark" viewBox="0 0 250 250" aria-hidden="true" focusable="false">
+    <path class="tail" d="M170 132 C 178 190, 152 226, 86 236 C 132 214, 152 182, 148 134 Z"/>
+    <circle class="disc" cx="132" cy="94" r="64"/>
+    <g class="groove">
+      <circle cx="132" cy="94" r="44.8"/>
+      <circle cx="132" cy="94" r="35.2"/>
+      <circle cx="132" cy="94" r="25.6"/>
+    </g>
+    <circle class="hole" cx="132" cy="94" r="8.3"/>
   </svg>`;
 
 function brandMark() {
   const lead   = CONFIG.brandLead || CONFIG.name;
   const accent = CONFIG.brandAccent ? ` <em>${esc(CONFIG.brandAccent)}</em>` : "";
-  return `<span class="brand-mark">${esc(lead)}${accent}${NOTE_MARK}</span>`;
+  return `${LOGO_MARK}<span class="brand-mark">${esc(lead)}${accent}</span>`;
 }
 
 /* =====================================================================

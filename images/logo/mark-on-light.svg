@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250" width="250" height="250">
+<title>DJ Mishoo</title>
+<!-- For light or white backgrounds -->
+<path d="M170 132 C 178 190, 152 226, 86 236 C 132 214, 152 182, 148 134 Z" fill="#DC2626"/>
+ <circle cx="132" cy="94" r="64" fill="#DC2626"/>
+ <g fill="none" stroke="#FFFFFF" stroke-opacity=".42">
+  <circle cx="132" cy="94" r="44.8" stroke-width="3.5"/>
+  <circle cx="132" cy="94" r="35.2" stroke-width="2.9"/>
+  <circle cx="132" cy="94" r="25.6" stroke-width="2.6"/>
+ </g>
+ <circle cx="132" cy="94" r="8.3" fill="#FFFFFF"/>
+</svg>
