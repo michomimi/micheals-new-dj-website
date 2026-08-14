@@ -333,6 +333,12 @@
             }),
           });
           const out = await res.json().catch(() => ({}));
+          if (window.postToSheet) window.postToSheet({
+            type: summary.document, client: summary.client, email: summary.email,
+            phone: summary.phone || "", eventDate: summary.eventDate || "",
+            venue: summary.venue || "",
+            detail: Object.entries(summary).map(([k, v]) => `${k}: ${v}`).join(" | "),
+          });
           if (!res.ok || out.success === false) throw new Error();
           status.textContent = summary.signedBy
             ? "Sent. I have the signed agreement. Keep your own PDF using the download button."
