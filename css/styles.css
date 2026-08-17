@@ -39,9 +39,9 @@
      above. Every fade, glow and ring on the site now reads from this, so
      the colour is set in one place instead of being hard coded in three
      dozen of them. Change both lines together. */
-  --red:       #CC0510;   /* primary accent, from the logo */
-  --red-rgb:   204, 5, 16;
-  --red-hot:   #E8121F;   /* hover, lifts rather than deepens */
+  --red:       #C00610;   /* primary accent, from the logo */
+  --red-rgb:   192, 6, 16;
+  --red-hot:   #DE101D;   /* hover, lifts rather than deepens */
   --line:      rgba(255,255,255,.10);
   --line-2:    rgba(255,255,255,.055);
   --line-3:    rgba(255,255,255,.14);  /* dashed empty states */

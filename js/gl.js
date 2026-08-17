@@ -63,8 +63,8 @@ const FALLBACK_BACKGROUND = "waves";
     uniform vec2  u_mouse;   // 0..1, eased
     uniform float u_scroll;  // 0..1 down the page
 
-    const vec3 RED    = vec3(0.800, 0.020, 0.063);   // #CC0510, matches --red
-    const vec3 HOT    = vec3(0.910, 0.071, 0.122);   // #E8121F, matches --red-hot
+    const vec3 RED    = vec3(0.753, 0.024, 0.063);   // #C00610, matches --red
+    const vec3 HOT    = vec3(0.871, 0.063, 0.114);   // #DE101D, matches --red-hot
     const vec3 MAGENTA= vec3(1.000, 0.180, 0.420);   // #FF2E6B
     const vec3 VIOLET = vec3(0.486, 0.227, 0.929);   // #7C3AED
     const vec3 AMBER  = vec3(1.000, 0.520, 0.145);   // #FF8525
