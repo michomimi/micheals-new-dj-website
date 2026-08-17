@@ -1047,6 +1047,28 @@ html.js .tile-in.in{ opacity:1; transform:none; }
    is what stops a deposit receipt being mistaken for a settled account. */
 .doc-stamp-part{ border-color:#a86407; color:#a86407 !important; }
 
+/* Add-on price rows on the booking page. The price is pushed to the far
+   end so the two figures line up in a column, which is what makes them
+   comparable at a glance; on a phone it drops under the label instead of
+   squeezing the description down to two words a line. */
+.addon-list{ list-style:none; margin-top:1.2rem; display:flex;
+             flex-direction:column; gap:.9rem; }
+.addon-list li{
+  display:grid; grid-template-columns:1fr auto; align-items:baseline;
+  column-gap:1.2rem; padding-top:.9rem; border-top:1px solid var(--line-2);
+}
+.addon-list b{ font-size:1rem; color:var(--ink); }
+.addon-list span{ grid-column:1; font-size:.88rem; color:var(--ink-2); }
+.addon-list em{
+  grid-row:1 / span 2; grid-column:2; font-style:normal;
+  font-family:var(--display-xl); font-size:1.5rem; color:var(--red);
+  line-height:1; white-space:nowrap;
+}
+@media (max-width:520px){
+  .addon-list li{ grid-template-columns:1fr; }
+  .addon-list em{ grid-row:auto; grid-column:1; margin-top:.4rem; }
+}
+
 /* Sits under the amount box on the invoice page, not on the document. */
 .field-hint{ font-size:.76rem; color:var(--ink-3); margin-top:.4rem; }
 /* A field the current document type does not use. Dimmed rather than

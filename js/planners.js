@@ -67,6 +67,11 @@
       desc: "A fine, nearly invisible mist that hangs in the air so light beams and lasers can actually be seen. Without haze, beams and lasers barely show up at all.",
       approval: true },
 
+    { id: "xDurbEntrance", group: "Live music", label: "Durbakeh drummer, entrance",
+      desc: "A live Arabic hand drummer for the grand entrance and the first few minutes. The drumming walks you into the room and lifts the whole start of the night." },
+    { id: "xDurbWedding", group: "Live music", label: "Durbakeh drummer, full wedding",
+      desc: "The drummer across the whole night: entrance, dabke sets and wherever else it is planned in. Priced separately from the DJ package." },
+
     { id: "xSub", group: "Sound", label: "Extra subwoofer",
       desc: "Adds low end for larger rooms or crowds over about 150. If you want the bass felt and not just heard, this is the part that does it." },
     { id: "xMic", group: "Sound", label: "Extra wireless microphone",

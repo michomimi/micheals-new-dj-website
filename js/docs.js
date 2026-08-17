@@ -111,6 +111,8 @@
       clause: "Ceremony sound, including a microphone for vows and readings" },
     { id: "svcCocktail", short: "Cocktail hour music",
       clause: "Cocktail hour and dinner background music" },
+    { id: "svcDurbakeh",  short: "Live durbakeh drummer",
+      clause: "Live durbakeh drummer, as agreed for the entrance or for the night" },
   ];
 
   function initContract() {

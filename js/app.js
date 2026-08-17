@@ -73,6 +73,18 @@ const CONFIG = {
     { id: "headline",  name: "Headline",  price: 2000, deposit: "" },  // ← $1,000 Stripe link
   ],
 
+  /* ---- ADD-ONS ----------------------------------------------------
+     Bookable alongside any package rather than instead of one, which is
+     why these are separate from `packages` above: a package is a tier and
+     you pick one, an add-on is a fixed price and you pick any number.
+
+     Read by the booking page through the same data-price spans, so a
+     price is still only ever written down here. */
+  addons: [
+    { id: "durbakeh-entrance", name: "Durbakeh, entrance", price: 250 },
+    { id: "durbakeh-wedding",  name: "Durbakeh, full wedding", price: 500 },
+  ],
+
   /* ---- FORMS ------------------------------------------------------
      THIS SITE HAS NO SERVER. It is plain files on GitHub Pages, and a
      page cannot send email by itself: sending requires a mail server,
@@ -622,10 +634,13 @@ const money = (n) => "$" + Math.round(n).toLocaleString("en-CA");
 const depositFor = (pkg) => Math.round(pkg.price * CONFIG.depositRate);
 
 /* fill the price on each package card from CONFIG */
+/* Packages and add-ons are looked up together, so one data-price span
+   works for either and a price never has to be typed into the markup. */
 function renderPrices() {
+  const priced = CONFIG.packages.concat(CONFIG.addons || []);
   $$("[data-price]").forEach((el) => {
-    const pkg = CONFIG.packages.find((p) => p.id === el.dataset.price);
-    if (pkg) el.textContent = money(pkg.price);
+    const item = priced.find((p) => p.id === el.dataset.price);
+    if (item) el.textContent = money(item.price);
   });
 }
 

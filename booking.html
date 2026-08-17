@@ -49,7 +49,7 @@ setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.c
      new HTML with the old CSS or JS, which renders half-styled and
      leaves fresh copy untranslated. Bump this on every deploy: the
      date, plus -2, -3 and so on if you deploy twice in a day. -->
-<link rel="stylesheet" href="css/styles.css?v=20260812-3">
+<link rel="stylesheet" href="css/styles.css?v=20260817-1">
 
 <!-- Icons. favicon.ico covers bookmarks and older clients that request it
      by that fixed path; the PNGs cover tabs, Android and the iOS home
@@ -153,6 +153,33 @@ setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.c
           <a class="btn btn-ghost btn-block" href="#enquiry" data-package="Headline">Choose Headline</a>
         </article>
 
+      </div>
+
+      <!-- Booked alongside a package, not instead of one, so it sits below
+           the three tiers rather than becoming a fourth card. Two fixed
+           prices, where a package quotes a starting point. -->
+      <div class="card reveal d3" style="margin-top:1.6rem">
+        <p class="eyebrow" style="margin-bottom:.7rem">Add on</p>
+        <h3>Live durbakeh drummer</h3>
+        <p style="margin-top:.6rem;max-width:62ch">
+          A live Arabic hand drummer playing over the set. Booked with any package.
+          Most often for the entrance, where the drumming walks you into the room,
+          or across the whole night at a wedding.
+        </p>
+        <ul class="addon-list">
+          <li>
+            <b>Entrance</b>
+            <span>The grand entrance and the first few minutes</span>
+            <em><span data-price="durbakeh-entrance"></span></em>
+          </li>
+          <li>
+            <b>Full wedding</b>
+            <span>Entrance, dabke sets and through the night as planned</span>
+            <em><span data-price="durbakeh-wedding"></span></em>
+          </li>
+        </ul>
+        <a class="btn btn-ghost" href="#enquiry" data-package="Durbakeh drummer"
+           style="margin-top:1.4rem">Ask about the drummer</a>
       </div>
 
       <p class="form-note reveal d3" style="margin-top:1.4rem">
@@ -342,10 +369,10 @@ setTimeout(function(){if(!document.querySelector(".reveal.in, .tile-in.in")){d.c
 
 </main>
 
-<script src="js/gl.js?v=20260812-3" defer></script>
-<script src="js/i18n.js?v=20260812-3" defer></script>
-<script src="js/app.js?v=20260812-3" defer></script>
-<script src="js/motion.js?v=20260812-3" defer></script>
+<script src="js/gl.js?v=20260817-1" defer></script>
+<script src="js/i18n.js?v=20260817-1" defer></script>
+<script src="js/app.js?v=20260817-1" defer></script>
+<script src="js/motion.js?v=20260817-1" defer></script>
 
 </body>
 </html>

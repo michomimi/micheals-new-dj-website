@@ -230,6 +230,19 @@ const AR = {
   "Starting points, not fine print. Every quote is confirmed in writing once I know the venue and the hours. <!-- EDIT: set your real prices below -->":
     "أسعار بداية لا شروط خفية. يُؤكَّد كل عرض سعر كتابياً بمجرد معرفة المكان وعدد الساعات. <!-- EDIT: set your real prices below -->",
   "starting": "ابتداءً من",
+
+  /* ---- the durbakeh add-on ---- */
+  "Add on": "إضافة",
+  "Live durbakeh drummer": "عازف دربكة مباشر",
+  "A live Arabic hand drummer playing over the set. Booked with any package. Most often for the entrance, where the drumming walks you into the room, or across the whole night at a wedding.":
+    "عازف دربكة يعزف مباشرةً فوق الموسيقى. يُحجز مع أي باقة. غالباً للزفة عند الدخول، حيث تدخل القاعة على إيقاع الدربكة، أو طوال الليلة في الأعراس.",
+  "Entrance": "الزفة",
+  "The grand entrance and the first few minutes": "الدخول والدقائق الأولى",
+  "Full wedding": "العرس كاملاً",
+  "Entrance, dabke sets and through the night as planned":
+    "الزفة وفقرات الدبكة وطوال الليلة حسب الاتفاق",
+  "Ask about the drummer": "اسأل عن عازف الدربكة",
+
   "Essential": "الأساسية",
   "Signature": "المميزة",
   "Headline": "الاحترافية",
