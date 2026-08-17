@@ -30,8 +30,18 @@
      white, which would remove the hierarchy between the two. */
   --ink-2:     rgba(255,255,255,.84);
   --ink-3:     rgba(255,255,255,.56);
-  --red:       #DC2626;   /* primary accent */
-  --red-hot:   #FF2E3E;   /* hover / glow   */
+  /* Taken from the logo artwork rather than picked: sampling the red in
+     the mark gives roughly #D8000x, deeper and far more saturated than the
+     old #DC2626. Darkened a shade further from there.
+
+     --red-rgb carries the same colour as bare channels, because a
+     translucent red has to be written as rgba() and cannot use the hex
+     above. Every fade, glow and ring on the site now reads from this, so
+     the colour is set in one place instead of being hard coded in three
+     dozen of them. Change both lines together. */
+  --red:       #CC0510;   /* primary accent, from the logo */
+  --red-rgb:   204, 5, 16;
+  --red-hot:   #E8121F;   /* hover, lifts rather than deepens */
   --line:      rgba(255,255,255,.10);
   --line-2:    rgba(255,255,255,.055);
   --line-3:    rgba(255,255,255,.14);  /* dashed empty states */
@@ -84,7 +94,7 @@
   --maxw:     1240px;
   --header-h: 76px;
   --ease:     cubic-bezier(.22,.61,.36,1);
-  --glow:     0 0 42px -8px rgba(220,38,38,.65);
+  --glow:     0 0 42px -8px rgba(var(--red-rgb),.65);
 }
 
 /* =====================================================================
@@ -94,8 +104,9 @@
 
    The page sits on a near-white rather than pure white so that cards,
    which stay pure white, still read as raised without needing a heavier
-   border. Red is nudged a shade darker here: #DC2626 on white is under
-   4.5:1, which the small uppercase eyebrow text would fail.
+   border. Red is nudged darker again here: the same red always reads
+   lighter against a pale page, and the small uppercase eyebrow text is
+   the first thing to suffer for it.
    ===================================================================== */
 :root[data-theme="light"]{
   color-scheme: light;
@@ -112,8 +123,10 @@
   --ink:       #0B0C0F;
   --ink-2:     rgba(11,12,15,.72);
   --ink-3:     rgba(11,12,15,.50);
-  --red:       #C01B1B;
-  --red-hot:   #D82222;
+  /* Deeper again on a pale page, where the same red reads lighter. */
+  --red:       #A80009;
+  --red-rgb:   168, 0, 9;
+  --red-hot:   #C0000E;
   --line:      rgba(11,12,15,.18);
   --line-2:    rgba(11,12,15,.11);
   --line-3:    rgba(11,12,15,.22);
@@ -128,12 +141,12 @@
   --media-shade:    rgba(0,0,0,.55);
 
   --sheen:   rgba(255,255,255,.55);
-  --sheen-ghost: rgba(220,38,38,.20);
+  --sheen-ghost: rgba(var(--red-rgb),.20);
   --ripple:  rgba(255,255,255,.75);
   /* the canvas inverts to a pale wash, so it lifts the page back up;
      pulled down to keep the darker ground from being washed out */
   --canvas-opacity: .24;
-  --glow:    0 0 42px -10px rgba(192,27,27,.40);
+  --glow:    0 0 42px -10px rgba(var(--red-rgb),.40);
 
   /* The form sits on a card, so the field has to contrast with the CARD
      rather than the page. Stepped down from it, with a border and label
@@ -300,8 +313,8 @@ section{ padding:clamp(60px,9vw,124px) 0; position:relative; }
   100% { transform:none; }
 }
 @keyframes coneRing{
-  0%   { box-shadow:0 0 0 0    rgba(220,38,38,.55); }
-  100% { box-shadow:0 0 0 24px rgba(220,38,38,0);   }
+  0%   { box-shadow:0 0 0 0    rgba(var(--red-rgb),.55); }
+  100% { box-shadow:0 0 0 24px rgba(var(--red-rgb),0);   }
 }
 
 .btn:active{ transform:scale(.95); transition-duration:.08s; }
@@ -419,7 +432,7 @@ body::after{
   transition:color .16s, background .16s, padding-left .2s var(--ease);
 }
 .mobile-nav a:last-child{ border-bottom:none; }
-.mobile-nav a:active{ background:rgba(220,38,38,.10); padding-left:.7rem; }
+.mobile-nav a:active{ background:rgba(var(--red-rgb),.10); padding-left:.7rem; }
 .mobile-nav a.is-active{ color:var(--ink); }
 /* red bar marks the current page, matching the desktop underline */
 .mobile-nav a.is-active::after{
@@ -477,7 +490,7 @@ body.nav-open{ overflow:hidden; }
 /* =====================================================================
    MARQUEE
    ===================================================================== */
-.marquee{ border-block:1px solid var(--line-2); background:rgba(220,38,38,.06); overflow:hidden; padding:.85rem 0; }
+.marquee{ border-block:1px solid var(--line-2); background:rgba(var(--red-rgb),.06); overflow:hidden; padding:.85rem 0; }
 .marquee-track{ display:flex; gap:2.6rem; width:max-content; animation:marquee 36s linear infinite; }
 .marquee-track span{ font-family:var(--display); font-weight:500; text-transform:uppercase; font-size:.96rem; letter-spacing:.02em; color:var(--ink-2); display:inline-flex; align-items:center; gap:2.6rem; }
 .marquee-track span::after{ content:"◆"; color:var(--red); font-size:.66rem; }
@@ -496,7 +509,7 @@ body.nav-open{ overflow:hidden; }
   background:var(--bg-2); border:1px solid var(--line-2); border-radius:var(--radius);
   padding:1.6rem; transition:border-color .18s, transform .2s var(--ease), box-shadow .2s;
 }
-.card:hover{ border-color:rgba(220,38,38,.5); transform:translateY(-4px); box-shadow:0 24px 50px -30px rgba(220,38,38,.6); }
+.card:hover{ border-color:rgba(var(--red-rgb),.5); transform:translateY(-4px); box-shadow:0 24px 50px -30px rgba(var(--red-rgb),.6); }
 .card h3{ margin-bottom:.5rem; }
 .card p{ font-size:.94rem; }
 .card .ic{ color:var(--red); width:26px; height:26px; margin-bottom:1rem; }
@@ -510,14 +523,14 @@ body.nav-open{ overflow:hidden; }
   background:var(--bg-2); transition:border-color .18s, background .18s, transform .2s var(--ease);
 }
 .mix + .mix{ margin-top:.7rem; }
-.mix:hover{ border-color:rgba(220,38,38,.55); background:var(--bg-3); transform:translateX(4px); }
+.mix:hover{ border-color:rgba(var(--red-rgb),.55); background:var(--bg-3); transform:translateX(4px); }
 .mix-num{ font-family:var(--display); font-weight:600; font-size:1.3rem; color:var(--red); min-width:2.4rem; letter-spacing:-.03em; }
 .mix-name{ display:block; font-family:var(--display); font-weight:600; text-transform:uppercase; font-size:1.05rem; line-height:1.2; letter-spacing:-.02em; }
 .mix-meta{ display:block; font-size:.78rem; color:var(--ink-3); letter-spacing:.06em; text-transform:uppercase; }
 .mix-play{
   width:46px; height:46px; border-radius:50%; display:grid; place-items:center;
-  background:rgba(220,38,38,.14); color:var(--red);
-  box-shadow:inset 0 0 0 1.4px rgba(220,38,38,.45);
+  background:rgba(var(--red-rgb),.14); color:var(--red);
+  box-shadow:inset 0 0 0 1.4px rgba(var(--red-rgb),.45);
   transition:background .18s, color .18s, box-shadow .18s;
 }
 .mix:hover .mix-play{ background:var(--red); color:var(--on-red); box-shadow:var(--glow); }
@@ -533,7 +546,7 @@ body.nav-open{ overflow:hidden; }
   padding:1.2rem .4rem; border-bottom:1px solid var(--line-2);
   transition:background .18s, padding-inline .2s var(--ease);
 }
-.date-row:hover{ background:rgba(220,38,38,.06); padding-inline:1rem .4rem; }
+.date-row:hover{ background:rgba(var(--red-rgb),.06); padding-inline:1rem .4rem; }
 .date-when{ font-family:var(--display); font-weight:600; font-size:1.2rem; min-width:6.2rem; line-height:1; letter-spacing:-.03em; }
 .date-when small{ display:block; font-family:var(--sans); font-size:.68rem; letter-spacing:.2em; color:var(--ink-3); }
 .date-venue{ font-weight:600; color:var(--ink); }
@@ -549,8 +562,8 @@ body.nav-open{ overflow:hidden; }
   padding:2rem 1.7rem; display:flex; flex-direction:column; gap:.9rem; position:relative;
   transition:border-color .18s, transform .2s var(--ease), box-shadow .2s;
 }
-.pkg:hover{ transform:translateY(-5px); border-color:rgba(220,38,38,.45); box-shadow:0 26px 60px -34px rgba(220,38,38,.7); }
-.pkg.featured{ border-color:var(--red); box-shadow:0 0 0 1px var(--red), 0 24px 60px -34px rgba(220,38,38,.8); }
+.pkg:hover{ transform:translateY(-5px); border-color:rgba(var(--red-rgb),.45); box-shadow:0 26px 60px -34px rgba(var(--red-rgb),.7); }
+.pkg.featured{ border-color:var(--red); box-shadow:0 0 0 1px var(--red), 0 24px 60px -34px rgba(var(--red-rgb),.8); }
 .pkg-badge{
   position:absolute; top:-11px; left:1.7rem; background:var(--red); color:var(--on-red);
   font-size:.64rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
@@ -573,7 +586,7 @@ body.nav-open{ overflow:hidden; }
   padding:1.7rem; display:flex; flex-direction:column; gap:1rem;
   transition:border-color .18s, transform .2s var(--ease), box-shadow .2s;
 }
-.review:hover{ border-color:rgba(220,38,38,.45); transform:translateY(-4px); box-shadow:0 24px 50px -30px rgba(220,38,38,.6); }
+.review:hover{ border-color:rgba(var(--red-rgb),.45); transform:translateY(-4px); box-shadow:0 24px 50px -30px rgba(var(--red-rgb),.6); }
 .review blockquote{ color:var(--ink-2); font-size:.98rem; }
 .review blockquote::before{ content:"\201C"; }
 .review blockquote::after{ content:"\201D"; }
@@ -584,8 +597,8 @@ body.nav-open{ overflow:hidden; }
    and full-strength copy. Spans the whole grid row. */
 .reviews-empty{
   grid-column:1 / -1;
-  background:linear-gradient(180deg, rgba(220,38,38,.10), var(--bg-2) 70%);
-  border:1px dashed rgba(220,38,38,.55);
+  background:linear-gradient(180deg, rgba(var(--red-rgb),.10), var(--bg-2) 70%);
+  border:1px dashed rgba(var(--red-rgb),.55);
   border-radius:var(--radius);
   padding:2.6rem 1.6rem; text-align:center;
 }
@@ -682,7 +695,7 @@ body.nav-open{ overflow:hidden; }
 }
 .section-jump a:hover{
   color:var(--red); box-shadow:inset 0 0 0 1.4px var(--red);
-  background:rgba(220,38,38,.08);
+  background:rgba(var(--red-rgb),.08);
 }
 
 /* =====================================================================
@@ -705,8 +718,8 @@ body.nav-open{ overflow:hidden; }
   opacity:.65; transition:opacity .25s;
 }
 .video-card:hover{
-  border-color:rgba(220,38,38,.55); transform:translateY(-5px);
-  box-shadow:0 28px 55px -28px rgba(220,38,38,.7);
+  border-color:rgba(var(--red-rgb),.55); transform:translateY(-5px);
+  box-shadow:0 28px 55px -28px rgba(var(--red-rgb),.7);
 }
 .video-card:hover img{ transform:scale(1.07); filter:saturate(1.12); }
 .video-card:hover::after{ opacity:.85; }
@@ -717,14 +730,14 @@ body.nav-open{ overflow:hidden; }
   width:60px; height:60px; border-radius:50%;
   display:grid; place-items:center;
   background:var(--red); color:var(--on-red);
-  box-shadow:0 0 0 0 rgba(220,38,38,.55);
+  box-shadow:0 0 0 0 rgba(var(--red-rgb),.55);
   transition:transform .28s var(--ease), background .2s;
 }
 .video-play svg{ width:24px; height:24px; fill:currentColor; margin-left:3px; }
 .video-card:hover .video-play{ transform:scale(1.12); background:var(--red-hot); animation:playPulse 1.4s ease-out infinite; }
 @keyframes playPulse{
-  0%   { box-shadow:0 0 0 0    rgba(220,38,38,.55); }
-  100% { box-shadow:0 0 0 26px rgba(220,38,38,0);   }
+  0%   { box-shadow:0 0 0 0    rgba(var(--red-rgb),.55); }
+  100% { box-shadow:0 0 0 26px rgba(var(--red-rgb),0);   }
 }
 
 .video-card figcaption{
@@ -784,7 +797,7 @@ html.js .tile-in.in{ opacity:1; transform:none; }
 /* a red wash along the bottom ties the photo to the rest of the palette */
 .portrait::after{
   content:""; position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(to top, rgba(220,38,38,.20), transparent 55%);
+  background:linear-gradient(to top, rgba(var(--red-rgb),.20), transparent 55%);
 }
 
 .video-frame{ position:relative; border-radius:var(--radius); overflow:hidden; border:1px solid var(--line-2); background:var(--bg-2); aspect-ratio:16/9; }
@@ -806,7 +819,7 @@ html.js .tile-in.in{ opacity:1; transform:none; }
   padding:.85rem 1rem; transition:border-color .15s, background-color .15s, box-shadow .15s;
 }
 .field input:focus, .field textarea:focus, .field select:focus{
-  outline:none; border-color:var(--red); background-color:var(--field-hover); box-shadow:0 0 0 3px rgba(220,38,38,.18);
+  outline:none; border-color:var(--red); background-color:var(--field-hover); box-shadow:0 0 0 3px rgba(var(--red-rgb),.18);
 }
 
 /* The native select arrow sits hard against the border and ignores
@@ -891,11 +904,11 @@ html.js .tile-in.in{ opacity:1; transform:none; }
 /* tint and lift rather than flood with red — matches .mix-play and the
    cards, and keeps the icon legible instead of white-on-solid-red */
 .social:hover{
-  background:rgba(220,38,38,.12);
-  border-color:rgba(220,38,38,.55);
+  background:rgba(var(--red-rgb),.12);
+  border-color:rgba(var(--red-rgb),.55);
   color:var(--red-hot);
   transform:translateY(-3px);
-  box-shadow:0 12px 28px -16px rgba(220,38,38,.85);
+  box-shadow:0 12px 28px -16px rgba(var(--red-rgb),.85);
 }
 
 /* =====================================================================
@@ -1777,7 +1790,7 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{ transform:scale(1.1
 }
 :root[data-theme="light"] .opt input{ color-scheme:light; }
 /* a ticked row stays visibly picked once the cursor moves away */
-.opt:has(input:checked){ background:var(--bg-3); border-color:rgba(220,38,38,.45); }
+.opt:has(input:checked){ background:var(--bg-3); border-color:rgba(var(--red-rgb),.45); }
 
 .opt-body{ display:flex; flex-direction:column; gap:.28rem; }
 .opt-label{ font-weight:600; font-size:.97rem; color:var(--ink); }
@@ -1785,7 +1798,7 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{ transform:scale(1.1
 .opt-flag{
   font-style:normal; font-size:.66rem; font-weight:600;
   letter-spacing:.1em; text-transform:uppercase;
-  color:var(--red); border:1px solid rgba(220,38,38,.5);
+  color:var(--red); border:1px solid rgba(var(--red-rgb),.5);
   padding:.12rem .42rem; border-radius:999px;
   margin-inline-start:.5rem; white-space:nowrap;
 }
@@ -1808,8 +1821,8 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{ transform:scale(1.1
   transition:border-color .18s, transform .2s var(--ease), box-shadow .2s;
 }
 .reach-card:hover{
-  border-color:rgba(220,38,38,.5); transform:translateY(-3px);
-  box-shadow:0 22px 44px -30px rgba(220,38,38,.6);
+  border-color:rgba(var(--red-rgb),.5); transform:translateY(-3px);
+  box-shadow:0 22px 44px -30px rgba(var(--red-rgb),.6);
 }
 .reach-card .ic{ color:var(--red); width:24px; height:24px; flex:none; margin-top:.15rem; }
 .reach-body{ display:flex; flex-direction:column; gap:.3rem; }
@@ -1840,7 +1853,7 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{ transform:scale(1.1
   width:1.6rem; height:1.6rem; border-radius:50%;
   display:grid; place-items:center;
   font-family:var(--display); font-size:.78rem; font-weight:600;
-  color:var(--red); box-shadow:inset 0 0 0 1.3px rgba(220,38,38,.5);
+  color:var(--red); box-shadow:inset 0 0 0 1.3px rgba(var(--red-rgb),.5);
 }
 .ask-list b{ font-size:.98rem; color:var(--ink); }
 .ask-list span{ font-size:.88rem; color:var(--ink-2); }
