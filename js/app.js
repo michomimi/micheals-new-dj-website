@@ -115,27 +115,6 @@ const CONFIG = {
     domain: "",     // e.g. "djmishoo.ca"
   },
 
-  /* ---- COPY EVERY SUBMISSION TO A GOOGLE SHEET --------------------
-     Off until `endpoint` is filled in, and while it is empty nothing is
-     sent anywhere but your inbox.
-
-     Setup is in tools/google-sheet-endpoint.gs: make a sheet, paste that
-     file into Apps Script, deploy it as a web app, then put the URL it
-     gives you here.
-
-     IMPORTANT: filling this in means Google receives your clients' names,
-     emails and event details. privacy.html currently promises that this
-     site loads nothing from anywhere else and shares nothing, so that
-     page has to be updated in the same commit or it becomes untrue.
-
-     The email copy stays either way. This is an extra, and it is sent
-     without waiting for an answer, so a failure at Google's end can never
-     turn into a failed submission for the guest. */
-  sheet: {
-    endpoint: "",   // the /exec URL from Apps Script
-    token:    "8UOeiB1Xa8whxP_xT7Xh8j4-AqyyF9Ia",   // must match TOKEN in the .gs file
-  },
-
   /* ---- GALLERY ----------------------------------------------------
      Name your photos 01.jpg, 02.jpg ... up to `count`, and drop them in
      the folder below. A slot with no file yet shows a labelled
@@ -865,35 +844,6 @@ function botTrapTripped(form) {
 window.armBotTrap = armBotTrap;
 window.botTrapTripped = botTrapTripped;
 
-/* Sends a copy of a submission to the Google Sheet, if one is configured.
-   Shared by the enquiry forms, the agreement and the two planner sheets,
-   so every document lands in the same seven columns.
-
-   Three deliberate choices:
-
-     mode "no-cors"   — an Apps Script web app returns no CORS headers, so
-                        the browser would refuse to hand us the response.
-                        We do not need it: the guest's copy has already
-                        gone by email and this is only a second record.
-     text/plain       — anything else makes the browser send a preflight
-                        first, which Apps Script does not answer, and the
-                        request never happens at all.
-     never awaited    — a slow or broken sheet must not delay, or fail,
-                        the thing the guest is actually waiting on. */
-function postToSheet(row) {
-  const cfg = CONFIG.sheet;
-  if (!cfg || !cfg.endpoint) return;
-  try {
-    fetch(cfg.endpoint, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(Object.assign({ token: cfg.token }, row)),
-    }).catch(() => { /* the email copy is the one that matters */ });
-  } catch { /* ditto */ }
-}
-window.postToSheet = postToSheet;
-
 function initForms() {
   $$("form[data-form]").forEach((form) => {
     const status = $(".form-status", form);
@@ -948,13 +898,6 @@ function initForms() {
           });
           const out = await res.json().catch(() => ({}));
           if (!res.ok || out.success === false) throw new Error(out.message || res.status);
-          postToSheet({
-            type: `${label} enquiry`, client: data.name, email: data.email,
-            phone: data.phone || "", eventDate: data.date || "", venue: data.venue || "",
-            detail: Object.entries(data)
-              .filter(([k, v]) => v && !["name", "email", "phone", "date", "venue"].includes(k))
-              .map(([k, v]) => `${k}: ${v}`).join(" | "),
-          });
           form.reset();
           status.textContent = "Thanks, I will get back to you shortly.";
           status.className = "form-status ok";

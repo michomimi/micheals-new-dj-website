@@ -261,12 +261,6 @@
           }),
         });
         const out = await res.json().catch(() => ({}));
-        if (window.postToSheet) window.postToSheet({
-          type: kind, client: payload.client || "", email: payload.email || "",
-          phone: payload.phone || "", eventDate: payload.eventDate || "",
-          venue: payload.venue || "",
-          detail: asMessage(kind, payload).replace(/\n+/g, " | "),
-        });
         if (!res.ok || out.success === false) {
           reason = out.message || `the service replied ${res.status}`;
           throw new Error(reason);
