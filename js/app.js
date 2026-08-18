@@ -140,7 +140,7 @@ const CONFIG = {
     thumbs: "images/gallery/thumb/",   // 700px, shown in the grid
     full:   "images/gallery/full/",    // 1600px, loaded only in the lightbox
     ext:    ".jpg",
-    count:  11,
+    count:  9,
     captions: {
       // 1: "Wedding · Calgary",
       // 2: "Corporate · Downtown",
