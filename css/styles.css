@@ -582,8 +582,15 @@ body.nav-open{ overflow:hidden; }
    REVIEWS
    ===================================================================== */
 .review{
-  background:var(--bg-2); border:1px solid var(--line-2); border-radius:var(--radius);
-  padding:1.7rem; display:flex; flex-direction:column; gap:1rem;
+  background:var(--bg-2); border:1px solid var(--line-2);
+  /* Pillowed rather than boxed. The second value makes the corner radius
+     elliptical, taller than it is wide, which reads softer than a plain
+     round corner and keeps the card feeling like something said out loud
+     instead of a panel of text. Deliberately not var(--radius): the rest
+     of the site stays on the tighter corner, and these are meant to look
+     different from the cards around them. */
+  border-radius:32px / 44px;
+  padding:1.9rem 1.8rem; display:flex; flex-direction:column; gap:1rem;
   transition:border-color .18s, transform .2s var(--ease), box-shadow .2s;
 }
 .review:hover{ border-color:rgba(var(--red-rgb),.45); transform:translateY(-4px); box-shadow:0 24px 50px -30px rgba(var(--red-rgb),.6); }
@@ -640,8 +647,8 @@ body.nav-open{ overflow:hidden; }
    the seam where the card's border would otherwise show through.
    ------------------------------------------------------------------- */
 .review::after{
-  content:""; position:absolute; left:2.1rem; bottom:-9px;
-  width:17px; height:17px; transform:rotate(45deg);
+  content:""; position:absolute; left:2.9rem; bottom:-9px;
+  width:17px; height:17px; transform:rotate(45deg); border-radius:0 0 5px 0;
   background:var(--bg-2);
   border-right:1px solid var(--line-2);
   border-bottom:1px solid var(--line-2);
