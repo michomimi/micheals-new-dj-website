@@ -1082,6 +1082,16 @@ html.js .tile-in.in{ opacity:1; transform:none; }
   .addon-list em{ grid-row:auto; grid-column:1; margin-top:.4rem; }
 }
 
+/* The count of reviews still hidden, on the Show more button. Kept as its
+   own element so the label beside it stays a fixed string the translator
+   can match; a number baked into the sentence would never match. */
+.btn > small{
+  font-family:var(--display); font-size:.72rem; font-weight:600;
+  letter-spacing:.06em; line-height:1;
+  padding:.2rem .45rem; border-radius:999px;
+  background:rgba(var(--red-rgb),.16); color:var(--red);
+}
+
 /* Sits under the amount box on the invoice page, not on the document. */
 .field-hint{ font-size:.76rem; color:var(--ink-3); margin-top:.4rem; }
 /* A field the current document type does not use. Dimmed rather than

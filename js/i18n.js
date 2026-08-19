@@ -134,6 +134,7 @@ const AR = {
   "Floors filled": "ساحات ممتلئة",
   'What people say <span class="accent">after</span>': 'ما يقوله الناس <span class="accent">بعدها</span>',
   "All reviews &amp; leave your own": "كل التقييمات وأضف تقييمك",
+  "Show more reviews": "عرض المزيد من التقييمات",
   '<b>No reviews published yet</b> <span>Yours could be the first.</span>':
     '<b>لا توجد تقييمات منشورة بعد</b> <span>قد يكون تقييمك هو الأول.</span>',
   'Tell me about <span class="accent">your night</span>': 'حدثني عن <span class="accent">سهرتك</span>',

@@ -1194,7 +1194,7 @@ function renderReviews() {
     /* no .reveal here on purpose: motion.js has already collected the
        reveal elements by the time this runs, so anything injected now
        would never be un-hidden. Put .reveal on the container instead. */
-    el.innerHTML = list.map((r) => `
+    const card = (r) => `
       <figure class="review">
         ${stars(r.stars)}
         <blockquote>${esc(r.text)}</blockquote>
@@ -1202,7 +1202,42 @@ function renderReviews() {
           ${r.name ? `<strong>${esc(r.name)}</strong>` : ""}
           ${r.event ? `<span>${esc(r.event)}</span>` : ""}
         </figcaption>` : ""}
-      </figure>`).join("");
+      </figure>`;
+
+    /* Fifty cards at once is a wall nobody reads, so a page can ask for
+       them in batches with data-step. Without that attribute nothing
+       changes and the whole list is printed, which is what the home page
+       wants from its three. */
+    const step = parseInt(el.dataset.step, 10);
+    if (!Number.isFinite(step) || list.length <= step) {
+      el.innerHTML = list.map(card).join("");
+      return;
+    }
+
+    let shown = step;
+    /* The button sits after the grid rather than inside it, or it would
+       be laid out as another column and land beside the last review. */
+    const more = document.createElement("button");
+    more.type = "button";
+    more.className = "btn btn-ghost";
+    more.style.marginTop = "1.6rem";
+    const draw = () => {
+      el.innerHTML = list.slice(0, shown).map(card).join("");
+      const left = list.length - shown;
+      /* Count in its own element: the label is translated by matching the
+         English text, and a number baked into it would never match. */
+      more.innerHTML = `<span>Show more reviews</span><small>${left}</small>`;
+      if (left <= 0) more.remove();
+    };
+    el.insertAdjacentElement("afterend", more);
+    more.addEventListener("click", () => {
+      shown += step;
+      draw();
+      /* Arabic is applied by matching English strings, and these cards
+         arrive after that pass, so anything newly drawn needs another. */
+      if (typeof retranslate === "function") retranslate();
+    });
+    draw();
   });
 }
 
