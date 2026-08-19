@@ -627,7 +627,72 @@ body.nav-open{ overflow:hidden; }
 .review{
   animation:reviewIn .55s cubic-bezier(.2,.85,.25,1) both;
   animation-delay:calc(var(--i, 0) * .055s);
+  position:relative;
 }
+
+/* ---------------------------------------------------------------------
+   A review is something a person said on a night of music, so the card
+   is built as a speech bubble with a piece of a track across the top.
+
+   The tail is a square rotated 45 degrees, sharing the card's own
+   background and two of its borders, so it reads as part of the bubble
+   rather than a triangle stuck underneath. It sits one pixel up to cover
+   the seam where the card's border would otherwise show through.
+   ------------------------------------------------------------------- */
+.review::after{
+  content:""; position:absolute; left:2.1rem; bottom:-9px;
+  width:17px; height:17px; transform:rotate(45deg);
+  background:var(--bg-2);
+  border-right:1px solid var(--line-2);
+  border-bottom:1px solid var(--line-2);
+  transition:border-color .18s, background-color .18s;
+}
+.review:hover::after{ border-color:rgba(var(--red-rgb),.45); }
+/* The bubble needs room under it for its own tail, and the grid gap alone
+   would have the tail touching the card below. */
+[data-reviews]{ row-gap:2.1rem; }
+
+.review-top{ display:flex; align-items:center; gap:.9rem; }
+
+/* The waveform. Eighteen bars whose heights are set per position, so it
+   reads as a specific fragment of audio rather than a regular pattern.
+   Idle it sits low and dim; on hover it stands up and plays, which is
+   the card acknowledging the pointer without moving any text. */
+.wave{
+  display:flex; align-items:center; gap:2px; height:20px;
+  margin-inline-start:auto; opacity:.55;
+  transition:opacity .25s;
+}
+.wave i{
+  width:2px; border-radius:1px; background:var(--red);
+  height:calc(var(--h, 4) * 1px);
+  transition:height .3s cubic-bezier(.2,.85,.25,1);
+  transition-delay:calc(var(--b, 0) * 12ms);
+}
+.review:hover .wave{ opacity:1; }
+.review:hover .wave i{ height:calc(var(--h, 4) * 1.9px); }
+
+/* The silhouette. Written out rather than generated so it stays the same
+   shape on every card and cannot drift into a sawtooth. */
+.wave i:nth-child(1){ --h:5 }   .wave i:nth-child(2){ --h:9 }
+.wave i:nth-child(3){ --h:4 }   .wave i:nth-child(4){ --h:11 }
+.wave i:nth-child(5){ --h:7 }   .wave i:nth-child(6){ --h:3 }
+.wave i:nth-child(7){ --h:8 }   .wave i:nth-child(8){ --h:10 }
+.wave i:nth-child(9){ --h:6 }   .wave i:nth-child(10){ --h:4 }
+.wave i:nth-child(11){ --h:9 }  .wave i:nth-child(12){ --h:5 }
+.wave i:nth-child(13){ --h:7 }  .wave i:nth-child(14){ --h:3 }
+.wave i:nth-child(15){ --h:10 } .wave i:nth-child(16){ --h:6 }
+.wave i:nth-child(17){ --h:4 }  .wave i:nth-child(18){ --h:8 }
+
+/* A light from above, only while the pointer is on the card. Sits behind
+   the text and cannot be clicked through to. */
+.review::before{
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  pointer-events:none; opacity:0; transition:opacity .25s;
+  background:radial-gradient(120% 70% at 50% -20%,
+             rgba(var(--red-rgb),.18), transparent 60%);
+}
+.review:hover::before{ opacity:1; }
 /* The stars catch up a beat after the card lands. */
 @keyframes starIn{ from{ opacity:0; transform:scale(.6); } to{ opacity:1; transform:none; } }
 .review .stars > *{

@@ -1206,9 +1206,17 @@ function renderReviews() {
     /* --i drives the entrance stagger in CSS. It restarts at zero for each
        batch, so the tenth card of the fifth batch does not sit waiting
        through a delay meant for the fiftieth. */
+    /* 18 bars, heights fixed per position by CSS. Drawn rather than
+       decorative-only: it reads as a snippet of a track, which is the
+       point on a page of reviews about music. aria-hidden because it
+       says nothing a screen reader needs. */
+    const wave = `<span class="wave" aria-hidden="true">${
+      Array.from({ length: 18 }, (_, b) => `<i style="--b:${b}"></i>`).join("")
+    }</span>`;
+
     const card = (r, i) => `
       <figure class="review" style="--i:${i}">
-        ${stars(r.stars)}
+        <span class="review-top">${stars(r.stars)}${wave}</span>
         <blockquote>${esc(r.text)}</blockquote>
         ${(r.name || r.event) ? `<figcaption>
           ${r.name ? `<strong>${esc(r.name)}</strong>` : ""}
