@@ -1163,10 +1163,19 @@ function renderVideos() {
    Any [data-reviews] element is filled from CONFIG.reviews. Add
    data-limit="3" to show only the newest few (used on the home page).
    ===================================================================== */
+/* Each star is its own element so they can be lit one after another on a
+   review card. --s is its position, which the stagger in CSS reads.
+
+   The wrapper keeps the aria-label and the stars themselves are hidden
+   from assistive software: five separate stars would otherwise be read
+   out as five meaningless characters after the label has already said
+   "four out of five". */
 function stars(n) {
   const filled = Math.max(0, Math.min(5, Math.round(Number(n) || 0)));
-  return `<span class="stars" aria-label="${filled} out of 5 stars">` +
-    "★".repeat(filled) + `<i>${"★".repeat(5 - filled)}</i></span>`;
+  const one = (i) =>
+    `<i class="${i < filled ? "on" : ""}" style="--s:${i}" aria-hidden="true">★</i>`;
+  return `<span class="stars" role="img" aria-label="${filled} out of 5 stars">` +
+    [0, 1, 2, 3, 4].map(one).join("") + `</span>`;
 }
 
 function renderReviews() {
@@ -1194,8 +1203,11 @@ function renderReviews() {
     /* no .reveal here on purpose: motion.js has already collected the
        reveal elements by the time this runs, so anything injected now
        would never be un-hidden. Put .reveal on the container instead. */
-    const card = (r) => `
-      <figure class="review">
+    /* --i drives the entrance stagger in CSS. It restarts at zero for each
+       batch, so the tenth card of the fifth batch does not sit waiting
+       through a delay meant for the fiftieth. */
+    const card = (r, i) => `
+      <figure class="review" style="--i:${i}">
         ${stars(r.stars)}
         <blockquote>${esc(r.text)}</blockquote>
         ${(r.name || r.event) ? `<figcaption>
@@ -1210,11 +1222,11 @@ function renderReviews() {
        wants from its three. */
     const step = parseInt(el.dataset.step, 10);
     if (!Number.isFinite(step) || list.length <= step) {
-      el.innerHTML = list.map(card).join("");
+      el.innerHTML = list.map((r, i) => card(r, i)).join("");
       return;
     }
 
-    let shown = step;
+    let shown = step, drawn = 0;
     /* The button sits after the grid rather than inside it, or it would
        be laid out as another column and land beside the last review. */
     const more = document.createElement("button");
@@ -1222,7 +1234,13 @@ function renderReviews() {
     more.className = "btn btn-ghost";
     more.style.marginTop = "1.6rem";
     const draw = () => {
-      el.innerHTML = list.slice(0, shown).map(card).join("");
+      /* Appended, never re-rendered. Rebuilding the lot would restart the
+         entrance animation on every card already on screen, so pressing
+         the button would make the whole page flicker instead of the new
+         row sliding in under the old. */
+      el.insertAdjacentHTML("beforeend",
+        list.slice(drawn, shown).map((r, i) => card(r, i)).join(""));
+      drawn = shown;
       const left = list.length - shown;
       /* Count in its own element: the label is translated by matching the
          English text, and a number baked into it would never match. */

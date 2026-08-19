@@ -588,10 +588,55 @@ body.nav-open{ overflow:hidden; }
 }
 .review:hover{ border-color:rgba(var(--red-rgb),.45); transform:translateY(-4px); box-shadow:0 24px 50px -30px rgba(var(--red-rgb),.6); }
 .review blockquote{ color:var(--ink-2); font-size:.98rem; }
-.review blockquote::before{ content:"\201C"; }
+/* The opening mark is set large and in the brand red so each card starts
+   on something other than a wall of grey. The closing one stays small and
+   quiet: two big quote marks would fight each other. */
+.review blockquote::before{
+  content:"\201C"; color:var(--red); font-family:var(--display-xl);
+  font-size:1.9em; line-height:0; vertical-align:-.32em; margin-inline-end:.04em;
+}
 .review blockquote::after{ content:"\201D"; }
 .review figcaption strong{ display:block; font-family:var(--display); text-transform:uppercase; font-size:1rem; font-weight:600; letter-spacing:-.02em; }
-.review figcaption span{ font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); }
+/* The occasion, as a chip rather than another line of grey text. It is
+   the one piece of a review a reader scans for, so it is worth making it
+   findable at a glance. align-self keeps it hugging its own text instead
+   of stretching the width of the card, which a flex child does by
+   default. */
+.review figcaption span{
+  display:inline-block; align-self:flex-start;
+  font-size:.68rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--red); background:rgba(var(--red-rgb),.12);
+  box-shadow:inset 0 0 0 1px rgba(var(--red-rgb),.30);
+  padding:.32rem .62rem; border-radius:999px;
+  transition:background-color .18s, box-shadow .18s;
+}
+.review:hover figcaption span{
+  background:rgba(var(--red-rgb),.22);
+  box-shadow:inset 0 0 0 1px rgba(var(--red-rgb),.55);
+}
+
+/* Cards arrive rather than appear. Each batch counts its own delay from
+   zero, so a later batch slides in as its own group instead of waiting
+   out the whole list. Declared on the card itself, not on a revealed
+   ancestor: these are injected after the scroll reveal has already
+   collected everything it is going to watch. */
+@keyframes reviewIn{
+  from{ opacity:0; transform:translateY(16px) scale(.985); }
+  to  { opacity:1; transform:none; }
+}
+.review{
+  animation:reviewIn .55s cubic-bezier(.2,.85,.25,1) both;
+  animation-delay:calc(var(--i, 0) * .055s);
+}
+/* The stars catch up a beat after the card lands. */
+@keyframes starIn{ from{ opacity:0; transform:scale(.6); } to{ opacity:1; transform:none; } }
+.review .stars > *{
+  animation:starIn .34s cubic-bezier(.16,1.4,.3,1) both;
+  animation-delay:calc(var(--i, 0) * .055s + .16s + var(--s, 0) * .045s);
+}
+@media (prefers-reduced-motion:reduce){
+  .review, .review .stars > *{ animation:none; }
+}
 /* Empty state for the review grid. The generic .embed-empty grey sits at
    40% white and vanished against black, so this gets its own dark panel
    and full-strength copy. Spans the whole grid row. */
@@ -609,8 +654,13 @@ body.nav-open{ overflow:hidden; }
 }
 .reviews-empty span{ color:var(--red-hot); font-size:.95rem; font-weight:500; }
 
-.stars{ color:var(--red); letter-spacing:.18em; font-size:1rem; line-height:1; }
-.stars i{ color:var(--line); font-style:normal; }
+.stars{ color:var(--red); letter-spacing:.18em; font-size:1rem; line-height:1;
+        display:inline-flex; gap:.02em; }
+/* Every star is an <i>; .on marks the earned ones. The rest stay as the
+   faint outline they always were, so a four star review still reads as
+   four out of five rather than simply four. */
+.stars i{ color:var(--line); font-style:normal; display:inline-block; }
+.stars i.on{ color:var(--red); }
 
 /* Star picker in the review form. The stars sit in DOM order 5→1 and are
    flipped with row-reverse, so "~ label" reaches every star below the one
