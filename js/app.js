@@ -177,8 +177,106 @@ const CONFIG = {
      to your site directly. Add newest first.
      ------------------------------------------------------------------ */
   reviews: [
-    // { name: "Sarah & Tom", event: "Wedding · Calgary", stars: 5,
-    //   text: "The floor did not empty once all night." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "We had DJ Mishoo for our wedding and he was honestly amazing. Our families are Lebanese and Canadian, so getting the music right was really important to us. He went from Arabic dabke into English music so smoothly and somehow had both our parents and our friends on the dance floor at the same time. Definitely one of the best decisions we made for the wedding." },
+    { stars: 5, event: "Engagement party", name: "",
+      text: "Michael DJ’d our engagement party and did a great job. We gave him a general idea of what we liked but didn’t want to give him a huge playlist because we wanted him to read the crowd. He mixed Arabic, hip-hop, R&B and some old school stuff throughout the night. People were dancing way longer than we expected." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "I’ve been to a lot of Arabic weddings where the DJ either plays way too much Arabic music or barely any at all. Mishoo actually found a really good balance. He played the traditional stuff for the family but later switched it up with English, Afrobeats, hip hop and some throwbacks for the younger crowd. Really impressed." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "DJ Mishoo was great at our wedding reception. We had Lebanese, Palestinian and Canadian guests so our music was literally all over the place 😂. He handled it really well and made the different genres flow instead of sounding like someone was just changing playlists." },
+    { stars: 5, name: "",
+      text: "We wanted an open format DJ and that’s exactly what we got. One minute we were dancing to Arabic music, then 2000s R&B, then Drake, reggaeton and house later in the night. It sounds random writing it out but somehow it worked perfectly." },
+    { stars: 5, name: "",
+      text: "The dance floor was full basically the entire night. What I liked most was that he actually watched the crowd instead of just playing whatever was next on a playlist. If people weren’t feeling something he switched it up quickly." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "We booked DJ Mishoo for our daughter’s wedding and were very happy with him. He played beautiful Arabic music earlier in the evening and then more modern music for the younger guests later. Everyone had something they enjoyed." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "Probably the best part of our wedding was the dabke set. It started with just a few people and within a couple songs almost everyone was involved. After that he transitioned right into party music and nobody wanted to sit down." },
+    { stars: 5, name: "",
+      text: "Very easy to communicate with before the event. We sent him a few must-play songs, some Lebanese songs my parents wanted and a do-not-play list. Everything was respected and he still had enough freedom to make the night feel natural." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "Honestly I was nervous about the music because my husband’s side mostly listens to Arabic music and my side listens to everything. DJ Mishoo nailed it. Both families kept telling us afterward how good the DJ was." },
+    { stars: 5, event: "Birthday", name: "",
+      text: "Had him for my 30th birthday and the music was 🔥. Hip hop, Arabic, old school, Afrobeats, some house later on… literally exactly the kind of party I wanted. Would book him again." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "We didn’t want the typical wedding playlist and told Mishoo that from the beginning. He actually listened. There were the songs everyone knows, obviously, but he also played a lot of stuff we hadn’t heard at every other wedding this year." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "Great DJ. My family is Syrian and my wife’s family is Canadian. He was able to mix both sides really well without making either group feel left out. That was probably the biggest thing for us." },
+    { stars: 4, name: "",
+      text: "Really good DJ and the music selection was great. There were maybe one or two songs during dinner that were a little louder than I personally wanted, but once the dancing started he absolutely killed it. The party portion was excellent." },
+    { stars: 5, event: "Wedding · Calgary", name: "",
+      text: "DJ Mishoo played our wedding in Calgary and did an amazing job. We wanted Arabic, English, some French music, Afrobeats and reggaeton. He handled all of it and kept the transitions clean. Our guests were asking for his contact information before the night was even over." },
+    { stars: 5, name: "",
+      text: "One thing that stood out was how he handled requests. People were going up asking for random songs all night, but he didn’t immediately play everything and ruin the vibe. He worked the good requests in at the right time." },
+    { stars: 5, event: "Engagement party", name: "",
+      text: "We hired Mishoo for an engagement party with around 150 people. The first half was mostly family and traditional Arabic music, then later it turned into a completely different party with hip-hop, R&B and dance music. Exactly what we wanted." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "If you have an Arab wedding but also want the night to feel modern, I would definitely recommend him. He knows the Arabic classics but also knows what people actually listen to right now." },
+    { stars: 5, name: "",
+      text: "The Arabic-English transitions were probably what impressed me most. I’ve heard DJs literally stop one song and start another completely different genre. With Mishoo it actually felt mixed and intentional." },
+    { stars: 5, name: "",
+      text: "Great experience. Professional setup, good sound, and most importantly he kept people dancing. We had guests from their 20s all the way into their 60s and there was always somebody on the floor." },
+    { stars: 5, name: "",
+      text: "We told him we wanted Lebanese music but didn’t want five hours of only Lebanese music 😂. He understood exactly what we meant. Dabke, Arabic classics, newer Arabic songs, then English party music mixed throughout." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "Our wedding had a really mixed crowd and I honestly thought it would be difficult for any DJ. Arabs, Canadians, Latinos and a bunch of friends who mostly listen to hip-hop and Afrobeats. Mishoo somehow found music for everybody." },
+    { stars: 4, name: "",
+      text: "Overall really happy with the service. We had one last-minute song request for an entrance that took a little coordination, but he got it sorted out and everything went fine. Once the party started the music was excellent." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "I normally don’t write reviews but wanted to give credit where it’s due. The dance floor at our wedding was packed until the venue basically told us we were done. People genuinely did not want the music to stop." },
+    { stars: 5, name: "",
+      text: "Exactly what an open-format DJ should be. Didn’t stay stuck in one genre forever. He would build a little Arabic set, move into hip hop or throwbacks, then later hit us with some Afrobeats and dance music. It kept the night interesting." },
+    { stars: 5, name: "",
+      text: "My parents were worried it would be ‘too English’ and my friends were worried it would be ‘too Arabic.’ Somehow both groups ended the night saying they loved the music. That probably says everything." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "Mishoo did our wedding and was very professional from the first conversation. He asked about our background, what type of Arabic music our families liked, what English genres we preferred and what songs were important to us. You could tell he actually cared about getting it right." },
+    { stars: 5, name: "",
+      text: "The throwback set was unexpected but amazing. He dropped a bunch of 2000s and early 2010s songs and suddenly literally everyone our age was screaming the lyrics. One of my favourite parts of the night." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "We had an Iraqi-Lebanese wedding and wanted both types of Arabic music represented. He did a really good job balancing everything and didn’t make one side feel forgotten. The families noticed that." },
+    { stars: 5, name: "",
+      text: "Super fun night. We went from Nancy Ajram and Amr Diab to 50 Cent and Usher and somehow it made sense 😂. Definitely knows how to handle a mixed crowd." },
+    { stars: 5, event: "Corporate", name: "",
+      text: "We booked DJ Mishoo for a corporate party, not a wedding, and he adjusted perfectly. Started with more relaxed background music while everyone was eating and talking, then gradually moved into more upbeat music later. Very good at reading the room." },
+    { stars: 5, name: "",
+      text: "What I liked is that he didn’t rely only on the obvious TikTok songs. There was a good mixture of current music, classics and songs you forgot you loved. Made the night feel less generic." },
+    { stars: 5, name: "",
+      text: "We had a Palestinian/Jordanian family crowd and a lot of younger Canadian friends. Mishoo understood both audiences very well. Dabke was amazing and then the English set later was just as good." },
+    { stars: 5, name: "",
+      text: "I asked for R&B, hip-hop and Arabic with a little bit of Afrobeats and he delivered exactly that. Not every song was one I personally knew, but judging by the dance floor he definitely knew what he was doing." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "The best compliment I can give is that I basically forgot about the DJ during the wedding. Everything just flowed. Entrances happened on time, dinner music was good, speeches were clear and then suddenly everyone was partying." },
+    { stars: 4, name: "",
+      text: "Very solid DJ. I personally would have liked a little more old-school Arabic music earlier in the night, but that’s just my taste. The younger crowd absolutely loved the music and the floor was full." },
+    { stars: 5, name: "",
+      text: "DJ Mishoo was able to take requests from our Arab relatives without letting the whole night turn into only requested songs. That sounds small but anybody with an Arab family knows how important that is 😂." },
+    { stars: 5, name: "",
+      text: "We were specific that we wanted a club type of atmosphere later in the night. Once the older guests started leaving he completely changed the vibe and started playing hip-hop, house, Afrobeats and harder party tracks. So much fun." },
+    { stars: 5, name: "",
+      text: "From Arabic classics for our parents to Drake and 2000s hip-hop for our friends, the music was on point. I was worried the mix would feel weird but it actually flowed really naturally." },
+    { stars: 5, name: "",
+      text: "He knows how to build energy instead of playing all the biggest songs immediately. The beginning of the dance was fun, but by later in the night it felt like the whole room was going crazy." },
+    { stars: 5, event: "Birthday", name: "",
+      text: "We booked Mishoo for a birthday after seeing him DJ another event. Same great energy. He remembered the kind of music we liked and gave us a completely different set than the previous event, which I appreciated." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "Excellent for multicultural weddings. We had Arab, Filipino, Canadian and Latino guests and there was something for everyone. I genuinely have no idea how DJs organize that many genres but he made it work." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "Our zaffe and entrance were very important to us and everything was timed perfectly. After that the music transitioned into a really fun Arabic set and then opened up into English music as the night went on." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "My friends usually leave weddings early and somehow they stayed until the lights came on. I’ll give the DJ credit for that one 😂. Music was great all night." },
+    { stars: 5, name: "",
+      text: "Good combination of professionalism and actually knowing how to party. He wasn’t on the microphone every 30 seconds trying to make himself the centre of attention. He let the music carry the night, which I really liked." },
+    { stars: 5, name: "",
+      text: "We wanted some reggaeton because a lot of our friends love Latin music but still needed enough Arabic music for the family. He mixed both in alongside English music and it never felt forced." },
+    { stars: 5, name: "",
+      text: "One of my favourite things was hearing Arabic songs mixed in ways I hadn’t heard before. It made familiar songs feel fresh instead of just pressing play on the same version everyone uses." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "Really versatile DJ. He did our cocktail hour, dinner, entrances and reception, and each part had a completely different feel while still fitting the same event. That takes more skill than people realize." },
+    { stars: 5, name: "",
+      text: "Would 100% book again. He understood that we didn’t want strictly an ‘Arabic DJ’ or strictly a ‘club DJ.’ We wanted someone who could do both and jump between genres depending on the crowd. That’s exactly what we got." },
+    { stars: 5, event: "Wedding", name: "",
+      text: "DJ Mishoo made our wedding feel like us. Arabic for the family, hip-hop and R&B for us, throwbacks for everybody, and then Afrobeats and house once the night really got going. The music never felt repetitive and the dance floor stayed busy right until the end." },
   ],
 };
 
@@ -1077,9 +1175,18 @@ function renderReviews() {
     const list = Number.isFinite(limit) ? CONFIG.reviews.slice(0, limit) : CONFIG.reviews;
 
     if (!list.length) {
+      /* Where the page has somewhere better to send people, the whole
+         section goes rather than announcing the emptiness. Only the
+         reviews page keeps the invitation, because the form to answer it
+         is directly underneath. */
+      if (el.hasAttribute("data-hide-if-empty")) {
+        const section = el.closest("section");
+        if (section) section.hidden = true;
+        return;
+      }
       el.innerHTML = `<p class="reviews-empty">
-        <b>No reviews published yet</b>
-        <span>Yours could be the first.</span>
+        <b>Be the first</b>
+        <span>The form below takes about thirty seconds.</span>
       </p>`;
       return;
     }
@@ -1091,10 +1198,10 @@ function renderReviews() {
       <figure class="review">
         ${stars(r.stars)}
         <blockquote>${esc(r.text)}</blockquote>
-        <figcaption>
-          <strong>${esc(r.name)}</strong>
+        ${(r.name || r.event) ? `<figcaption>
+          ${r.name ? `<strong>${esc(r.name)}</strong>` : ""}
           ${r.event ? `<span>${esc(r.event)}</span>` : ""}
-        </figcaption>
+        </figcaption>` : ""}
       </figure>`).join("");
   });
 }
